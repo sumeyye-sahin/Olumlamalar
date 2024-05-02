@@ -19,13 +19,16 @@
             android:name=".FavoriesActivity"
             android:exported="false" />
         <activity
-            android:name=".KategoryActivity"
+            android:name=".CategoryActivity"
             android:exported="false" />
         <activity
             android:name=".AffirmationMainPageActivity"
-            android:exported="false" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
