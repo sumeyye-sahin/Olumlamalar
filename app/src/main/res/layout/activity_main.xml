@@ -8,9 +8,11 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="69dp"
-        android:text="HOŞGELDİNİZ"
+        android:text="H O Ş G E L D İ N İ Z"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:textColor="#B98967"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -64,7 +66,7 @@
             android:layout_height="52dp"
             android:background="@drawable/buttonmain"
             android:layout_marginBottom="16dp"
-            android:text="Beğenilen Olumlamalar"
+            android:text="Nefes Egzersizi"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="18sp"
