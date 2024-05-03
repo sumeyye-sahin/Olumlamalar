@@ -17,426 +17,423 @@ class MainActivity : AppCompatActivity() {
 
             val myDatabase= this.openOrCreateDatabase("Olumlamalar", MODE_PRIVATE,null)
             myDatabase.execSQL("CREATE TABLE IF NOT EXISTS olumlamalar (id INTEGER PRIMARY KEY, affirmation VARCHAR, category VARCHAR, favorite BOOLEAN)")
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine olan inancını asla kaybetme; senin için her şey mümkün.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Olumlu düşünceler, olumlu sonuçlar doğurur.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini sev, çünkü sen eşsizsin.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Şu anı kucakla ve her anın tadını çıkar.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zihnin neye odaklanırsa, enerjin de o yöne akar.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına nezaketle davranmak, kendi iç huzurunu artırır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zorluklar, başarı yolunda karşılaştığın adımlardır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerine doğru cesur adımlar at.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini şımartmaktan çekinme; kendine iyi bak.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü, bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçindeki sessizliği dinle ve oradan gelen bilgeliği takip et.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarının yargıları senin gerçekliğini belirleyemez.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki barış, dış dünyadaki kaosa meydan okur.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İç huzuru bul, dünya seninle beraber huzur bulsun.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içsel gücünün farkına var ve onu kucakla.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Olumlu kelimeler kullan, çünkü kelimelerin büyük gücü vardır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi yolunu çiz; başkalarının izlediği yol senin için doğru olmayabilir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sabahları tebessümle uyan ve yeni günün getireceği fırsatları kucakla.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Mutluluk, içinde bulunduğun anın güzelliğini fark etmektir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi dolu düşünceler, sevgi dolu bir dünya yaratır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçindeki ışığı parlat, ve dünya seninle birlikte parlasın.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bugün kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Küçük şeylerde büyük mutluluklar bul.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her deneyim, büyümen için bir fırsattır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zihnini sakinleştirmek, tüm bedeninizi iyileştirir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendine konuşmaların pozitif ve yapıcı olsun.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Nezaket, en büyük güçlerden biridir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarını yargılamadan önce, onların yerine kendini koy.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, önceki gününden daha bilge olma şansıdır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hikayeni yaz, başkalarının senin için yazdığı hikayeyi değil.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine ve yeteneklerine güven.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi, korkudan daha güçlüdür; her zaman sevgiyi seç.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendinin en iyi arkadaşı ol.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Stres, geçici bir durumdur, bu da geçer.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Öz şefkat, iyileşmenin başlangıcıdır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki sevgiyi bul ve onu dünyayla paylaş.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayatta en çok tutku duyduğun şeyleri yapmak için zaman ayır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Huzur, sadece bir düşünce kadar uzağında.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sabır, en büyük erdemlerden biridir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her adımda güzellikleri keşfet.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yaşam bir yolculuktur, her gün yeni bir macera.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hata yapmaktan korkma; hatalar öğrenmenin parçasıdır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine inan, çünkü senin gücün sınırsız.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerini gerçekleştirmek için her gün bir adım at.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgiyle dolu bir kalp, en büyük zenginliktir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sen kendi hayatının kahramanısın.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine zaman ayır, çünkü sen bunu hak ediyorsun.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İyi düşünceler, iyi insanlar yaratır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başarıya giden yolda sabırlı ol.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç huzurunu bul, ve bunu dışarıya yansıt.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her sabah yeni bir umutla uyan.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayatını sevdiğin şeylerle doldur.', 'Genel', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine olan inancını asla kaybetme; senin için her şey mümkün.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Olumlu düşünceler, olumlu sonuçlar doğurur.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini sev, çünkü sen eşsizsin.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Şu anı kucakla ve her anın tadını çıkar.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zihnin neye odaklanırsa, enerjin de o yöne akar.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına nezaketle davranmak, kendi iç huzurunu artırır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zorluklar, başarı yolunda karşılaştığın adımlardır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerine doğru cesur adımlar at.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini şımartmaktan çekinme; kendine iyi bak.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü, bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçindeki sessizliği dinle ve oradan gelen bilgeliği takip et.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarının yargıları senin gerçekliğini belirleyemez.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki barış, dış dünyadaki kaosa meydan okur.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İç huzuru bul, dünya seninle beraber huzur bulsun.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içsel gücünün farkına var ve onu kucakla.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Olumlu kelimeler kullan, çünkü kelimelerin büyük gücü vardır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi yolunu çiz; başkalarının izlediği yol senin için doğru olmayabilir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sabahları tebessümle uyan ve yeni günün getireceği fırsatları kucakla.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Mutluluk, içinde bulunduğun anın güzelliğini fark etmektir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi dolu düşünceler, sevgi dolu bir dünya yaratır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçindeki ışığı parlat, ve dünya seninle birlikte parlasın.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bugün kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Küçük şeylerde büyük mutluluklar bul.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her deneyim, büyümen için bir fırsattır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zihnini sakinleştirmek, tüm bedeninizi iyileştirir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendine konuşmaların pozitif ve yapıcı olsun.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Nezaket, en büyük güçlerden biridir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarını yargılamadan önce, onların yerine kendini koy.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, önceki gününden daha bilge olma şansıdır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hikayeni yaz, başkalarının senin için yazdığı hikayeyi değil.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine ve yeteneklerine güven.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi, korkudan daha güçlüdür; her zaman sevgiyi seç.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendinin en iyi arkadaşı ol.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Stres, geçici bir durumdur, bu da geçer.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Öz şefkat, iyileşmenin başlangıcıdır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki sevgiyi bul ve onu dünyayla paylaş.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayatta en çok tutku duyduğun şeyleri yapmak için zaman ayır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Huzur, sadece bir düşünce kadar uzağında.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sabır, en büyük erdemlerden biridir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her adımda güzellikleri keşfet.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yaşam bir yolculuktur, her gün yeni bir macera.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hata yapmaktan korkma; hatalar öğrenmenin parçasıdır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine inan, çünkü senin gücün sınırsız.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerini gerçekleştirmek için her gün bir adım at.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgiyle dolu bir kalp, en büyük zenginliktir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sen kendi hayatının kahramanısın.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine zaman ayır, çünkü sen bunu hak ediyorsun.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İyi düşünceler, iyi insanlar yaratır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başarıya giden yolda sabırlı ol.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç huzurunu bul, ve bunu dışarıya yansıt.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her sabah yeni bir umutla uyan.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayatını sevdiğin şeylerle doldur.', 'Genel Olumlamalar', 0)");
 
 
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini sürekli olarak yenile.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yapıcı eleştirilere açık ol, büyümenin bir parçasıdırlar.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki sessizliği bul ve orada huzur bul.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yaptığın işlerde kaliteyi asla göz ardı etme.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hayatını başkalarıyla kıyaslamaktan kaçın.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç gücünü keşfet ve onu kullan.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevdiklerine zaman ayır, çünkü ilişkiler değerlidir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her yeni gün, yeni bir başlangıçtır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Güçlü olmak, her zaman mümkün olmayabilir ama neşeli olmak mümkündür.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi değerini bil ve buna göre davran.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, yaşamaya değer kılınacak küçük anlarla doludur.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Seni geri tutan şeyleri bırak.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hikayeni kendin yaz.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına ilham olacak işler yap.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi, her zaman cevaptır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçsel güzellik, dışsal güzellikten daha kalıcıdır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerine ulaşmak için disiplinli ol.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini affetmeyi öğren ve ileriye bak.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bugün, dününden daha iyi bir insan olmak için çaba göster.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendine yeterli olmayı öğren.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün en az bir kişiye iyilik yap.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçsel huzur, dış dünya ile uyum içinde olmanı sağlar.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi başarını kutlamayı unutma.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, paylaştığında daha güzel.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç sesini dinle, o seni doğru yola yönlendirir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sıkıntılı zamanlarda bile umudu koru.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi başına yapabileceğinden daha fazlasını yapabilirsin.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zamanını bilgece kullan.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi yeteneklerini keşfet ve onları geliştir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Özgürlük, kendi kararlarını verebilmektir.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü bir hediye olarak gör.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına olan saygın, kendine olan saygından başlar.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini başkalarıyla karşılaştırmak yerine, kendini başkalarıyla ilhamlaştır.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, yaşamak için çok kısa, bugünü en iyi şekilde yaşa.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Herkes için nezaketin önemini hatırla.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, bir önceki günden daha iyi olmak için bir şans.', 'Genel', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim sağlıkla ve enerjiyle dolu.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün fiziksel sağlığımı geliştiriyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi bedenimi seviyor ve ona iyi bakıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi güçlü ve dinç hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı yemek yemek benim için bir zevktir.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün daha da sağlıklı oluyorum.', 'Beden', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini sürekli olarak yenile.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yapıcı eleştirilere açık ol, büyümenin bir parçasıdırlar.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki sessizliği bul ve orada huzur bul.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yaptığın işlerde kaliteyi asla göz ardı etme.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hayatını başkalarıyla kıyaslamaktan kaçın.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç gücünü keşfet ve onu kullan.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevdiklerine zaman ayır, çünkü ilişkiler değerlidir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her yeni gün, yeni bir başlangıçtır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Güçlü olmak, her zaman mümkün olmayabilir ama neşeli olmak mümkündür.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi değerini bil ve buna göre davran.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, yaşamaya değer kılınacak küçük anlarla doludur.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Seni geri tutan şeyleri bırak.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hikayeni kendin yaz.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına ilham olacak işler yap.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi, her zaman cevaptır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçsel güzellik, dışsal güzellikten daha kalıcıdır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerine ulaşmak için disiplinli ol.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini affetmeyi öğren ve ileriye bak.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bugün, dününden daha iyi bir insan olmak için çaba göster.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendine yeterli olmayı öğren.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün en az bir kişiye iyilik yap.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçsel huzur, dış dünya ile uyum içinde olmanı sağlar.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi başarını kutlamayı unutma.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, paylaştığında daha güzel.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç sesini dinle, o seni doğru yola yönlendirir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sıkıntılı zamanlarda bile umudu koru.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi başına yapabileceğinden daha fazlasını yapabilirsin.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zamanını bilgece kullan.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi yeteneklerini keşfet ve onları geliştir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Özgürlük, kendi kararlarını verebilmektir.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü bir hediye olarak gör.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına olan saygın, kendine olan saygından başlar.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini başkalarıyla karşılaştırmak yerine, kendini başkalarıyla ilhamlaştır.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, yaşamak için çok kısa, bugünü en iyi şekilde yaşa.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Herkes için nezaketin önemini hatırla.', 'Genel Olumlamalar', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, bir önceki günden daha iyi olmak için bir şans.', 'Genel Olumlamalar', 0)");
+
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim sağlıkla ve enerjiyle dolu.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün fiziksel sağlığımı geliştiriyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi bedenimi seviyor ve ona iyi bakıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi güçlü ve dinç hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı yemek yemek benim için bir zevktir.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün daha da sağlıklı oluyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim kendini iyileştirme gücüne sahip.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel aktivite beni canlandırır.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime ihtiyacı olan dinlenmeyi sağlıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her bakımdan iyi hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimdeki her hücre sağlıkla dolu.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimi olduğu gibi seviyorum ve onurlandırıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi fiziksel olarak güçlü ve yetenekli hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her sabah dinç ve enerjik uyanıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle barış içindeyim.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı yaşam tarzım beni daha iyi hissettiriyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle uyum içindeyim.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığım benim için bir önceliktir.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her gün daha iyi hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim tüm ihtiyaçlarımı karşılayacak şekilde mükemmel çalışıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlık, zihinsel berraklık getirir.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi güçlü ve canlı hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim benim tapınağım ve ona saygı duyuyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenime iyi bakıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel egzersiz yapmak beni mutlu ediyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlığımı korumak için ihtiyacım olan her şeye sahibim.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim bana güç ve direnç sağlıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel iyilik hali benim doğal halim.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimi dinlemeyi öğreniyorum ve ona göre hareket ediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her nefesimde sağlık ve iyilik alıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her zaman genç ve enerjik hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle her gün kendini iyileştirdiğini hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime olan sevgim, her gün artıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimi sevgiyle besliyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi geliştirmek benim için heyecan verici.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlığımı iyileştirmek için attığım adımlar işe yarıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimin sağlıkla parladığını görüyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle uyum içinde yaşamak beni mutlu ediyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel iyilik halim, tüm hayatımı iyileştiriyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her yönüyle kabul ediyorum ve seviyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, bedenimin sağlık ve canlılıkla dolu olduğunu hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi her geçen gün daha güçlü ve sağlıklı hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim, doğal güzelliği ve sağlığı ile parlıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her egzersiz, bedenimin daha da güçlenmesine ve esnek olmasına yardımcı oluyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı beslenmek, bedenime olan sevgimin bir ifadesidir.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi bedenime olan saygım, beni daha sağlıklı yaşam tarzı seçimleri yapmaya teşvik ediyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel aktiviteler benim için neşe kaynağı ve kendimi ifade etme şeklidir.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin her fonksiyonu mükemmel uyum içinde çalışıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her fiziksel aktivitede daha canlı ve enerjik hissediyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin iyileşme ve kendini yenileme kapasitesine hayranım.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığımı her gün bilinçli çabalarla destekliyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı olmak, benim için bir yaşam biçimi.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime olan şükranım, her gün artıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığımı korumak ve geliştirmek için gerekli tüm kaynaklara sahibim.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi fiziksel olarak aktif tutmak, genel iyiliğimi artırıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimin sağlıkla dolu olması için minnettarım.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendime iyi bakmak, benim için önceliktir.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığım, benim genel yaşam kalitemi artırıyor.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin her bir parçasına saygı gösteriyorum ve ona iyi bakıyorum.', 'Beden Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim, yaşamın tüm zorluklarına karşı direnç gösterme gücüne sahip.', 'Beden Olumlamaları', 0)");
 
 
-
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim kendini iyileştirme gücüne sahip.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel aktivite beni canlandırır.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime ihtiyacı olan dinlenmeyi sağlıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her bakımdan iyi hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimdeki her hücre sağlıkla dolu.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimi olduğu gibi seviyorum ve onurlandırıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi fiziksel olarak güçlü ve yetenekli hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her sabah dinç ve enerjik uyanıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle barış içindeyim.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı yaşam tarzım beni daha iyi hissettiriyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle uyum içindeyim.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığım benim için bir önceliktir.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her gün daha iyi hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim tüm ihtiyaçlarımı karşılayacak şekilde mükemmel çalışıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlık, zihinsel berraklık getirir.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi güçlü ve canlı hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim benim tapınağım ve ona saygı duyuyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenime iyi bakıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel egzersiz yapmak beni mutlu ediyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlığımı korumak için ihtiyacım olan her şeye sahibim.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim bana güç ve direnç sağlıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel iyilik hali benim doğal halim.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimi dinlemeyi öğreniyorum ve ona göre hareket ediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her nefesimde sağlık ve iyilik alıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her zaman genç ve enerjik hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle her gün kendini iyileştirdiğini hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime olan sevgim, her gün artıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimi sevgiyle besliyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi geliştirmek benim için heyecan verici.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlığımı iyileştirmek için attığım adımlar işe yarıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimin sağlıkla parladığını görüyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle uyum içinde yaşamak beni mutlu ediyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel iyilik halim, tüm hayatımı iyileştiriyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her yönüyle kabul ediyorum ve seviyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, bedenimin sağlık ve canlılıkla dolu olduğunu hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi her geçen gün daha güçlü ve sağlıklı hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim, doğal güzelliği ve sağlığı ile parlıyor.', 'Beden', 0)");
-
-
-
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her egzersiz, bedenimin daha da güçlenmesine ve esnek olmasına yardımcı oluyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı beslenmek, bedenime olan sevgimin bir ifadesidir.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi bedenime olan saygım, beni daha sağlıklı yaşam tarzı seçimleri yapmaya teşvik ediyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel aktiviteler benim için neşe kaynağı ve kendimi ifade etme şeklidir.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin her fonksiyonu mükemmel uyum içinde çalışıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her fiziksel aktivitede daha canlı ve enerjik hissediyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin iyileşme ve kendini yenileme kapasitesine hayranım.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığımı her gün bilinçli çabalarla destekliyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı olmak, benim için bir yaşam biçimi.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime olan şükranım, her gün artıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığımı korumak ve geliştirmek için gerekli tüm kaynaklara sahibim.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi fiziksel olarak aktif tutmak, genel iyiliğimi artırıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimin sağlıkla dolu olması için minnettarım.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendime iyi bakmak, benim için önceliktir.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığım, benim genel yaşam kalitemi artırıyor.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin her bir parçasına saygı gösteriyorum ve ona iyi bakıyorum.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim, yaşamın tüm zorluklarına karşı direnç gösterme gücüne sahip.', 'Beden', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni güçlendiriyor ve rehberlik ediyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancım daha da güçleniyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnanç, hayatımdaki tüm zorlukların üstesinden gelmeme yardımcı oluyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni yüksek ideallerime bağlı tutuyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Hayatımda her şeyin iyi bir nedenle olduğuna inanıyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni daha yüksek bir bilince taşıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Evrenin benim için en iyisini sunduğuna inanıyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni günlük yaşamımda rehberlik ediyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım her gün daha da derinleşiyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde içsel huzuru buluyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, yaşamın zorluklarına karşı bana güç veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımla daha uyumlu bir yaşam sürüyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni pozitif kalmaya itiyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki amaç ve anlamı pekiştiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde zor zamanlarda bile sabırlı olabiliyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana umut ve cesaret veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, karşılaştığım her şeyde bana yol gösteriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımı zenginleştiriyor ve renklendiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımın beni desteklediğini hissediyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni her gün ileriye taşıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, hayatımda olumlu değişiklikler yaratıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içsel gücümü artırıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde her zorluğu aşabileceğime inanıyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni koruyor ve yönlendiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki her şeyin daha iyi olacağına dair bana güven veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içimdeki korkuları yatıştırıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni her gün daha iyi bir insan yapmak için ilham veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde hayatımda sürekli bir ilerleme görüyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, yaşamımın temel taşıdır.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana her gün daha fazla neşe ve mutluluk getiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, tüm zorluklara rağmen ayakta durmamı sağlıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımda olumlu bir değişim yaratıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana hayatın güzelliklerini daha çok takdir etme fırsatı veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde daha büyük bir amaç için yaşadığımı hissediyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana doğru yolda olduğumu hissettiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni daha derin bir içsel huzura yönlendiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her şeyin en iyisi için çalıştığıma dair bana güven veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana yaşamın sonsuz olanaklarını keşfetme cesareti veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, zorluklar karşısında bana sabır ve direnç veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, yaşamımda her gün yeni başlangıçlar yaratıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her gün beni daha büyük başarılara taşıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her sabah, inancımın rehberliğinde yeni bir güne başlıyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, bana zor zamanlarda rehberlik ediyor ve yol gösteriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni yaşamın dalgalı denizlerinde sağlam bir kaya gibi tutuyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımın kuvvetiyle, hayatımın kontrolünü daha iyi elime alıyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımın anlamını derinleştiriyor ve daha büyük bir perspektif sunuyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni her gün daha fazla iyilik yapmaya itiyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, hayatımda sevgi ve anlayışı artırıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her adımda bana cesaret ve kuvvet veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, inancımın gücüyle hayatımdaki engelleri aşıyorum.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni bilgelikle donatıyor ve doğru kararlar almamı sağlıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içsel gücümü artırıyor ve bana her zorlukta dayanma gücü veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, beni kendime ve evrenin gücüne daha çok bağlıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımın her anında bana huzur ve güven sağlıyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, sürekli olarak beni iyimserliğe ve umuda yönlendiriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancımın derinliği, yaşamımdaki zorluklar karşısında bana sabır veriyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana her yeni gün için şükran duymamı öğretiyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki amaç hissini güçlendiriyor ve beni motive ediyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, zor zamanlarda bile iç huzurumu korumama yardımcı oluyor.', 'inanc', 0)");
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her gün beni daha fazla sevgiyle dolduruyor ve etrafıma yaymamı sağlıyor.', 'inanc', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni güçlendiriyor ve rehberlik ediyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancım daha da güçleniyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnanç, hayatımdaki tüm zorlukların üstesinden gelmeme yardımcı oluyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni yüksek ideallerime bağlı tutuyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Hayatımda her şeyin iyi bir nedenle olduğuna inanıyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni daha yüksek bir bilince taşıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Evrenin benim için en iyisini sunduğuna inanıyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni günlük yaşamımda rehberlik ediyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım her gün daha da derinleşiyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde içsel huzuru buluyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, yaşamın zorluklarına karşı bana güç veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımla daha uyumlu bir yaşam sürüyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni pozitif kalmaya itiyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki amaç ve anlamı pekiştiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde zor zamanlarda bile sabırlı olabiliyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana umut ve cesaret veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, karşılaştığım her şeyde bana yol gösteriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımı zenginleştiriyor ve renklendiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımın beni desteklediğini hissediyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni her gün ileriye taşıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, hayatımda olumlu değişiklikler yaratıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içsel gücümü artırıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde her zorluğu aşabileceğime inanıyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni koruyor ve yönlendiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki her şeyin daha iyi olacağına dair bana güven veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içimdeki korkuları yatıştırıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni her gün daha iyi bir insan yapmak için ilham veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde hayatımda sürekli bir ilerleme görüyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, yaşamımın temel taşıdır.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana her gün daha fazla neşe ve mutluluk getiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, tüm zorluklara rağmen ayakta durmamı sağlıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımda olumlu bir değişim yaratıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana hayatın güzelliklerini daha çok takdir etme fırsatı veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde daha büyük bir amaç için yaşadığımı hissediyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana doğru yolda olduğumu hissettiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni daha derin bir içsel huzura yönlendiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her şeyin en iyisi için çalıştığıma dair bana güven veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana yaşamın sonsuz olanaklarını keşfetme cesareti veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, zorluklar karşısında bana sabır ve direnç veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, yaşamımda her gün yeni başlangıçlar yaratıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her gün beni daha büyük başarılara taşıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her sabah, inancımın rehberliğinde yeni bir güne başlıyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, bana zor zamanlarda rehberlik ediyor ve yol gösteriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni yaşamın dalgalı denizlerinde sağlam bir kaya gibi tutuyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımın kuvvetiyle, hayatımın kontrolünü daha iyi elime alıyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımın anlamını derinleştiriyor ve daha büyük bir perspektif sunuyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni her gün daha fazla iyilik yapmaya itiyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, hayatımda sevgi ve anlayışı artırıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her adımda bana cesaret ve kuvvet veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, inancımın gücüyle hayatımdaki engelleri aşıyorum.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni bilgelikle donatıyor ve doğru kararlar almamı sağlıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içsel gücümü artırıyor ve bana her zorlukta dayanma gücü veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, beni kendime ve evrenin gücüne daha çok bağlıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımın her anında bana huzur ve güven sağlıyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, sürekli olarak beni iyimserliğe ve umuda yönlendiriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancımın derinliği, yaşamımdaki zorluklar karşısında bana sabır veriyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana her yeni gün için şükran duymamı öğretiyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki amaç hissini güçlendiriyor ve beni motive ediyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, zor zamanlarda bile iç huzurumu korumama yardımcı oluyor.', 'İnanç Olumlamaları', 0)");
+            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her gün beni daha fazla sevgiyle dolduruyor ve etrafıma yaymamı sağlıyor.', 'İnanç Olumlamaları', 0)");
 
 
             myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-            "('Zor günler geçici, gücüm kalıcı.', 'zor gunler', 0), " +
-            "('Her zorluk, beni daha da güçlendiriyor.', 'zor gunler', 0), " +
-            "('Zor zamanlarda bile huzuru bulabilirim.', 'zor gunler', 0), " +
-            "('Her deneyim, bana değerli dersler öğretir.', 'zor gunler', 0), " +
-            "('Zor günler, beni daha da dirençli kılıyor.', 'zor gunler', 0), " +
-            "('Zorluklar karşısında sakin ve odaklanmış kalabilirim.', 'zor gunler', 0), " +
-            "('Her zorluk sonrasında daha güçlü bir şekilde yükselirim.', 'zor gunler', 0), " +
-            "('Zor zamanlar geçecek, güçlü kalmalıyım.', 'zor gunler', 0), " +
-            "('Zor günlerde bile kendime güvenim tam.', 'zor gunler', 0), " +
-            "('Her zorluk, içimdeki cesareti ortaya çıkarır.', 'zor gunler', 0), " +
-            "('Zor günler benim için büyüme fırsatlarıdır.', 'zor gunler', 0), " +
-            "('Zor zamanlarda bile minnettar olacak şeyler bulabilirim.', 'zor gunler', 0), " +
-            "('Her zorluk, beni hedeflerime bir adım daha yaklaştırır.', 'zor gunler', 0), " +
-            "('Zor zamanlar beni daha bilge kılar.', 'zor gunler', 0), " +
-            "('Zor günlerde bile pozitif kalmayı seçiyorum.', 'zor gunler', 0), " +
-            "('Zorluklar, benim güçlü yönlerimi ortaya çıkarır.', 'zor gunler', 0), " +
-            "('Zor zamanlarda bile kendime iyi bakıyorum.', 'zor gunler', 0), " +
-            "('Her zorluk sonrasında, daha da parlak bir şekilde parlıyorum.', 'zor gunler', 0), " +
-            "('Zor günlerde dahi güzellikler bulabilirim.', 'zor gunler', 0), " +
-            "('Zor zamanlar, benim dayanıklılığımı test eder, ve ben her seferinde başarılı olurum.', 'zor gunler', 0), " +
-            "('Zorluklar, beni daha da sağlam kılar.', 'zor gunler', 0), " +
-            "('Her zor gün, sonunda güneşin doğacağını bilmekle daha kolay geçer.', 'zor gunler', 0), " +
-            "('Zor zamanlarda dahi sevgi ve destek buluyorum.', 'zor gunler', 0), " +
-            "('Zor günler, karakterimi şekillendirir.', 'zor gunler', 0), " +
-            "('Zor zamanlarda dahi umudumu koruyorum.', 'zor gunler', 0), " +
-            "('Her zorluk, beni daha da güçlü kılar.', 'zor gunler', 0), " +
-            "('Zor günlerde bile, hayatın güzel yanlarını görebiliyorum.', 'zor gunler', 0), " +
-            "('Zor zamanlarda dahi güç buluyorum.', 'zor gunler', 0), " +
-            "('Zorluklar, bana neyin önemli olduğunu hatırlatır.', 'zor gunler', 0), " +
-            "('Zor günler, beni daha iyi bir insan yapar.', 'zor gunler', 0), " +
-            "('Zor zamanlarda dahi, ilerlemeye devam ediyorum.', 'zor gunler', 0), " +
-            "('Her zorluk, sonunda zaferle sonuçlanır.', 'zor gunler', 0), " +
-            "('Zor günler geçici, zafer kalıcıdır.', 'zor gunler', 0), " +
-            "('Zor zamanlarda dahi, kendime ve yeteneklerime güveniyorum.', 'zor gunler', 0), " +
-            "('Zor günler, beni daha da odaklanmış ve kararlı kılar.', 'zor gunler', 0), " +
-            "('Zorluklar, beni hayatın değerini daha çok takdir etmeye yönlendirir.', 'zor gunler', 0), " +
-            "('Her zor gün, hayatın güçlü yönlerimi geliştirdiğini gösterir.', 'zor gunler', 0), " +
-            "('Zor zamanlarda dahi, başkalarına yardım etmekten vazgeçmiyorum.', 'zor gunler', 0), " +
-            "('Zor günler, benim en büyük öğretmenimdir.', 'zor gunler', 0), " +
-            "('Her zorluk sonrasında, daha büyük bir mutluluk bekler beni.', 'zor gunler', 0), " +
-            "('Zor zamanlar, içimdeki dayanıklılığı keşfetmemi sağlar.', 'zor gunler', 0), " +
-            "('Her zorluk, hayata olan inancımı daha da güçlendirir.', 'zor gunler', 0), " +
-            "('Zor günler, yaratıcılığımı harekete geçirir ve çözüm bulmamı sağlar.', 'zor gunler', 0), " +
-            "('Zor zamanlarda, iç huzuru bulmak için farkındalık ve meditasyon pratiklerine yönelebilirim.', 'zor gunler', 0), " +
-            "('Zorluklar, benim esnekliğimi arttırır ve değişime uyum sağlamamı öğretir.', 'zor gunler', 0), " +
-            "('Her zorluk, içimdeki gücü ortaya çıkarır ve potansiyelimi serbest bırakır.', 'zor gunler', 0), " +
-            "('Zor günlerde, kendime olan sevgi ve kabulümü derinleştiririm.', 'zor gunler', 0), " +
-            "('Zor zamanlar, hayatta daha fazla empati ve anlayış geliştirmeme yardımcı olur.', 'zor gunler', 0), " +
-            "('Her zorluk, problem çözme becerilerimi geliştirir ve yaratıcı çözümler bulmamı sağlar.', 'zor gunler', 0), " +
-            "('Zor günler, önemli bir dönüşüm fırsatı sunar ve içsel büyümeme katkıda bulunur.', 'zor gunler', 0), " +
-            "('Zor zamanlarda, sağlığımı korumak için bedenime daha fazla özen gösteririm.', 'zor gunler', 0), " +
-            "('Zorluklar, hayatta değerli olan şeyleri daha derinden takdir etmeme yol açar.', 'zor gunler', 0), " +
-            "('Her zorluk, geleceğe daha umut dolu bakmamı sağlar ve potansiyel fırsatları görmeme yardımcı olur.', 'zor gunler', 0), " +
-            "('Zor günler, yaşamın dengesini yeniden kurmam için bir teşvik sağlar.', 'zor gunler', 0), " +
-            "('Zor zamanlarda, dışarıdaki desteği kabul etmek ve bağlantı kurmak önemlidir.', 'zor gunler', 0), " +
-            "('Zorluklar, içsel gücümü ve dayanma yeteneğimi keşfetmemi sağlar.', 'zor gunler', 0), " +
-            "('Her zorluk, başkalarına olan minnettarlığımı ve yardımlaşma duygusunu arttırır.', 'zor gunler', 0), " +
-            "('Zor günler, bana hayatın anlamını ve derinliğini daha iyi anlamamı sağlar.', 'zor gunler', 0), " +
-            "('Zor zamanlarda, hedeflerime ulaşmak için motivasyonumu korumak için yeniden odaklanırım.', 'zor gunler', 0), " +
-            "('Zorluklar, benim için birer fırsat ve büyüme potansiyeli barındırır.', 'zor gunler', 0)");
+            "('Zor günler geçici, gücüm kalıcı.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, beni daha da güçlendiriyor.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda bile huzuru bulabilirim.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her deneyim, bana değerli dersler öğretir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, beni daha da dirençli kılıyor.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar karşısında sakin ve odaklanmış kalabilirim.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk sonrasında daha güçlü bir şekilde yükselirim.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlar geçecek, güçlü kalmalıyım.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günlerde bile kendime güvenim tam.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, içimdeki cesareti ortaya çıkarır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler benim için büyüme fırsatlarıdır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda bile minnettar olacak şeyler bulabilirim.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, beni hedeflerime bir adım daha yaklaştırır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlar beni daha bilge kılar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günlerde bile pozitif kalmayı seçiyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, benim güçlü yönlerimi ortaya çıkarır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda bile kendime iyi bakıyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk sonrasında, daha da parlak bir şekilde parlıyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günlerde dahi güzellikler bulabilirim.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlar, benim dayanıklılığımı test eder, ve ben her seferinde başarılı olurum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, beni daha da sağlam kılar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zor gün, sonunda güneşin doğacağını bilmekle daha kolay geçer.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda dahi sevgi ve destek buluyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, karakterimi şekillendirir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda dahi umudumu koruyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, beni daha da güçlü kılar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günlerde bile, hayatın güzel yanlarını görebiliyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda dahi güç buluyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, bana neyin önemli olduğunu hatırlatır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, beni daha iyi bir insan yapar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda dahi, ilerlemeye devam ediyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, sonunda zaferle sonuçlanır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler geçici, zafer kalıcıdır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda dahi, kendime ve yeteneklerime güveniyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, beni daha da odaklanmış ve kararlı kılar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, beni hayatın değerini daha çok takdir etmeye yönlendirir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zor gün, hayatın güçlü yönlerimi geliştirdiğini gösterir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda dahi, başkalarına yardım etmekten vazgeçmiyorum.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, benim en büyük öğretmenimdir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk sonrasında, daha büyük bir mutluluk bekler beni.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlar, içimdeki dayanıklılığı keşfetmemi sağlar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, hayata olan inancımı daha da güçlendirir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, yaratıcılığımı harekete geçirir ve çözüm bulmamı sağlar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda, iç huzuru bulmak için farkındalık ve meditasyon pratiklerine yönelebilirim.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, benim esnekliğimi arttırır ve değişime uyum sağlamamı öğretir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, içimdeki gücü ortaya çıkarır ve potansiyelimi serbest bırakır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günlerde, kendime olan sevgi ve kabulümü derinleştiririm.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlar, hayatta daha fazla empati ve anlayış geliştirmeme yardımcı olur.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, problem çözme becerilerimi geliştirir ve yaratıcı çözümler bulmamı sağlar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, önemli bir dönüşüm fırsatı sunar ve içsel büyümeme katkıda bulunur.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda, sağlığımı korumak için bedenime daha fazla özen gösteririm.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, hayatta değerli olan şeyleri daha derinden takdir etmeme yol açar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, geleceğe daha umut dolu bakmamı sağlar ve potansiyel fırsatları görmeme yardımcı olur.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, yaşamın dengesini yeniden kurmam için bir teşvik sağlar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda, dışarıdaki desteği kabul etmek ve bağlantı kurmak önemlidir.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, içsel gücümü ve dayanma yeteneğimi keşfetmemi sağlar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Her zorluk, başkalarına olan minnettarlığımı ve yardımlaşma duygusunu arttırır.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor günler, bana hayatın anlamını ve derinliğini daha iyi anlamamı sağlar.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zor zamanlarda, hedeflerime ulaşmak için motivasyonumu korumak için yeniden odaklanırım.', 'Zor Günler Olumlamaları', 0), " +
+            "('Zorluklar, benim için birer fırsat ve büyüme potansiyeli barındırır.', 'Zor Günler Olumlamaları', 0)");
 
 
 
             myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-            "('Sevgi hayatımın her köşesini aydınlatıyor.', 'ask', 0), " +
-            "('Kendi içimdeki sevgiyi dış dünyayla paylaşıyorum.', 'ask', 0), " +
-            "('Her gün sevgiyi derinlemesine yaşıyorum.', 'ask', 0), " +
-            "('Sevgi benim rehberim, beni en iyi yola yönlendiriyor.', 'ask', 0), " +
-            "('Sevgi, hayatımı zenginleştiriyor ve güzelleştiriyor.', 'ask', 0), " +
-            "('Aşk, hayatımda her gün daha fazla yer kaplıyor.', 'ask', 0), " +
-            "('Kendimi ve çevremdekileri koşulsuzca seviyorum.', 'ask', 0), " +
-            "('Aşk, hayatımın en güçlü gücüdür.', 'ask', 0), " +
-            "('Sevgi, tüm korkularımı yener.', 'ask', 0), " +
-            "('Her gün aşkla doluyorum ve bunu etrafa yayıyorum.', 'ask', 0), " +
-            "('Sevgi, benim her gün yaşamak için bir sebebim.', 'ask', 0), " +
-            "('Aşk, hayatımdaki her şeyi daha iyi hale getiriyor.', 'ask', 0), " +
-            "('Sevgi dolu ilişkiler, hayatımı anlamla dolduruyor.', 'ask', 0), " +
-            "('Her gün sevgiyle daha iyi bir insan oluyorum.', 'ask', 0), " +
-            "('Aşk, hayatımın merkezinde yer alıyor.', 'ask', 0), " +
-            "('Kendimi ve başkalarını sevmek, benim doğal halim.', 'ask', 0), " +
-            "('Sevgi, hayatımdaki tüm engelleri aşmama yardımcı oluyor.', 'ask', 0), " +
-            "('Her gün sevgiyi daha derinden hissediyorum ve bunu yaşamıma yansıtıyorum.', 'ask', 0), " +
-            "('Aşk, hayatımda sürekli bir ilham kaynağı.', 'ask', 0), " +
-            "('Sevgiyle, hayatım her gün daha güzel ve anlamlı hale geliyor.', 'ask', 0), " +
-            "('Aşk, tüm ilişkilerimi güçlendiriyor ve derinleştiriyor.', 'ask', 0), " +
-            "('Sevgi sayesinde, hayatımda daha çok mutluluk ve huzur var.', 'ask', 0), " +
-            "('Aşk, hayatımdaki her alanında bana rehberlik ediyor.', 'ask', 0), " +
-            "('Kendimi sevgiyle ifade etmek, benim için doğal ve kolay.', 'ask', 0), " +
-            "('Aşk, tüm zorlukları aşmamı sağlıyor.', 'ask', 0), " +
-            "('Sevgiyle, her gün yeni ve güzel başlangıçlar yapabiliyorum.', 'ask', 0), " +
-            "('Aşk, hayatımın en değerli hediyesi.', 'ask', 0), " +
-            "('Sevgi, benim kalbimde sürekli büyüyen bir çiçek gibi.', 'ask', 0), " +
-            "('Aşk, her gün beni daha iyi bir insan yapmaya itiyor.', 'ask', 0), " +
-            "('Sevgi, hayatımda her yönünü iyileştiriyor.', 'ask', 0), " +
-            "('Her gün sevgiyi daha çok kabul ediyorum ve bunu yaşamıma yansıtıyorum.', 'ask', 0), " +
-            "('Aşk, beni her zaman daha büyük bir neşe ve mutlulukla dolduruyor.', 'ask', 0), " +
-            "('Sevgi, hayatımda daima var olan bir kuvvet.', 'ask', 0), " +
-            "('Aşk, hayatımı daha anlamlı ve değerli kılıyor.', 'ask', 0), " +
-            "('Sevgiyle, her ilişkim daha derin ve anlamlı hale geliyor.', 'ask', 0), " +
-            "('Aşk, hayatımdaki her zorluğu aşmama yardımcı oluyor.', 'ask', 0), " +
-            "('Sevgi, hayatımdaki en büyük motivasyon kaynağı.', 'ask', 0), " +
-            "('Her gün aşkı daha derinlemesine hissediyorum ve bunu yaşamıma yansıtıyorum.', 'ask', 0), " +
-            "('Aşk, beni daha mutlu ve memnun bir insan yapıyor.', 'ask', 0), " +
-            "('Sevgi, hayatımda her zaman var olan bir ışık.', 'ask', 0), " +
-            "('Aşk, içimdeki potansiyeli serbest bırakıyor ve beni sınırlarımın ötesine taşıyor.', 'ask', 0), " +
-            "('Her nefeste, sevgiyle dolup taşıyorum ve bu enerjiyi etrafa yayıyorum.', 'ask', 0), " +
-            "('Aşk, her sabah uyandığımda yüzümde bir gülümseme bırakıyor.', 'ask', 0), " +
-            "('Sevgiyle dolu bir kalp, hayatıma bolluk ve bereket getiriyor.', 'ask', 0), " +
-            "('Aşk, geçmişi affetmeme ve şimdiki anı yaşamama yardımcı oluyor.', 'ask', 0), " +
-            "('Her gün, aşkın gücüyle yeniden doğuyorum ve potansiyelimin farkına varıyorum.', 'ask', 0), " +
-            "('Sevgi, iç huzurumu bulmamı sağlıyor ve ruhumu besliyor.', 'ask', 0), " +
-            "('Aşk, hayatıma neşe, tutku ve heyecan katıyor.', 'ask', 0), " +
-            "('Her bir nefeste, sevgiyi derinden hissediyorum ve bu hissi paylaşıyorum.', 'ask', 0), " +
-            "('Sevgi, hayatıma coşku ve enerji getiriyor, her günü daha dolu dolu yaşamama yardımcı oluyor.', 'ask', 0), " +
-            "('Aşk, içimdeki her hücreyi şifa ve iyileşmeyle dolduruyor.', 'ask', 0), " +
-            "('Her sevgi dolu adımım, etrafımdaki dünyayı biraz daha güzelleştiriyor.', 'ask', 0), " +
-            "('Sevgi, beni diğerlerine bağlıyor ve bana yaşamın bir parçası olduğumu hatırlatıyor.', 'ask', 0), " +
-            "('Aşk, içsel ve dışsal barışımı güçlendiriyor ve dengemi korumama yardımcı oluyor.', 'ask', 0), " +
-            "('Her gün, sevgiyle dolu bir kalp, yeni fırsatlar ve mucizelerle dolu bir dünya yaratıyor.', 'ask', 0), " +
-            "('Sevgi, beni başkalarının bakış açısını anlamaya ve onları kabul etmeye teşvik ediyor.', 'ask', 0)");
+            "('Sevgi hayatımın her köşesini aydınlatıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Kendi içimdeki sevgiyi dış dünyayla paylaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün sevgiyi derinlemesine yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi benim rehberim, beni en iyi yola yönlendiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatımı zenginleştiriyor ve güzelleştiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımda her gün daha fazla yer kaplıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Kendimi ve çevremdekileri koşulsuzca seviyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımın en güçlü gücüdür.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, tüm korkularımı yener.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün aşkla doluyorum ve bunu etrafa yayıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, benim her gün yaşamak için bir sebebim.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımdaki her şeyi daha iyi hale getiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi dolu ilişkiler, hayatımı anlamla dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün sevgiyle daha iyi bir insan oluyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımın merkezinde yer alıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Kendimi ve başkalarını sevmek, benim doğal halim.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatımdaki tüm engelleri aşmama yardımcı oluyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün sevgiyi daha derinden hissediyorum ve bunu yaşamıma yansıtıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımda sürekli bir ilham kaynağı.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgiyle, hayatım her gün daha güzel ve anlamlı hale geliyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, tüm ilişkilerimi güçlendiriyor ve derinleştiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi sayesinde, hayatımda daha çok mutluluk ve huzur var.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımdaki her alanında bana rehberlik ediyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Kendimi sevgiyle ifade etmek, benim için doğal ve kolay.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, tüm zorlukları aşmamı sağlıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgiyle, her gün yeni ve güzel başlangıçlar yapabiliyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımın en değerli hediyesi.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, benim kalbimde sürekli büyüyen bir çiçek gibi.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, her gün beni daha iyi bir insan yapmaya itiyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatımda her yönünü iyileştiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün sevgiyi daha çok kabul ediyorum ve bunu yaşamıma yansıtıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, beni her zaman daha büyük bir neşe ve mutlulukla dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatımda daima var olan bir kuvvet.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımı daha anlamlı ve değerli kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgiyle, her ilişkim daha derin ve anlamlı hale geliyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatımdaki her zorluğu aşmama yardımcı oluyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatımdaki en büyük motivasyon kaynağı.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün aşkı daha derinlemesine hissediyorum ve bunu yaşamıma yansıtıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, beni daha mutlu ve memnun bir insan yapıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatımda her zaman var olan bir ışık.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, içimdeki potansiyeli serbest bırakıyor ve beni sınırlarımın ötesine taşıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her nefeste, sevgiyle dolup taşıyorum ve bu enerjiyi etrafa yayıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, her sabah uyandığımda yüzümde bir gülümseme bırakıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgiyle dolu bir kalp, hayatıma bolluk ve bereket getiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, geçmişi affetmeme ve şimdiki anı yaşamama yardımcı oluyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün, aşkın gücüyle yeniden doğuyorum ve potansiyelimin farkına varıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, iç huzurumu bulmamı sağlıyor ve ruhumu besliyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, hayatıma neşe, tutku ve heyecan katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her bir nefeste, sevgiyi derinden hissediyorum ve bu hissi paylaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, hayatıma coşku ve enerji getiriyor, her günü daha dolu dolu yaşamama yardımcı oluyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, içimdeki her hücreyi şifa ve iyileşmeyle dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her sevgi dolu adımım, etrafımdaki dünyayı biraz daha güzelleştiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, beni diğerlerine bağlıyor ve bana yaşamın bir parçası olduğumu hatırlatıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Aşk, içsel ve dışsal barışımı güçlendiriyor ve dengemi korumama yardımcı oluyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Her gün, sevgiyle dolu bir kalp, yeni fırsatlar ve mucizelerle dolu bir dünya yaratıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
+            "('Sevgi, beni başkalarının bakış açısını anlamaya ve onları kabul etmeye teşvik ediyor.', 'Sevgi ve Aşk Olumlamaları', 0)");
 
 
 
             myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-            "('Kendi benliğime saygı göstermek, başkalarının da beni saygıyla görmesine yardımcı olur.', 'oz deger', 0), " +
-            "('Kendi kendime verdiğim değer, dış dünyada aldığım değerin temelidir.', 'oz deger', 0), " +
-            "('Kendimi sevgiyle kabul ettiğimde, etrafımdaki insanların da beni sevgiyle kabul etmesini sağlarım.', 'oz deger', 0), " +
-            "('Kendi ihtiyaçlarımı karşılamak, kendi değerimi tanımamı ve ona saygı göstermemi sağlar.', 'oz deger', 0), " +
-            "('Kendimle barışık olmak, hayatımda içsel bir huzur ve denge hissetmemi sağlar.', 'oz deger', 0), " +
-            "('Kendime saygı göstermek, başkalarının da bana saygı göstermesini sağlar.', 'oz deger', 0), " +
-            "('Kendi iç sesime kulak vermek, kendi değerimi anlamamı ve ona göre hareket etmemi sağlar.', 'oz deger', 0), " +
-            "('Kendi duygularımı ve düşüncelerimi ifade etmek, kendi değerimi ifade etmemi sağlar.', 'oz deger', 0), " +
-            "('Kendi hikayemi ve deneyimlerimi değerli bulmak, kendi benliğimi anlamamı ve takdir etmemi sağlar.', 'oz deger', 0), " +
-            "('Kendimle dürüst olmak, kendi değerimi daha iyi anlamamı sağlar.', 'oz deger', 0), " +
-            "('Kendi önceliklerime ve ihtiyaçlarıma özen göstermek, kendi değerimi önemsediğimi gösterir.', 'oz deger', 0), " +
-            "('Kendimi geliştirmek ve büyümek için çaba göstermek, kendi değerimi arttırır.', 'oz deger', 0), " +
-            "('Kendi hayallerimi ve hedeflerimi takip etmek, kendi değerime olan inancımı arttırır.', 'oz deger', 0), " +
-            "('Kendimle ilgili olumlu konuşmak, kendi değerimi güçlendirir ve beni motive eder.', 'oz deger', 0), " +
-            "('Kendi hayatımı yönlendirmek, kendi değerimi kontrol etme yeteneğimi gösterir.', 'oz deger', 0), " +
-            "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'oz deger', 0), " +
-            "('Kendi başarılarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'oz deger', 0), " +
-            "('Kendimi sürekli olarak geliştirmek, kendi değerimi arttırır ve kişisel tatmin sağlar.', 'oz deger', 0), " +
-            "('Kendimle ilgili olumsuz düşünceleri değiştirmek, kendi değerimi arttırır ve beni motive eder.', 'oz deger', 0), " +
-            "('Kendimi çevremdekilere olduğu gibi kabul etmek, kendi değerimi ve benzersizliğimi takdir etmemi sağlar.', 'oz deger', 0), " +
-            "('Kendi duygularımı tanımak ve onlara saygı göstermek, kendi değerimi tanımama yardımcı olur.', 'oz deger', 0), " +
-            "('Kendi hayatımı yönlendirmek için bilinçli kararlar almak, kendi değerimi kontrol etme yeteneğimi gösterir.', 'oz deger', 0), " +
-            "('Kendi sınırlarımı bilmek ve korumak, kendi değerimi ve ihtiyaçlarımı önemsediğimi gösterir.', 'oz deger', 0), " +
-            "('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'oz deger', 0), " +
-            "('Kendi iç gücümü ve potansiyelimi keşfetmek, kendi değerimi tanımama ve ona güvenmeme yardımcı olur.', 'oz deger', 0), " +
-            "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'oz deger', 0), " +
-            "('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'oz deger', 0), " +
-            "('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'oz deger', 0), " +
-            "('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'oz deger', 0), " +
-            "('Kendi başarılarımı ve kazanımlarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'oz deger', 0), " +
-            "('Kendi değerlerimle uyumlu olarak yaşamak, kendi değerlerimi ve benliğimi önemsediğimi gösterir.', 'oz deger', 0), " +
-            "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'oz deger', 0), " +
-            "('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'oz deger', 0), " +
-            "('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'oz deger', 0)");
+            "('Kendi benliğime saygı göstermek, başkalarının da beni saygıyla görmesine yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi kendime verdiğim değer, dış dünyada aldığım değerin temelidir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevgiyle kabul ettiğimde, etrafımdaki insanların da beni sevgiyle kabul etmesini sağlarım.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi ihtiyaçlarımı karşılamak, kendi değerimi tanımamı ve ona saygı göstermemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle barışık olmak, hayatımda içsel bir huzur ve denge hissetmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendime saygı göstermek, başkalarının da bana saygı göstermesini sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi iç sesime kulak vermek, kendi değerimi anlamamı ve ona göre hareket etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi duygularımı ve düşüncelerimi ifade etmek, kendi değerimi ifade etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi hikayemi ve deneyimlerimi değerli bulmak, kendi benliğimi anlamamı ve takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle dürüst olmak, kendi değerimi daha iyi anlamamı sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi önceliklerime ve ihtiyaçlarıma özen göstermek, kendi değerimi önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi geliştirmek ve büyümek için çaba göstermek, kendi değerimi arttırır.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi hayallerimi ve hedeflerimi takip etmek, kendi değerime olan inancımı arttırır.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle ilgili olumlu konuşmak, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi hayatımı yönlendirmek, kendi değerimi kontrol etme yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi başarılarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sürekli olarak geliştirmek, kendi değerimi arttırır ve kişisel tatmin sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle ilgili olumsuz düşünceleri değiştirmek, kendi değerimi arttırır ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi çevremdekilere olduğu gibi kabul etmek, kendi değerimi ve benzersizliğimi takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi duygularımı tanımak ve onlara saygı göstermek, kendi değerimi tanımama yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi hayatımı yönlendirmek için bilinçli kararlar almak, kendi değerimi kontrol etme yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi sınırlarımı bilmek ve korumak, kendi değerimi ve ihtiyaçlarımı önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi iç gücümü ve potansiyelimi keşfetmek, kendi değerimi tanımama ve ona güvenmeme yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi başarılarımı ve kazanımlarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi değerlerimle uyumlu olarak yaşamak, kendi değerlerimi ve benliğimi önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0)");
 
 
 
             myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-            "('Kendimi sevgiyle kabul ediyorum ve değerimi biliyorum.', 'oz deger', 0), " +
-            "('İçimdeki güçlü yanları keşfediyor ve onlara güveniyorum.', 'oz deger', 0), " +
-            "('Her gün kendi değerimi arttırıyorum ve kendimi geliştiriyorum.', 'oz deger', 0), " +
-            "('Kendi yeteneklerimi ve becerilerimi kutluyor ve onlara minnet duyuyorum.', 'oz deger', 0), " +
-            "('Başkalarının beklentileri yerine, kendi iç sesime ve değerlerime güveniyorum.', 'oz deger', 0), " +
-            "('Hayatın her alanında kendime saygı gösteriyorum ve sınırlarımı koruyorum.', 'oz deger', 0), " +
-            "('Başkalarının benim hakkımdaki düşünceleri benim değerimi belirlemez.', 'oz deger', 0), " +
-            "('Ben benim, ve bu yeterince değerli.', 'oz deger', 0), " +
-            "('Kendimi olduğum gibi kabul ediyorum ve bu beni güçlendiriyor.', 'oz deger', 0), " +
-            "('Kendi ihtiyaçlarımı karşılamak için zaman ve enerji ayırıyorum.', 'oz deger', 0), " +
-            "('Kendimi sevgiyle besliyor ve içsel huzurumu koruyorum.', 'oz deger', 0), " +
-            "('Her gün kendi değerimi görmek ve takdir etmek için zaman ayırıyorum.', 'oz deger', 0), " +
-            "('Kendi mutluluğum ve refahım benim için önemlidir.', 'oz deger', 0), " +
-            "('Kendi içimdeki güzelliği ve benzersizliği kutluyorum.', 'oz deger', 0), " +
-            "('Kendimi sürekli olarak büyüyen bir insan olarak görüyorum ve bununla gurur duyuyorum.', 'oz deger', 0), " +
-            "('Kendimi sevmek ve değer vermek, en önemli görevimdir.', 'oz deger', 0), " +
-            "('Kendi kendime söylediğim olumlu sözler, içsel değerimi güçlendirir.', 'oz deger', 0), " +
-            "('Kendimi tanımak ve kabul etmek, sürekli bir keşif ve öğrenme sürecidir.', 'oz deger', 0), " +
-            "('Kendime özen göstermek, kendimi değerli hissettirir.', 'oz deger', 0), " +
-            "('Kendi başarılarımı kutluyor ve bu başarılarıma değer veriyorum.', 'oz deger', 0), " +
-            "('Başkalarının benimle aynı fikirde olmaması benim değerimi azaltmaz.', 'oz deger', 0), " +
-            "('Kendimi affediyor ve geçmiş hatalarımı bir öğrenme fırsatı olarak görüyorum.', 'oz deger', 0), " +
-            "('Kendi ihtiyaçlarımı ve isteklerimi ifade etmek, benim haklarımı korumama yardımcı olur.', 'oz deger', 0), " +
-            "('Kendi iç sesime kulak vermek, kendi değerimi güçlendirir.', 'oz deger', 0), " +
-            "('Kendi güçlü yanlarımı ve zayıflıklarımı kabul ediyorum ve onlarla barış içindeyim.', 'oz deger', 0), " +
-            "('Kendi içsel kaynaklarıma güveniyorum ve onlardan yararlanıyorum.', 'oz deger', 0), " +
-            "('Kendimle ilgili olumlu düşünceler beslemek, benim için bir önceliktir.', 'oz deger', 0), " +
-            "('Kendimi sevmek ve değer vermek, başkalarını da sevmeme ve değer vermeme yardımcı olur.', 'oz deger', 0), " +
-            "('Kendi değerimi dış faktörlere bağlamak yerine, içsel gücümü kutluyorum.', 'oz deger', 0), " +
-            "('Kendime olumsuz düşünceleri reddediyor ve yerine olumlu düşünceler yerleştiriyorum.', 'oz deger', 0), " +
-            "('Kendime zaman ayırarak, içsel huzurumu koruyorum ve öz değerimi güçlendiriyorum.', 'oz deger', 0), " +
-            "('Kendi içimdeki güçlü ışığı görmek ve ona güvenmek, beni her gün daha da güçlendiriyor.', 'oz deger', 0), " +
-            "('Kendimi sevgiyle beslemek, hayatımda olumlu bir döngü oluşturur ve daha fazla sevgi çeker.', 'oz deger', 0), " +
-            "('Kendimi değersiz hissettiğimde, kendi içimdeki güçlü ve değerli yanları hatırlamak beni güçlendirir.', 'oz deger', 0), " +
-            "('Kendi benzersizliğim ve özgünlüğüm beni değerli kılar, ve bu benim en büyük gücümdür.', 'oz deger', 0)");
+            "('Kendimi sevgiyle kabul ediyorum ve değerimi biliyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('İçimdeki güçlü yanları keşfediyor ve onlara güveniyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Her gün kendi değerimi arttırıyorum ve kendimi geliştiriyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi yeteneklerimi ve becerilerimi kutluyor ve onlara minnet duyuyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Başkalarının beklentileri yerine, kendi iç sesime ve değerlerime güveniyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Hayatın her alanında kendime saygı gösteriyorum ve sınırlarımı koruyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Başkalarının benim hakkımdaki düşünceleri benim değerimi belirlemez.', 'Öz Değer Olumlamaları', 0), " +
+            "('Ben benim, ve bu yeterince değerli.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi olduğum gibi kabul ediyorum ve bu beni güçlendiriyor.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi ihtiyaçlarımı karşılamak için zaman ve enerji ayırıyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevgiyle besliyor ve içsel huzurumu koruyorum.', 'Öz Değer Olumlamaları' , 0), " +
+            "('Her gün kendi değerimi görmek ve takdir etmek için zaman ayırıyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi mutluluğum ve refahım benim için önemlidir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi içimdeki güzelliği ve benzersizliği kutluyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sürekli olarak büyüyen bir insan olarak görüyorum ve bununla gurur duyuyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevmek ve değer vermek, en önemli görevimdir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi kendime söylediğim olumlu sözler, içsel değerimi güçlendirir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi tanımak ve kabul etmek, sürekli bir keşif ve öğrenme sürecidir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendime özen göstermek, kendimi değerli hissettirir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi başarılarımı kutluyor ve bu başarılarıma değer veriyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Başkalarının benimle aynı fikirde olmaması benim değerimi azaltmaz.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi affediyor ve geçmiş hatalarımı bir öğrenme fırsatı olarak görüyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi ihtiyaçlarımı ve isteklerimi ifade etmek, benim haklarımı korumama yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi iç sesime kulak vermek, kendi değerimi güçlendirir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi güçlü yanlarımı ve zayıflıklarımı kabul ediyorum ve onlarla barış içindeyim.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi içsel kaynaklarıma güveniyorum ve onlardan yararlanıyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimle ilgili olumlu düşünceler beslemek, benim için bir önceliktir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevmek ve değer vermek, başkalarını da sevmeme ve değer vermeme yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi değerimi dış faktörlere bağlamak yerine, içsel gücümü kutluyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendime olumsuz düşünceleri reddediyor ve yerine olumlu düşünceler yerleştiriyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendime zaman ayırarak, içsel huzurumu koruyorum ve öz değerimi güçlendiriyorum.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi içimdeki güçlü ışığı görmek ve ona güvenmek, beni her gün daha da güçlendiriyor.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi sevgiyle beslemek, hayatımda olumlu bir döngü oluşturur ve daha fazla sevgi çeker.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendimi değersiz hissettiğimde, kendi içimdeki güçlü ve değerli yanları hatırlamak beni güçlendirir.', 'Öz Değer Olumlamaları', 0), " +
+            "('Kendi benzersizliğim ve özgünlüğüm beni değerli kılar, ve bu benim en büyük gücümdür.', 'Öz Değer Olumlamaları', 0)");
 
 
 
@@ -518,7 +515,7 @@ class MainActivity : AppCompatActivity() {
             "('Kaygılarımı tanıyor ve onlarla sağlıklı bir şekilde ilgileniyorum.', 'stres ve kaygi', 0), " +
             "('Stresli zamanlarda bile, huzur bulmayı başarabilirim.', 'stres ve kaygi', 0), " +
             "('Kaygılarımı kontrol altına alabilir ve onları hafifletebiliriz.', 'stres ve kaygi', 0), " +
-            "('Stres, beni daha güçlü ve dirençli kılıyor.', 'stres ve kaygi', 0), " +
+            "('Stresle baş etmek beni daha güçlü ve dirençli kılıyor.', 'stres ve kaygi', 0), " +
             "('Her kaygılı düşünceyi sakinlikle karşılıyorum ve geçmesine izin veriyorum.', 'stres ve kaygi', 0), " +
             "('Kendimi stresten arındırmak için gereken zamanı ayırıyorum.', 'stres ve kaygi', 0), " +
             "('Stresli anlarda bile, içsel huzuru bulmayı başarabilirim.', 'stres ve kaygi', 0)");
@@ -864,9 +861,18 @@ class MainActivity : AppCompatActivity() {
             "('Evren, bana her gün daha fazla sevgi ve neşe getir.', 'dua ve istek', 0)");
 
 
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Stres ve Kaygı Olumlamaları' WHERE category = 'stres ve kaygi'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Pozitif Düşünce Olumlamaları' WHERE category = 'pozitif_dusunce'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Pozitif Düşünce Olumlamaları' WHERE category = 'pozitif_dusunme'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'İlişki Olumlamaları' WHERE category = 'iliskiler'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Dua ve İstek Olumlamaları' WHERE category = 'dua ve istek'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Zaman Yönetimi Olumlamaları' WHERE category = 'zaman yonetimi'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Kişisel Gelişim Olumlamaları' WHERE category = 'kisisel gelisim'");
+            myDatabase.execSQL("UPDATE olumlamalar SET category = 'Başarı Olumlamaları' WHERE category = 'basari'");
 
 
-            val cunsor = myDatabase.rawQuery("SELECT * FROM olumlamalar WHERE id =3" , null)
+
+            val cunsor = myDatabase.rawQuery("SELECT * FROM olumlamalar" , null)
             val affirmationIndex = cunsor.getColumnIndex("affirmation")
             val categoryIndex = cunsor.getColumnIndex("category")
             val favoriteIndex = cunsor.getColumnIndex("favorite")
