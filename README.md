@@ -1,1 +1,1 @@
-# olumlamalar
+# sqlite çalışması
