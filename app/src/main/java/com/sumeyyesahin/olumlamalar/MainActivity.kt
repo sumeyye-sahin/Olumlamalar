@@ -1,16 +1,63 @@
 package com.sumeyyesahin.olumlamalar
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
+import android.view.View
+import com.squareup.picasso.Picasso
+import com.sumeyyesahin.olumlamalar.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+
+
+
+        val originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.mainbackground4)
+       // binding.deneme.background = BitmapDrawable(resources, originalBitmap)
+
+        val screenHight = resources.displayMetrics.heightPixels.toInt()
+        val screenWidth = resources.displayMetrics.widthPixels.toInt()
+
+        if(originalBitmap.height>screenHight){
+
+            val height= (originalBitmap.height.toInt()-screenHight.toInt())/4
+            val croppedimage1= cropBottomOfImage(originalBitmap, 250)
+            val croppedimage2= croppedimage1?.let { cropTopOfImage(it, 250) }
+            binding.deneme.background = BitmapDrawable(resources, croppedimage2)}
+        else if(originalBitmap.width>screenWidth){
+            val width= (originalBitmap.width.toInt()-screenWidth.toInt())/4
+            val croppedimage1= cropRightOfImage(originalBitmap, width)
+            val croppedimage2= croppedimage1?.let { cropLeftOfImage(it, width)
+
+            }
+            binding.deneme.background = BitmapDrawable(resources, croppedimage2)
+        }
+        else{
+            binding.deneme.background = BitmapDrawable(resources, originalBitmap)
+        }
+
+       // println(screenHight)
+     //   println(screenWidth)
+
+      //  println("...............")
+
+     //   println(originalBitmap.height)
+      ///  println(originalBitmap.width)
+
+
+
+
+
+
+        /*
 
 
         try {
@@ -896,6 +943,75 @@ class MainActivity : AppCompatActivity() {
           shareIntent.putExtra(Intent.EXTRA_TEXT, "Bu bir örnek metin")
           // Paylaşım menüsünü başlatın
           startActivity(Intent.createChooser(shareIntent, "İçeriği Paylaş"))
-  */
+  */*/
     }
+
+    fun cropTopOfImage(bitmap: Bitmap, cropHeight: Int): Bitmap? {
+
+
+        // Resmin üst kısmını kırp
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap,
+            0,
+            cropHeight,
+            bitmap.width,
+            bitmap.height - cropHeight
+        )
+
+        return croppedBitmap
+    }
+
+    fun cropBottomOfImage(bitmap: Bitmap, cropHeight: Int): Bitmap? {
+
+
+        // Resmin alt kısmını kırp
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
+            bitmap.width,
+            bitmap.height - cropHeight
+        )
+
+        return croppedBitmap
+    }
+
+    fun cropRightOfImage(bitmap: Bitmap, cropWidth: Int): Bitmap? {
+        // Resmin sağ tarafını kırp
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
+            bitmap.width - cropWidth,
+            bitmap.height
+        )
+
+        return croppedBitmap
+    }
+
+
+    fun cropLeftOfImage(bitmap: Bitmap, cropWidth: Int): Bitmap? {
+
+        // Resmin sol tarafını kırp
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap,
+            cropWidth,
+            0,
+            bitmap.width - cropWidth,
+            bitmap.height
+        )
+
+        return croppedBitmap
+    }
+
+    fun genelolumlamalaragit(view: View){
+        val intent = Intent(view.context, AffirmationMainPageActivity::class.java)
+        view.context.startActivity(intent)
+    }
+
+    fun kategorileregit(view: View) {
+        val intent = Intent(view.context, CategoryActivity::class.java)
+        view.context.startActivity(intent)
+    }
+
 }
