@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainbackground4"
+    android:id="@+id/deneme"
+
     tools:context=".MainActivity">
 
     <TextView
@@ -39,7 +40,8 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttongenel"
+            android:onClick="genelolumlamalaragit"
             android:layout_width="289dp"
             android:layout_height="52dp"
             android:background="@drawable/buttonmain"
@@ -50,7 +52,8 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonkategori"
+            android:onClick="kategorileregit"
             android:layout_width="289dp"
             android:layout_height="52dp"
             android:background="@drawable/buttonmain"
@@ -61,7 +64,8 @@
             android:textSize="18sp"/>
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonnefes"
+            android:onClick="nefesegit"
             android:layout_width="289dp"
             android:layout_height="52dp"
             android:background="@drawable/buttonmain"
