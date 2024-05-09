@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/deneme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/deneme"
-    android:background="@drawable/categories"
     tools:context=".CategoryActivity">
+
+
+    <ImageView
+        android:id="@+id/topimage"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+
+        android:layout_marginTop="-5dp"
+        android:src="@drawable/categorytopimage"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="69dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/category_headline"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:padding="20dp"
         android:text="KATEGORİLER"
-        android:textColor="#4E9591"
-        android:textSize="22sp"
+        android:textColor="#6A6A6A"
+        android:paddingBottom="7dp"
+        android:layout_gravity="center"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+>
 
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="395dp"
-        android:layout_height="603dp"
-        android:layout_marginTop="30dp"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:listitem="@layout/category_item" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

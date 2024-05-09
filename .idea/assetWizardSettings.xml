@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/share/baseline_share_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/apps/baseline_apps_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,9 +34,9 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="color" value="559793" />
-                            <entry key="outputName" value="mainbackground4_1" />
-                            <entry key="sourceFile" value="C:\Users\sumeyye\Desktop\medium stories\kotlinOOP\mainbackground4 1.svg" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="categoryicon" />
+                            <entry key="sourceFile" value="C:\Users\sumeyye\Desktop\Group 9.svg" />
                           </map>
                         </option>
                       </PersistentState>
