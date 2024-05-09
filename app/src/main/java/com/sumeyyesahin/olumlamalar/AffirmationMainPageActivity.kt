@@ -34,6 +34,10 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding.textView.text = kategori
         binding.textView.text = Html.fromHtml("<u>$kategori</u>")
 
+        // Kullanıcının son görüntülenen olumlamadan ID'sini kontrol et
+        val lastId = getLastPosition(this)
+        currentIndex = lastId
+
         // DBHelper sınıfını kullanarak kategorinin olumlamalarını alıyoruz
         olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori!!)
 
@@ -44,12 +48,16 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding.ileri.setOnClickListener {
             currentIndex = (currentIndex + 1) % olumlamalar.size
             updateAffirmationText()
+            // Son görüntülenen olumlamadan ID'sini kaydet
+            saveLastPosition(this, currentIndex)
         }
 
         // Geri butonuna tıklandığında bir önceki olumlamayı göster
         binding.geri.setOnClickListener {
             currentIndex = (currentIndex - 1 + olumlamalar.size) % olumlamalar.size
             updateAffirmationText()
+            // Son görüntülenen olumlamadan ID'sini kaydet
+            saveLastPosition(this, currentIndex)
         }
 
         binding.share.setOnClickListener {
@@ -58,21 +66,17 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             val bitmap = takeScreenshot(binding.imageView, binding.olumlamalarTextView)
 
             // Share intent
-            val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Olumlama", null)
+            val path =
+                MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Olumlama", null)
             val uri = Uri.parse(path)
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/*"
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
             startActivity(Intent.createChooser(shareIntent, "İçeriği Paylaş"))
 
-/*
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, olumlamalar[currentIndex].affirmation)
-            startActivity(Intent.createChooser(shareIntent, "İçeriği Paylaş"))*/
         }
-    }
 
+    }
     private fun takeScreenshot(imageView: ImageView, textView: TextView) : Bitmap {
         val returnedBitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(returnedBitmap)
@@ -96,21 +100,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         return Pair(xDelta, yDelta)
     }
 
-    // take screenshot
- /*   private fun takeScreenshot(view: View) : Bitmap {
-        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(returnedBitmap)
-        val bgDrawable = view.background
-        if (bgDrawable != null) {
-            bgDrawable.draw(canvas)
-        } else {
-            canvas.drawColor(Color.WHITE)
-        }
-        view.draw(canvas)
-        return returnedBitmap
 
-    }
-*/
 
 
 
@@ -123,20 +113,18 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
     }
 
-    // SharedPreferences'a son id ve kategori bilgisini kaydetme
-    fun saveLastPosition(context: Context, id: Int, category: String) {
+    // SharedPreferences'a son görüntülenen olumlamadan ID bilgisini kaydetme
+    fun saveLastPosition(context: Context, id: Int) {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
         editor.putInt(LAST_AFFIRMATION_ID, id)
-        editor.putString(LAST_CATEGORY, category)
         editor.apply()
     }
-    // SharedPreferences'dan son id ve kategori bilgisini alma
-    fun getLastPosition(context: Context): Pair<Int, String> {
+
+    // SharedPreferences'dan son görüntülenen olumlamadan ID bilgisini alma
+    fun getLastPosition(context: Context): Int {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val lastId = sharedPrefs.getInt(LAST_AFFIRMATION_ID, 0) // Varsayılan olarak 0 döndür
-        val lastCategory = sharedPrefs.getString(LAST_CATEGORY, "") ?: ""
-        return Pair(lastId, lastCategory)
+        return sharedPrefs.getInt(LAST_AFFIRMATION_ID, 0) // Varsayılan olarak 0 döndür
     }
 
 
@@ -146,12 +134,4 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         val intent = Intent(this, CategoryActivity::class.java)
         startActivity(intent)
     }
-/*
-    // İçeriği paylaşmak için onClick fonksiyonu
-    fun share(view: View){
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "Bu bir örnek metin")
-        startActivity(Intent.createChooser(shareIntent, "İçeriği Paylaş"))
-    }*/
 }
