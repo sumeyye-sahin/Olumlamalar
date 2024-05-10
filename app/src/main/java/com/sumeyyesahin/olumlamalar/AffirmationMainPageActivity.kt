@@ -43,13 +43,14 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         // İlk olumlama metnini güncelle
         updateAffirmationText()
-
+        //updateLikeButtonIcon()
         // İleri butonuna tıklandığında bir sonraki olumlamayı göster
         binding.ileri.setOnClickListener {
             currentIndex = (currentIndex + 1) % olumlamalar.size
             updateAffirmationText()
             // Son görüntülenen olumlamadan ID'sini kaydet
             saveLastPosition(this, currentIndex)
+            updateLikeButtonIcon()
         }
 
         // Geri butonuna tıklandığında bir önceki olumlamayı göster
@@ -58,6 +59,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             updateAffirmationText()
             // Son görüntülenen olumlamadan ID'sini kaydet
             saveLastPosition(this, currentIndex)
+            updateLikeButtonIcon()
+
         }
 
         binding.share.setOnClickListener {
@@ -76,6 +79,34 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         }
 
+        // Beğen butonuna tıklama işlevselliğini ekle
+        binding.like.setOnClickListener {
+            // Kullanıcının tıkladığı olumlama
+            val clickedAffirmation = olumlamalar[currentIndex]
+            // Favori durumunu tersine çevir
+            clickedAffirmation.favorite = !clickedAffirmation.favorite
+            // Favori durumunu güncelle
+            DBHelper(this).updateAffirmationWithLikeStatus(clickedAffirmation, clickedAffirmation.favorite)
+            // Favori butonunun ikonunu güncelle
+            updateLikeButtonIcon()
+        }
+
+
+    }
+    override fun onResume() {
+        super.onResume()
+
+        // Favori butonunun ikonunu güncelle
+        updateLikeButtonIcon()
+    }
+    // Beğenme butonu ikonunu güncellemek için özel bir fonksiyon
+    private fun updateLikeButtonIcon() {
+        val likeButtonIcon = if (olumlamalar[currentIndex].favorite) {
+            R.drawable.baseline_favorite
+        } else {
+            R.drawable.baseline_favorite_border_24
+        }
+        binding.like.background = getDrawable(likeButtonIcon)
     }
     private fun takeScreenshot(imageView: ImageView, textView: TextView) : Bitmap {
         val returnedBitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)

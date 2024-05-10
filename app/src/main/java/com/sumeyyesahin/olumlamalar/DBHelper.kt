@@ -960,27 +960,6 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
     }
 
 
-    /*
-    // get all affirmations
-    fun getAllAffirmations(): ArrayList<Olumlamalarlistmodel> {
-        val list = ArrayList<Olumlamalarlistmodel>()
-        val db = this.readableDatabase
-        val query = "SELECT * FROM $TABLE_NAME"
-        val result = db.rawQuery(query, null)
-        if (result.moveToFirst()) {
-            do {
-                val affirmation = Olumlamalarlistmodel()
-                affirmation.id = result.getString(result.getColumnIndex(COLUMN_ID)).toInt()
-                affirmation.affirmation = result.getString(result.getColumnIndex(COLUMN_AFFIRMATION))
-                affirmation.category = result.getString(result.getColumnIndex(COLUMN_CATEGORY))
-                affirmation.favorite = result.getString(result.getColumnIndex(COLUMN_FAVORITE)).toBoolean()
-                list.add(affirmation)
-            } while (result.moveToNext())
-        }
-        result.close()
-        db.close()
-        return list
-    }
-*/
+
 
 }
