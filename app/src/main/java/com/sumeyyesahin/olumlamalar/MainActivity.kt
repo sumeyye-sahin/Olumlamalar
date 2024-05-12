@@ -18,6 +18,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        binding.buttonnefes.setOnClickListener {
+            val intent = Intent(this, NefesActivity::class.java)
+            startActivity(intent)
+        }
 
 
 

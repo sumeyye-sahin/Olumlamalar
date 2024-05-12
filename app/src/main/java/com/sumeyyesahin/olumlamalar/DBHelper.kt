@@ -974,6 +974,8 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         return olumlamalar
     }
 
+
+
     fun addAffirmation(affirmation: Olumlamalarlistmodel) {
         val db = this.writableDatabase
         val values = ContentValues()

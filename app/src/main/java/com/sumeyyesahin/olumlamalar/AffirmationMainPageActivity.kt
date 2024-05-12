@@ -39,8 +39,17 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
 
         // currentIndex değeriyle olumlamaları güncelle
-        updateAffirmationText(currentIndex)
-        updateLikeButtonIcon(currentIndex)
+
+        updateUI()
+       // updateAffirmationText(currentIndex)
+       // updateLikeButtonIcon(currentIndex)
+        if(kategori == "Kendi Olumlamalarım"){
+            binding.delete.visibility = View.VISIBLE
+
+
+        }else{
+            binding.delete.visibility = View.GONE
+        }
 
         // İleri butonuna tıklandığında bir sonraki olumlamayı göster
         binding.ileri.setOnClickListener {
@@ -48,7 +57,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             updateAffirmationText(currentIndex)
             // Son görüntülenen olumlamadan ID'sini kaydet
             saveLastPosition(this, currentIndex, kategori)
-            updateLikeButtonIcon(currentIndex)
+           // updateLikeButtonIcon(currentIndex)
+            updateUI()
         }
 
         // Geri butonuna tıklandığında bir önceki olumlamayı göster
@@ -57,8 +67,34 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             updateAffirmationText(currentIndex)
             // Son görüntülenen olumlamadan ID'sini kaydet
             saveLastPosition(this, currentIndex, kategori)
+            updateUI()
+           // updateLikeButtonIcon(currentIndex)
+        }
 
-            updateLikeButtonIcon(currentIndex)
+/*
+        // Sil butonuna tıklandığında olumlamayı sil
+        binding.delete.setOnClickListener {
+            val clickedAffirmation = olumlamalar[currentIndex]
+            DBHelper(this).deleteAffirmation(clickedAffirmation.id)
+            olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
+
+            if (olumlamalar.isNotEmpty()) {
+                currentIndex = 0
+                updateAffirmationText(currentIndex)
+                updateLikeButtonIcon(currentIndex)
+            } else {
+                binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
+                // Diğer UI elemanlarını da uygun şekilde gizleyin veya disable edin.
+                binding.delete.visibility = View.GONE
+            }}
+*/
+        binding.delete.setOnClickListener {
+            if (olumlamalar.isNotEmpty()) {
+                DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id)
+                olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
+                currentIndex = 0
+                updateUI()
+            }
         }
 
         binding.share.setOnClickListener {
@@ -99,8 +135,11 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             // Favori butonunun ikonunu güncelle
             updateLikeButtonIcon(currentIndex)
             // Favori durumunu güncelle
+        }
 
-
+        binding.addbutton.setOnClickListener {
+            val intent = Intent(this, AddAffirmationActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ADD_AFFIRMATION)
         }
     }
 
@@ -108,13 +147,55 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         super.onResume()
         // Kategori değiştiğinde currentIndex değerini güncelle
         val kategori = intent.getStringExtra("kategori")
-        currentIndex = getLastPosition(this, kategori!!)
-        updateAffirmationText(currentIndex)
+       // currentIndex = getLastPosition(this, kategori!!)
+        // DBHelper kullanarak kategorinin güncel olumlamalarını al
+        olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori!!)
+
+        // Listeyi güncelleme ve currentIndex'i sıfırlama
+        if (olumlamalar.isNotEmpty()) {
+            currentIndex = getLastPosition(this, kategori).coerceAtMost(olumlamalar.size - 1)
+        } else {
+            currentIndex = 0 // Eğer liste boşsa currentIndex'i sıfırla
+        }
+
+        updateUI()
+       // updateAffirmationText(currentIndex)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_ADD_AFFIRMATION && resultCode == RESULT_OK) {
+            // DBHelper kullanarak kategorinin güncel olumlamalarını al
+            val kategori = intent.getStringExtra("kategori")!!
+            olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
+            updateUI() // UI'yi güncelle
+        }
+    }
 
+    private fun updateUI() {
+        if (olumlamalar.isNotEmpty()) {
+            updateAffirmationText(currentIndex)
+            updateLikeButtonIcon(currentIndex)
+            enableButtons(true) // Butonları etkinleştir
+        } else {
+            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
+            binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
+            binding.like.isClickable = false
+            binding.delete.isClickable = false
+            binding.ileri.isClickable = false
+            binding.geri.isClickable = false
+            binding.share.isClickable = false
 
-
+        }
+    }
+    private fun enableButtons(enable: Boolean) {
+        binding.ileri.isClickable = enable
+        binding.geri.isClickable = enable
+        binding.share.isClickable = enable
+        binding.like.isClickable = enable
+        binding.delete.isClickable = enable
+        // Diğer butonları da bu şekilde ayarlayabilirsiniz.
+    }
     private fun updateLikeButtonIcon(index: Int) {
         val likeButtonIcon = if (olumlamalar[index].favorite) {
             R.drawable.baseline_favorite
@@ -170,4 +251,10 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     fun kategori(view: View){
         val intent = Intent(this, CategoryActivity::class.java)
         startActivity(intent)
-    }}
+    }
+
+    // Request kod tanımı
+    companion object {
+        private const val REQUEST_CODE_ADD_AFFIRMATION = 1
+    }
+}

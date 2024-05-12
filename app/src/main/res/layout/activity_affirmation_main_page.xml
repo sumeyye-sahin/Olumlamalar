@@ -68,6 +68,7 @@
                     android:fontFamily="@font/lobster"
                     android:letterSpacing="0.09"
                     android:gravity="center"
+                    android:layout_gravity="center"
                     android:text="Kendini sevmeyi hak ediyorsun. Kendini sevmeyi hak ediyorsun.Kendini sevmeyi hak ediyorsun."
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
@@ -100,6 +101,8 @@
         android:layout_marginEnd="0dp"
         android:orientation="horizontal">
 
+
+
         <Button
             android:id="@+id/like"
             android:layout_width="40dp"
@@ -116,13 +119,19 @@
             android:layout_marginRight="20dp"
             android:background="@drawable/baseline_share_24"
             android:onClick="share" />
-
+        <Button
+            android:id="@+id/delete"
+            android:visibility="gone"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/baseline_delete_24" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="right"
@@ -131,6 +140,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/addbutton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="right"
