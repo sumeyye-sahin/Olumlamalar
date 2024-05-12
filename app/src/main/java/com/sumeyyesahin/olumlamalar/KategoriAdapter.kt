@@ -26,7 +26,7 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
     override fun onBindViewHolder(holder: KategoriViewHolder, position: Int) {
         val currentKategori = kategoriListesi[position]
         holder.textViewKategoriAdi.text = currentKategori
-       // println(currentKategori)
+        // println(currentKategori)
 
         // Kategoriye göre drawable kaynağını atan
         val drawableResourceId = getDrawableResourceId(holder.itemView.context, currentKategori)
@@ -34,12 +34,30 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
 
 
         // intent
-        holder.cardView.setOnClickListener {
+
+        if (currentKategori == "Favori Olumlamalarım") {
+            holder.cardView.setOnClickListener {
+                val context = holder.textViewKategoriAdi.context
+                val intent = Intent(context, FavoriesActivity::class.java)
+                intent.putExtra("kategori", currentKategori)
+                context.startActivity(intent)
+            }
+        } else {
+            holder.cardView.setOnClickListener {
+                val context = holder.textViewKategoriAdi.context
+                val intent = Intent(context, AffirmationMainPageActivity::class.java)
+                intent.putExtra("kategori", currentKategori)
+                context.startActivity(intent)
+            }
+        }
+
+
+        /*holder.cardView.setOnClickListener {
             val context = holder.textViewKategoriAdi.context
             val intent = Intent(context, AffirmationMainPageActivity::class.java)
             intent.putExtra("kategori", currentKategori)
             context.startActivity(intent)
-        }
+        }*/
     }
 
     override fun getItemCount() = kategoriListesi.size
@@ -60,6 +78,7 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
             "Zaman Yönetimi Olumlamaları" -> R.drawable.zaman11
             "İlişki Olumlamaları" -> R.drawable.iliskiler12
             "Dua ve İstek Olumlamaları" -> R.drawable.duaveistek13
+            "Favori Olumlamalarım" -> R.drawable.favori
             else -> R.drawable.kendi // Varsayılan drawable, eğer kategori bulunamazsa
         }
     }

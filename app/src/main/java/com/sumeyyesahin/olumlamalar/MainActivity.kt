@@ -32,63 +32,7 @@ class MainActivity : AppCompatActivity() {
   */
     }
 
-    fun cropTopOfImage(bitmap: Bitmap, cropHeight: Int): Bitmap? {
 
-
-        // Resmin üst kısmını kırp
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap,
-            0,
-            cropHeight,
-            bitmap.width,
-            bitmap.height - cropHeight
-        )
-
-        return croppedBitmap
-    }
-
-    fun cropBottomOfImage(bitmap: Bitmap, cropHeight: Int): Bitmap? {
-
-
-        // Resmin alt kısmını kırp
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap,
-            0,
-            0,
-            bitmap.width,
-            bitmap.height - cropHeight
-        )
-
-        return croppedBitmap
-    }
-
-    fun cropRightOfImage(bitmap: Bitmap, cropWidth: Int): Bitmap? {
-        // Resmin sağ tarafını kırp
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap,
-            0,
-            0,
-            bitmap.width - cropWidth,
-            bitmap.height
-        )
-
-        return croppedBitmap
-    }
-
-
-    fun cropLeftOfImage(bitmap: Bitmap, cropWidth: Int): Bitmap? {
-
-        // Resmin sol tarafını kırp
-        val croppedBitmap = Bitmap.createBitmap(
-            bitmap,
-            cropWidth,
-            0,
-            bitmap.width - cropWidth,
-            bitmap.height
-        )
-
-        return croppedBitmap
-    }
 
 
     fun kategorileregit(view: View) {

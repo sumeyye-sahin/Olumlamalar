@@ -13,10 +13,10 @@
         android:id="@+id/topimage"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-
-        android:layout_marginTop="-5dp"
-        android:src="@drawable/categorytopimage"
-
+        android:layout_marginLeft="-25dp"
+        android:layout_marginRight="-25dp"
+        android:layout_marginTop="-25dp"
+        android:src="@drawable/kotegoritop1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="KATEGORİLER"
-        android:textColor="#6A6A6A"
+        android:textColor="#151515"
         android:paddingBottom="7dp"
         android:layout_gravity="center"
         android:textSize="20sp"

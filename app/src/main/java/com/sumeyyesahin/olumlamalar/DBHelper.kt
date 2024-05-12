@@ -25,7 +25,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
 
 
     override fun onCreate(myDatabase: SQLiteDatabase?) {
-        val createTable = "CREATE TABLE " + TABLE_NAME + " (" +
+        val createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_AFFIRMATION + " VARCHAR," +
                 COLUMN_CATEGORY + " VARCHAR," +
@@ -889,22 +889,60 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         onCreate(db)
     }
 
+
+
     fun deleteAffirmation(id: Int) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
         db.close()
     }
 
-    fun updateAffirmationWithLikeStatus(affirmation: Olumlamalarlistmodel, isLiked: Boolean) {
+    fun updateAffirmationFavStatus(affirmation: Olumlamalarlistmodel) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_AFFIRMATION, affirmation.affirmation)
-            put(COLUMN_CATEGORY, affirmation.category)
-            put(COLUMN_FAVORITE, isLiked) // Beğenildiyse true, beğenilmediyse false
+            put(COLUMN_FAVORITE, affirmation.favorite)
         }
         db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
         db.close()
     }
+
+    fun addAffirmationFav(affirmation: Olumlamalarlistmodel, isFavorite: Boolean) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_AFFIRMATION, affirmation.affirmation)
+            put(COLUMN_CATEGORY, "Favori Olumlamalarım" )
+            put(COLUMN_FAVORITE, isFavorite)
+        }
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
+
+    fun deleteFavoriteAffirmationByCategoryAndAffirmationName(category: String, affirmation: String) {
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?", arrayOf(category, affirmation))
+        db.close()
+    }
+
+    fun getFavoriteAffirmations(): List<Olumlamalarlistmodel> {
+        val olumlamalar = mutableListOf<Olumlamalarlistmodel>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1", null)
+        cursor.use {
+            while (it.moveToNext()) {
+                val olumlama = Olumlamalarlistmodel(
+                    it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
+                )
+                olumlamalar.add(olumlama)
+            }
+        }
+        return olumlamalar
+    }
+
+
 
     fun updateAffirmation(affirmation: Olumlamalarlistmodel) {
         val db = this.writableDatabase
@@ -960,6 +998,27 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
     }
 
 
+    /*
+    // get all affirmations
+    fun getAllAffirmations(): ArrayList<Olumlamalarlistmodel> {
+        val list = ArrayList<Olumlamalarlistmodel>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1", null)
+        cursor.use {
+            while (it.moveToNext()) {
+                val olumlama = Olumlamalarlistmodel(
+                    it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
+                )
+                olumlamalar.add(olumlama)
+            }
+        }
+        return olumlamalar
+    }
+
+*/
 
 
 }
