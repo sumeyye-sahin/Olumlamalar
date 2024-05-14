@@ -90,7 +90,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 */
         binding.delete.setOnClickListener {
             if (olumlamalar.isNotEmpty()) {
-                DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id)
+                DBHelper(this).deleteAffirmation(kategori!!, olumlamalar[currentIndex].affirmation)
                 olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
                 currentIndex = 0
                 updateUI()

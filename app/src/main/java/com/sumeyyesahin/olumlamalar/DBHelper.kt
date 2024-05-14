@@ -598,6 +598,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, hayatımda büyük değişiklikler yaratıyor.', 'pozitif_dusunce', 0)");
         myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, beni daha iyi bir geleceğe taşıyor.', 'pozitif_dusunce', 0)");
 
+
         myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
                 "('Başarı, her gün biraz daha yakınıma geliyor.', 'basari', 0), " +
                 "('Her başarı, yeni bir özgüven kaynağıdır.', 'basari', 0), " +
@@ -869,7 +870,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
                 "('Hayatımın her alanında başarı ve tatmin duygusu için yardım istiyorum.', 'dua ve istek', 0), " +
                 "('Her gün içsel gücümü ve özgüvenimi artırmak için evrenin rehberliğini istiyorum.', 'dua ve istek', 0), " +
                 "('Evren, bana her gün daha fazla sevgi ve neşe getir.', 'dua ve istek', 0)");
-
+        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES (NULL, 'Kendi Olumlamalarım', 0)");
 
         myDatabase.execSQL("UPDATE olumlamalar SET category = 'Stres ve Kaygı Olumlamaları' WHERE category = 'stres ve kaygi'");
         myDatabase.execSQL("UPDATE olumlamalar SET category = 'Pozitif Düşünce Olumlamaları' WHERE category = 'pozitif_dusunce'");
@@ -891,100 +892,136 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
 
 
 
-    fun deleteAffirmation(id: Int) {
-        val db = this.writableDatabase
-        db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
-        db.close()
+    fun deleteAffirmation(
+        category: String,
+        affirmation: String
+        ) {
+            val db = this.writableDatabase
+            db.delete(
+                TABLE_NAME,
+                "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?",
+                arrayOf(category, affirmation)
+            )
+            db.close()
     }
+        //getAffirmationCountByCategory(kategori)
 
-    fun updateAffirmationFavStatus(affirmation: Olumlamalarlistmodel) {
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(COLUMN_FAVORITE, affirmation.favorite)
-        }
-        db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
-        db.close()
-    }
-
-    fun addAffirmationFav(affirmation: Olumlamalarlistmodel, isFavorite: Boolean) {
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(COLUMN_AFFIRMATION, affirmation.affirmation)
-            put(COLUMN_CATEGORY, "Favori Olumlamalarım" )
-            put(COLUMN_FAVORITE, isFavorite)
-        }
-        db.insert(TABLE_NAME, null, values)
-        db.close()
-    }
-
-
-    fun deleteFavoriteAffirmationByCategoryAndAffirmationName(category: String, affirmation: String) {
-        val db = this.writableDatabase
-        db.delete(TABLE_NAME, "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?", arrayOf(category, affirmation))
-        db.close()
-    }
-
-    fun getFavoriteAffirmations(): List<Olumlamalarlistmodel> {
-        val olumlamalar = mutableListOf<Olumlamalarlistmodel>()
-        val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1", null)
-        cursor.use {
-            while (it.moveToNext()) {
-                val olumlama = Olumlamalarlistmodel(
-                    it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
-                    it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
-                )
-                olumlamalar.add(olumlama)
+        fun getAffirmationCountByCategory(kategori: String): Int {
+            val db = this.readableDatabase
+            val cursor = db.rawQuery(
+                "SELECT COUNT(*) FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?",
+                arrayOf(kategori)
+            )
+            var count = 0
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0) // İlk sütun, COUNT(*) sonucunu içerir
             }
+            cursor.close()
+            return count
         }
-        return olumlamalar
-    }
 
-
-
-    fun updateAffirmation(affirmation: Olumlamalarlistmodel) {
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(COLUMN_AFFIRMATION, affirmation.affirmation)
-            put(COLUMN_CATEGORY, affirmation.category)
-            put(COLUMN_FAVORITE, affirmation.favorite)
-        }
-        db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
-        db.close()
-    }
-
-    // DBHelper sınıfı içinde olumlamaları kategoriye göre çeken metod
-    fun getOlumlamalarByCategory(kategori: String): List<Olumlamalarlistmodel> {
-        val olumlamalar = mutableListOf<Olumlamalarlistmodel>()
-        val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?", arrayOf(kategori))
-        cursor.use {
-            while (it.moveToNext()) {
-                val olumlama = Olumlamalarlistmodel(
-                    it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
-                    it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
-                )
-                olumlamalar.add(olumlama)
+        fun updateAffirmationFavStatus(affirmation: Olumlamalarlistmodel) {
+            val db = this.writableDatabase
+            val values = ContentValues().apply {
+                put(COLUMN_FAVORITE, affirmation.favorite)
             }
+            db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
+            db.close()
         }
-        return olumlamalar
-    }
+
+        fun addAffirmationFav(affirmation: Olumlamalarlistmodel, isFavorite: Boolean) {
+            val db = this.writableDatabase
+            val values = ContentValues().apply {
+                put(COLUMN_AFFIRMATION, affirmation.affirmation)
+                put(COLUMN_CATEGORY, "Favori Olumlamalarım")
+                put(COLUMN_FAVORITE, isFavorite)
+            }
+            db.insert(TABLE_NAME, null, values)
+            db.close()
+        }
 
 
+        fun deleteFavoriteAffirmationByCategoryAndAffirmationName(
+            category: String,
+            affirmation: String
+        ) {
+            val db = this.writableDatabase
+            db.delete(
+                TABLE_NAME,
+                "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?",
+                arrayOf(category, affirmation)
+            )
+            db.close()
+        }
 
-    fun addAffirmation(affirmation: Olumlamalarlistmodel) {
-        val db = this.writableDatabase
-        val values = ContentValues()
-        values.put(COLUMN_AFFIRMATION, affirmation.affirmation)
-        values.put(COLUMN_CATEGORY, affirmation.category)
-        values.put(COLUMN_FAVORITE, affirmation.favorite)
-        db.insert(TABLE_NAME, null, values)
-        db.close()
-    }
+        fun getFavoriteAffirmations(): List<Olumlamalarlistmodel> {
+            val olumlamalar = mutableListOf<Olumlamalarlistmodel>()
+            val db = this.readableDatabase
+            val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1", null)
+            cursor.use {
+                while (it.moveToNext()) {
+                    val olumlama = Olumlamalarlistmodel(
+                        it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
+                        it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
+                        it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                        it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
+                    )
+                    olumlamalar.add(olumlama)
+                }
+            }
+            return olumlamalar
+        }
+
+
+        fun updateAffirmation(affirmation: Olumlamalarlistmodel) {
+            val db = this.writableDatabase
+            val values = ContentValues().apply {
+                put(COLUMN_AFFIRMATION, affirmation.affirmation)
+                put(COLUMN_CATEGORY, affirmation.category)
+                put(COLUMN_FAVORITE, affirmation.favorite)
+            }
+            db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
+            db.close()
+        }
+
+        // DBHelper sınıfı içinde olumlamaları kategoriye göre çeken metod
+        fun getOlumlamalarByCategory(kategori: String): List<Olumlamalarlistmodel> {
+            val db = this.readableDatabase
+            val list = mutableListOf<Olumlamalarlistmodel>()
+
+            // "Kendi Olumlamalarım" kategorisi için özel durum kontrolü
+            if (kategori == "Kendi Olumlamalarım" && getAffirmationCountByCategory(kategori) == 0) {
+                return list  // Boş liste döndür
+            }
+
+            val cursor = db.rawQuery(
+                "SELECT * FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?",
+                arrayOf(kategori)
+            )
+            cursor.use {
+                while (it.moveToNext()) {
+                    val id = it.getInt(it.getColumnIndexOrThrow(COLUMN_ID))
+                    val affirmation = it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
+                        ?: "Henüz olumlama bulunmamaktadır."  // Nullsa varsayılan değer
+                    val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
+                        ?: kategori  // Nullsa kategori adını kullan
+                    val favorite = false
+                    list.add(Olumlamalarlistmodel(id, affirmation, category, favorite))
+                }
+            }
+            return list
+        }
+
+
+        fun addAffirmation(affirmation: Olumlamalarlistmodel) {
+            val db = this.writableDatabase
+            val values = ContentValues()
+            values.put(COLUMN_AFFIRMATION, affirmation.affirmation)
+            values.put(COLUMN_CATEGORY, affirmation.category)
+            values.put(COLUMN_FAVORITE, affirmation.favorite)
+            db.insert(TABLE_NAME, null, values)
+            db.close()
+        }
 
     fun getAllCategories(): List<String> {
         val kategoriListesi = mutableListOf<String>()
@@ -996,8 +1033,17 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
                 kategoriListesi.add(kategori)
             }
         }
+        // Kendi Olumlamalarım kategorisini kontrol et ve ekle
+        if (!kategoriListesi.contains("Kendi Olumlamalarım")) {
+            kategoriListesi.add("Kendi Olumlamalarım")
+        }
+
+
+
         return kategoriListesi
     }
+
+}
 
 
     /*
@@ -1023,4 +1069,3 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
 */
 
 
-}

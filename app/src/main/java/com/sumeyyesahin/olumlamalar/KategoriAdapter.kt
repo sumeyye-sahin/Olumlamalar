@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
@@ -35,6 +36,7 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
 
         // intent
 
+
         if (currentKategori == "Favori Olumlamalarım") {
             holder.cardView.setOnClickListener {
                 val context = holder.textViewKategoriAdi.context
@@ -51,7 +53,26 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
             }
         }
 
+/*
+        holder.cardView.setOnClickListener {
+            val context = holder.textViewKategoriAdi.context
+            if(isCategoryEmpty(context, currentKategori)){
+                Toast.makeText(context, "$currentKategori içeriği boş.", Toast.LENGTH_SHORT).show()
+                val intent = Intent(context, AffirmationMainPageActivity::class.java)
+                intent.putExtra("kategori", currentKategori)
+                context.startActivity(intent)
+            } else {
+                val intent = if (currentKategori == "Favori Olumlamalarım") {
+                    Intent(context, FavoriesActivity::class.java)
+                } else {
+                    Intent(context, AffirmationMainPageActivity::class.java)
+                }
+                intent.putExtra("kategori", currentKategori)
+                context.startActivity(intent)
+            }
 
+        }
+*/
         /*holder.cardView.setOnClickListener {
             val context = holder.textViewKategoriAdi.context
             val intent = Intent(context, AffirmationMainPageActivity::class.java)
@@ -59,7 +80,12 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
             context.startActivity(intent)
         }*/
     }
-
+    private fun isCategoryEmpty(context: Context, kategori: String): Boolean {
+        // Burada DBHelper'ınızdan kategorinin içeriğini kontrol eden bir sorgu yapılabilir
+        val dbHelper = DBHelper(context)
+        val count = dbHelper.getAffirmationCountByCategory(kategori)
+        return count == 0
+    }
     override fun getItemCount() = kategoriListesi.size
 
     // Kategoriye göre drawable kaynağını bulan yardımcı fonksiyon
