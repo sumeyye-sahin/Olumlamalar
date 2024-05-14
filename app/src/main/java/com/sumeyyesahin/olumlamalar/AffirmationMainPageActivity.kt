@@ -90,7 +90,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 */
         binding.delete.setOnClickListener {
             if (olumlamalar.isNotEmpty()) {
-                DBHelper(this).deleteAffirmation(kategori!!, olumlamalar[currentIndex].affirmation)
+                DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id, kategori!!)
                 olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
                 currentIndex = 0
                 updateUI()
@@ -174,10 +174,24 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
     private fun updateUI() {
         if (olumlamalar.isNotEmpty()) {
+
+         /*   if (olumlamalar[currentIndex].affirmation=="Henüz olumlama bulunmamaktadır."){
+                binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
+                binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
+                binding.like.isClickable = false
+                binding.delete.isClickable = false
+                binding.ileri.isClickable = false
+                binding.geri.isClickable = false
+                binding.share.isClickable = false
+            }else{
+
+
+            }*/
             updateAffirmationText(currentIndex)
             updateLikeButtonIcon(currentIndex)
-            enableButtons(true) // Butonları etkinleştir
+            enableButtons(true) // Tüm butonları etkinleştir
         } else {
+            // Olumlamalar listesi boş ise, kullanıcıya bilgi ver
             binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
             binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
             binding.like.isClickable = false
@@ -188,6 +202,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         }
     }
+
     private fun enableButtons(enable: Boolean) {
         binding.ileri.isClickable = enable
         binding.geri.isClickable = enable

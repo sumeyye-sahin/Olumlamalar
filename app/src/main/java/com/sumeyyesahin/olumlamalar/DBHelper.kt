@@ -891,20 +891,29 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
     }
 
 
+    fun deleteAffirmation(id: Int, kategori: String) {
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
 
-    fun deleteAffirmation(
-        category: String,
-        affirmation: String
-        ) {
-            val db = this.writableDatabase
-            db.delete(
-                TABLE_NAME,
-                "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?",
-                arrayOf(category, affirmation)
-            )
-            db.close()
+        // Olumlamaların sayısını kontrol et
+        if (getAffirmationCountByCategory(kategori) == 0) {
+            // Eğer kategoriye ait olumlama kalmadıysa, varsayılan mesajı ekle
+            addDefaultAffirmation(kategori)
+        }
+        db.close()
     }
-        //getAffirmationCountByCategory(kategori)
+
+    fun addDefaultAffirmation(kategori: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_AFFIRMATION, "Henüz olumlama bulunmamaktadır.")
+        values.put(COLUMN_CATEGORY, kategori)
+        values.put(COLUMN_FAVORITE, false)
+        db.insert(TABLE_NAME, null, values)
+    }
+
+
+    //getAffirmationCountByCategory(kategori)
 
         fun getAffirmationCountByCategory(kategori: String): Int {
             val db = this.readableDatabase
@@ -1013,15 +1022,30 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         }
 
 
-        fun addAffirmation(affirmation: Olumlamalarlistmodel) {
-            val db = this.writableDatabase
-            val values = ContentValues()
-            values.put(COLUMN_AFFIRMATION, affirmation.affirmation)
-            values.put(COLUMN_CATEGORY, affirmation.category)
-            values.put(COLUMN_FAVORITE, affirmation.favorite)
-            db.insert(TABLE_NAME, null, values)
-            db.close()
+    fun addNewAffirmation(affirmation: String, category: String) {
+        val db = this.writableDatabase
+
+
+        // Yeni olumlamayı ekle
+        val values = ContentValues()
+        values.put(COLUMN_AFFIRMATION, affirmation)
+        values.put(COLUMN_CATEGORY, category)
+        values.put(COLUMN_FAVORITE, false)
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+
+    }
+
+    fun getOnlyAffirmation(category: String): String {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT $COLUMN_AFFIRMATION FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?", arrayOf(category))
+        var affirmation = ""
+        if (cursor.moveToFirst()) {
+            affirmation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
         }
+        cursor.close()
+        return affirmation
+    }
 
     fun getAllCategories(): List<String> {
         val kategoriListesi = mutableListOf<String>()
@@ -1037,8 +1061,6 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         if (!kategoriListesi.contains("Kendi Olumlamalarım")) {
             kategoriListesi.add("Kendi Olumlamalarım")
         }
-
-
 
         return kategoriListesi
     }
