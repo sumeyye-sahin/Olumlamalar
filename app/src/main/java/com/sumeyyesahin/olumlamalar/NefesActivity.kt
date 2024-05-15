@@ -1,59 +1,62 @@
 package com.sumeyyesahin.olumlamalar
 
-import androidx.appcompat.app.AppCompatActivity
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import com.sumeyyesahin.olumlamalar.databinding.ActivityNefesBinding
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 class NefesActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityNefesBinding
-    private var seconds = 0
-    private var stage = 1  // Nefes almak için 1, tutmak için 2, vermek için 3.
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var circleView: CircleView
+    private lateinit var btnStart: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNefesBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        runTimer()
+        setContentView(R.layout.activity_nefes)
 
-    }
-    private fun runTimer() {
-        val runnable = object : Runnable {
-            override fun run() {
-                when (stage) {
-                    1 -> {
-                        if (seconds > 0) {
-                            binding.timerTextView.text = "$seconds"
-                            seconds--
-                        } else {
-                            stage = 2
-                            seconds = 7
-                        }
-                    }
-                    2 -> {
-                        if (seconds > 0) {
-                            binding.timerTextView.text = "$seconds"
-                            seconds--
-                        } else {
-                            stage = 3
-                            seconds = 8
-                        }
-                    }
-                    3 -> {
-                        if (seconds > 0) {
-                            binding.timerTextView.text = "$seconds"
-                            seconds--
-                        } else {
-                            stage = 1
-                            seconds = 4  // Süreci tekrar başlat.
-                        }
-                    }
-                }
-                handler.postDelayed(this, 1000)
-            }
+        circleView = findViewById(R.id.circleView)
+        btnStart = findViewById(R.id.btnStart)
+
+        btnStart.setOnClickListener {
+            startBreathingExercise()
         }
-        handler.post(runnable)
+    }
+
+    private fun startBreathingExercise() {
+        val breatheInDuration = 4000L
+        val holdDuration = 7000L
+        val breatheOutDuration = 8000L
+
+        // Step 1: Breathe In
+        animateCircle(0f, 1f, breatheInDuration, 4)
+
+        Handler().postDelayed({
+            // Step 2: Hold
+            animateCircle(1f, 0f, holdDuration, 7)
+        }, breatheInDuration)
+
+        Handler().postDelayed({
+            // Step 3: Breathe Out
+            animateCircle(0f, 1f, breatheOutDuration, 8)
+        }, breatheInDuration + holdDuration)
+    }
+
+    private fun animateCircle(startProgress: Float, endProgress: Float, duration: Long, initialSeconds: Int) {
+        val animator = ValueAnimator.ofFloat(startProgress, endProgress).apply {
+            this.duration = duration
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Float
+                circleView.setProgress(progress)
+
+                // Calculate remaining time
+                val remainingTime = if (startProgress < endProgress) {
+                    (initialSeconds * (1 - progress)).toInt()
+                } else {
+                    (initialSeconds * progress).toInt()
+                }
+                circleView.setTimerText((initialSeconds - remainingTime).toString())
+            }
+            start()
+        }
     }
 }
