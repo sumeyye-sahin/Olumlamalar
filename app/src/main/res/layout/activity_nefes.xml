@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
     tools:context=".NefesActivity">
 
+    <TextView
+        android:id="@+id/tvInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="24sp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:text="Hadi başlayalım. Bu süreçte nefesini dinlemen çok önemli.." />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="118dp"
+        android:layout_marginEnd="0dp"
+        android:contentDescription="Başlangıç Görüntüsü"
+        android:src="@drawable/mainflower" />
     <com.sumeyyesahin.olumlamalar.CircleView
         android:id="@+id/circleView"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:layout_below="@id/tvInstruction"
+        android:layout_marginTop="30dp" >
+
+
+    </com.sumeyyesahin.olumlamalar.CircleView>
 
     <Button
         android:id="@+id/btnStart"
@@ -17,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/circleView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="Start" />
+        android:layout_marginTop="30dp"
+        android:text="Başla" />
 
 </RelativeLayout>

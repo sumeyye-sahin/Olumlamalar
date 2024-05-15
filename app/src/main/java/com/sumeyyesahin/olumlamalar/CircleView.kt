@@ -11,10 +11,18 @@ import androidx.core.content.ContextCompat
 
 class CircleView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
     private var progress: Float = 0f
+    private var mode: Int = 0 // 0: Breathe In, 1: Hold, 2: Breathe Out
+
     private val paint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.purple)
+        color = ContextCompat.getColor(context, R.color.yellow)
         style = Paint.Style.STROKE
         strokeWidth = 20f
+        isAntiAlias = true
+    }
+
+    private val fillPaint = Paint().apply {
+        color = ContextCompat.getColor(context, R.color.purple_white)
+        style = Paint.Style.FILL
         isAntiAlias = true
     }
 
@@ -31,21 +39,36 @@ class CircleView(context: Context, attrs: AttributeSet) : ConstraintLayout(conte
             val radius = (width.coerceAtMost(height) / 2 * 0.8).toFloat()
             val cx = width / 2f
             val cy = height / 2f
-            it.drawArc(
-                cx - radius,
-                cy - radius,
-                cx + radius,
-                cy + radius,
-                -90f,
-                360 * progress,
-                false,
-                paint
-            )
+
+            when (mode) {
+                0 -> { // Breathe In
+                    val currentRadius = radius * progress
+                    it.drawCircle(cx, cy, currentRadius, fillPaint)
+                }
+                1 -> { // Hold
+                    it.drawCircle(cx, cy, radius, fillPaint)
+                    it.drawArc(
+                        cx - radius,
+                        cy - radius,
+                        cx + radius,
+                        cy + radius,
+                        -90f,
+                        360 * progress,
+                        false,
+                        paint
+                    )
+                }
+                2 -> { // Breathe Out
+                    val currentRadius = radius * (1 - progress)
+                    it.drawCircle(cx, cy, currentRadius, fillPaint)
+                }
+            }
         }
     }
 
-    fun setProgress(progress: Float) {
+    fun setProgress(progress: Float, mode: Int) {
         this.progress = progress
+        this.mode = mode
         invalidate()
     }
 
