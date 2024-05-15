@@ -114,6 +114,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             // Kategori değiştiğinde currentIndex değerini güncelle
             currentIndex = getLastPosition(this, kategori)
             updateAffirmationText(currentIndex)
+            updateUI()
         }
 
         // Beğen butonuna tıklama işlevselliğini ekle
@@ -174,26 +175,18 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
     private fun updateUI() {
         if (olumlamalar.isNotEmpty()) {
-
-         /*   if (olumlamalar[currentIndex].affirmation=="Henüz olumlama bulunmamaktadır."){
-                binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
-                binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
-                binding.like.isClickable = false
-                binding.delete.isClickable = false
-                binding.ileri.isClickable = false
-                binding.geri.isClickable = false
-                binding.share.isClickable = false
-            }else{
-
-
-            }*/
             updateAffirmationText(currentIndex)
             updateLikeButtonIcon(currentIndex)
-            enableButtons(true) // Tüm butonları etkinleştir
+            enableButtons(true) // Butonları etkinleştir
         } else {
-            // Olumlamalar listesi boş ise, kullanıcıya bilgi ver
-            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
+            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz."
             binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
+            binding.like.visibility = View.INVISIBLE
+            binding.delete.visibility = View.INVISIBLE
+            binding.ileri.visibility = View.INVISIBLE
+            binding.geri.visibility = View.INVISIBLE
+            binding.share.visibility = View.INVISIBLE
+
             binding.like.isClickable = false
             binding.delete.isClickable = false
             binding.ileri.isClickable = false
@@ -202,15 +195,23 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         }
     }
-
     private fun enableButtons(enable: Boolean) {
         binding.ileri.isClickable = enable
         binding.geri.isClickable = enable
         binding.share.isClickable = enable
         binding.like.isClickable = enable
         binding.delete.isClickable = enable
+
+        binding.like.visibility = View.VISIBLE
+        binding.delete.visibility = View.VISIBLE
+        binding.ileri.visibility = View.VISIBLE
+        binding.geri.visibility = View.VISIBLE
+        binding.share.visibility = View.VISIBLE
         // Diğer butonları da bu şekilde ayarlayabilirsiniz.
     }
+
+
+
     private fun updateLikeButtonIcon(index: Int) {
         val likeButtonIcon = if (olumlamalar[index].favorite) {
             R.drawable.baseline_favorite
@@ -242,8 +243,10 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     private fun updateAffirmationText(currentIndex: Int) {
         if (olumlamalar.isNotEmpty()) {
             binding.olumlamalarTextView.text = olumlamalar[currentIndex].affirmation
+          //  updateUI()
         } else {
-            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
+            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz."
+          //  updateUI()
         }
     }
 
