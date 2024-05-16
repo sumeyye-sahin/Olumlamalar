@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer -->
+    <item android:right="4dp" android:bottom="4dp">
+        <shape android:shape="oval">
+            <solid android:color="#1A000000" /> <!-- Shadow color with transparency -->
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+    <!-- Button background layer -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF"/> <!-- İç kısmı beyaz yap -->
+            <stroke
+                android:width="2dp"
+                android:color="#000000" /> <!-- Siyah çerçeve rengi -->
+        </shape>
+    </item>
+    <!-- Light effect layer -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:startColor="#80FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="135"/> <!-- Işığın sol üstten gelmesi için -->
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -61,8 +61,7 @@
         android:background="@drawable/buttonmain"
 
 
-        android:drawableLeft="@drawable/heart"
-        android:onClick="kategorileregit"
+        android:drawableLeft="@drawable/baseline_diamond_24"
         android:paddingLeft="10dp"
         android:shadowDx="0"
         android:shadowDy="0"
@@ -81,7 +80,6 @@
         android:layout_height="0dp"
         android:layout_marginBottom="25dp"
         android:background="@drawable/buttonmain"
-        android:onClick="nefesegit"
         android:drawableLeft="@drawable/star"
         android:paddingLeft="10dp"
         android:text="Nefes Egzersizi"

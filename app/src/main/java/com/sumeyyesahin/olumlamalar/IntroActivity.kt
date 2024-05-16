@@ -16,7 +16,7 @@ class IntroActivity : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("intro_seen", true).apply()
 
-            // Nefes egzersizi aktivitesine geç
+            // Ana sayfaya geç
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()

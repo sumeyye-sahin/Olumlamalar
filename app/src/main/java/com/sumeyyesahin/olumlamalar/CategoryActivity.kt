@@ -24,7 +24,7 @@ class CategoryActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         //recyclerView.layoutManager = LinearLayoutManager(this) // this, Activity içinde olmalı
         recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+            StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
 
     }
 

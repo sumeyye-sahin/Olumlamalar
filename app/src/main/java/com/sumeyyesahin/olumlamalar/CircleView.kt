@@ -19,10 +19,32 @@ class CircleView(context: Context, attrs: AttributeSet) : ConstraintLayout(conte
         strokeWidth = 20f
         isAntiAlias = true
     }
+    private val paint2 = Paint().apply {
+        color = ContextCompat.getColor(context, R.color.blue)
+        style = Paint.Style.STROKE
+        strokeWidth = 20f
+        isAntiAlias = true
+    }
 
     private val fillPaint = Paint().apply {
         color = ContextCompat.getColor(context, R.color.purple_white)
         style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    // Daha kalın çerçeve için Paint nesnesi
+    private val thickPaint = Paint().apply {
+        color = ContextCompat.getColor(context, R.color.yellow)
+        style = Paint.Style.STROKE
+        strokeWidth = 20f // Daha kalın çerçeve
+        isAntiAlias = true
+    }
+
+    // Silinen kısım için Paint nesnesi
+    private val erasedPaint = Paint().apply {
+        color = ContextCompat.getColor(context, R.color.blue) // Silinen kısmın rengi
+        style = Paint.Style.STROKE
+        strokeWidth = 20f
         isAntiAlias = true
     }
 
@@ -42,25 +64,44 @@ class CircleView(context: Context, attrs: AttributeSet) : ConstraintLayout(conte
 
             when (mode) {
                 0 -> { // Breathe In
+
                     val currentRadius = radius * progress
                     it.drawCircle(cx, cy, currentRadius, fillPaint)
+
+                    // Çemberin dış çerçevesini çiz
+                    it.drawCircle(cx, cy, radius, paint2)
                 }
                 1 -> { // Hold
                     it.drawCircle(cx, cy, radius, fillPaint)
+                    // Sarı çerçeveyi tamamen doldur
                     it.drawArc(
                         cx - radius,
                         cy - radius,
                         cx + radius,
                         cy + radius,
                         -90f,
-                        360 * progress,
+                        360f,
                         false,
-                        paint
+                        erasedPaint
+                    )
+                    // Mavi çerçeveyi dolduktan sonra sil
+                    it.drawArc(
+                        cx - radius,
+                        cy - radius,
+                        cx + radius,
+                        cy + radius,
+                        -90f,
+                        360 * (1 - progress),
+                        false,
+                        thickPaint
                     )
                 }
                 2 -> { // Breathe Out
+
                     val currentRadius = radius * (1 - progress)
                     it.drawCircle(cx, cy, currentRadius, fillPaint)
+                    // Çemberin dış çerçevesini çiz
+                    it.drawCircle(cx, cy, radius, paint)
                 }
             }
         }

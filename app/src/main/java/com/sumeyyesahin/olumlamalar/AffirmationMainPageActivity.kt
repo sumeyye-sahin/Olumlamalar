@@ -39,17 +39,10 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
 
         // currentIndex değeriyle olumlamaları güncelle
-
         updateUI()
-       // updateAffirmationText(currentIndex)
-       // updateLikeButtonIcon(currentIndex)
-        if(kategori == "Kendi Olumlamalarım"){
-            binding.delete.visibility = View.VISIBLE
 
-
-        }else{
-            binding.delete.visibility = View.GONE
-        }
+        // Delete butonunun görünürlüğünü ayarlama
+        setDeleteButtonVisibility(kategori)
 
         // İleri butonuna tıklandığında bir sonraki olumlamayı göster
         binding.ileri.setOnClickListener {
@@ -57,7 +50,6 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             updateAffirmationText(currentIndex)
             // Son görüntülenen olumlamadan ID'sini kaydet
             saveLastPosition(this, currentIndex, kategori)
-           // updateLikeButtonIcon(currentIndex)
             updateUI()
         }
 
@@ -68,26 +60,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             // Son görüntülenen olumlamadan ID'sini kaydet
             saveLastPosition(this, currentIndex, kategori)
             updateUI()
-           // updateLikeButtonIcon(currentIndex)
         }
 
-/*
-        // Sil butonuna tıklandığında olumlamayı sil
-        binding.delete.setOnClickListener {
-            val clickedAffirmation = olumlamalar[currentIndex]
-            DBHelper(this).deleteAffirmation(clickedAffirmation.id)
-            olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
-
-            if (olumlamalar.isNotEmpty()) {
-                currentIndex = 0
-                updateAffirmationText(currentIndex)
-                updateLikeButtonIcon(currentIndex)
-            } else {
-                binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır."
-                // Diğer UI elemanlarını da uygun şekilde gizleyin veya disable edin.
-                binding.delete.visibility = View.GONE
-            }}
-*/
         binding.delete.setOnClickListener {
             if (olumlamalar.isNotEmpty()) {
                 DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id, kategori!!)
@@ -135,7 +109,6 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
             // Favori butonunun ikonunu güncelle
             updateLikeButtonIcon(currentIndex)
-            // Favori durumunu güncelle
         }
 
         binding.addbutton.setOnClickListener {
@@ -148,8 +121,6 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         super.onResume()
         // Kategori değiştiğinde currentIndex değerini güncelle
         val kategori = intent.getStringExtra("kategori")
-       // currentIndex = getLastPosition(this, kategori!!)
-        // DBHelper kullanarak kategorinin güncel olumlamalarını al
         olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori!!)
 
         // Listeyi güncelleme ve currentIndex'i sıfırlama
@@ -159,8 +130,10 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             currentIndex = 0 // Eğer liste boşsa currentIndex'i sıfırla
         }
 
+        // Delete butonunun görünürlüğünü ayarlama
+        setDeleteButtonVisibility(kategori)
+
         updateUI()
-       // updateAffirmationText(currentIndex)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -195,6 +168,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         }
     }
+
     private fun enableButtons(enable: Boolean) {
         binding.ileri.isClickable = enable
         binding.geri.isClickable = enable
@@ -203,14 +177,19 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding.delete.isClickable = enable
 
         binding.like.visibility = View.VISIBLE
-        binding.delete.visibility = View.VISIBLE
         binding.ileri.visibility = View.VISIBLE
         binding.geri.visibility = View.VISIBLE
         binding.share.visibility = View.VISIBLE
         // Diğer butonları da bu şekilde ayarlayabilirsiniz.
     }
 
-
+    private fun setDeleteButtonVisibility(kategori: String) {
+        if (kategori == "Kendi Olumlamalarım") {
+            binding.delete.visibility = View.VISIBLE
+        } else {
+            binding.delete.visibility = View.GONE
+        }
+    }
 
     private fun updateLikeButtonIcon(index: Int) {
         val likeButtonIcon = if (olumlamalar[index].favorite) {
@@ -243,10 +222,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     private fun updateAffirmationText(currentIndex: Int) {
         if (olumlamalar.isNotEmpty()) {
             binding.olumlamalarTextView.text = olumlamalar[currentIndex].affirmation
-          //  updateUI()
         } else {
             binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz."
-          //  updateUI()
         }
     }
 
@@ -263,7 +240,6 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return sharedPrefs.getInt(kategori, 0)
     }
-
 
     // Kategori sayfasına gitmek için onClick fonksiyonu
     fun kategori(view: View){
