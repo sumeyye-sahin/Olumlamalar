@@ -1,5 +1,6 @@
 package com.sumeyyesahin.olumlamalar
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
@@ -28,7 +29,12 @@ class CategoryActivity : AppCompatActivity() {
 
     }
 
-
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
 
 
 }

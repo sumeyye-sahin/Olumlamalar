@@ -135,7 +135,12 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         updateUI()
     }
-
+    override fun onBackPressed() {
+        val intent = Intent(this, CategoryActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_AFFIRMATION && resultCode == RESULT_OK) {

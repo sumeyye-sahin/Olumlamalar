@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.sumeyyesahin.olumlamalar.databinding.ActivityNefesBinding
 
 class NefesActivity : AppCompatActivity() {
     private lateinit var circleView: CircleView
@@ -16,26 +17,36 @@ class NefesActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var tvRoundCounter: TextView
     private lateinit var handler: Handler
+    private lateinit var btnend: Button
+    private lateinit var binding: ActivityNefesBinding
     private val animators = mutableListOf<ValueAnimator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nefes)
+        binding = ActivityNefesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
         circleView = findViewById(R.id.circleView)
         btnStart = findViewById(R.id.btnStart)
         tvInstruction = findViewById(R.id.tvInstruction)
         imageView = findViewById(R.id.imageView)
         tvRoundCounter = findViewById(R.id.tvRoundCounter)
+        btnend = findViewById(R.id.btnend)
         handler = Handler()
 
         btnStart.setOnClickListener {
-            imageView.visibility = View.GONE
+            imageView.visibility = View.INVISIBLE
             circleView.visibility = View.VISIBLE
-            tvInstruction.visibility = View.VISIBLE
+            tvInstruction.visibility = View.INVISIBLE
             tvRoundCounter.visibility = View.VISIBLE
             btnStart.visibility = View.GONE
+            btnend.visibility = View.VISIBLE
+            binding.talimat.visibility = View.VISIBLE
             startBreathingExercise(4)
+        }
+        btnend.setOnClickListener {
+            finish()
         }
     }
 
@@ -50,19 +61,19 @@ class NefesActivity : AppCompatActivity() {
 
             handler.postDelayed({
                 // Step 1: Breathe In
-                tvInstruction.text = "Nefes Al"
+                binding.talimat.text = "Nefes Al"
                 animateCircle(0f, 1f, breatheInDuration, 4, 0)
             }, delay)
 
             handler.postDelayed({
                 // Step 2: Hold
-                tvInstruction.text = "Nefesini Tut"
+                binding.talimat.text = "Nefesini Tut"
                 animateCircle(1f, 0f, holdDuration, 7, 1)
             }, delay + breatheInDuration)
 
             handler.postDelayed({
                 // Step 3: Breathe Out
-                tvInstruction.text = "Nefes Ver"
+                binding.talimat.text = "Nefes Ver"
                 animateCircle(0f, 1f, breatheOutDuration, 8, 2)
             }, delay + breatheInDuration + holdDuration)
 
@@ -76,9 +87,13 @@ class NefesActivity : AppCompatActivity() {
         // Döngü tamamlandıktan sonra mesajı göstermek ve aktiviteyi sonlandırmak için gecikme
         handler.postDelayed({
             tvInstruction.text = "Egzersiziniz tamamlanmıştır."
-            circleView.visibility = View.GONE
-            btnStart.visibility = View.GONE
-            imageView.visibility = View.GONE
+            tvInstruction.visibility = View.VISIBLE
+            circleView.visibility = View.INVISIBLE
+            btnStart.visibility = View.INVISIBLE
+            imageView.visibility = View.INVISIBLE
+            tvRoundCounter.visibility = View.INVISIBLE
+            binding.talimat.visibility = View.INVISIBLE
+            btnend.visibility = View.INVISIBLE
 
             // 3 saniye sonra aktiviteyi sonlandır
             handler.postDelayed({

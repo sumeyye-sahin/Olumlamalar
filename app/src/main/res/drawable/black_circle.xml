@@ -2,7 +2,7 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Shadow layer -->
-    <item android:right="4dp" android:bottom="4dp">
+    <item android:left="10dp" android:top="10dp">
         <shape android:shape="oval">
             <solid android:color="#1A000000" /> <!-- Shadow color with transparency -->
             <corners android:radius="21dp" />
@@ -23,8 +23,10 @@
             <gradient
                 android:startColor="#80FFFFFF"
                 android:endColor="#00FFFFFF"
-                android:angle="135"/> <!-- Işığın sol üstten gelmesi için -->
+                android:angle="315"/> <!-- Işığın sol üstten gelmesi için -->
             <corners android:radius="21dp" />
         </shape>
     </item>
+
+
 </layer-list>

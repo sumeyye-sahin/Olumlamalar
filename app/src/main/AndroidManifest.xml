@@ -16,14 +16,18 @@
         <activity
             android:name=".BreathingIntroActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            />
         <activity
             android:name=".IntroActivity"
             android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NefesActivity"
             android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".AddAffirmationActivity"

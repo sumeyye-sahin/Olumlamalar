@@ -86,18 +86,18 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
             "Genel Olumlamalar" -> R.drawable.genel_icon
             "Beden Olumlamaları" -> R.drawable.beden_icon
             "İnanç Olumlamaları" -> R.drawable.dua_icon
-            "Zor Günler Olumlamaları" -> R.drawable.zor_icon
-            "Sevgi ve Aşk Olumlamaları" -> R.drawable.sevgi_icon
+            "Zor Günler Olumlamaları" -> R.drawable.bad_day_icon
+            "Sevgi ve Aşk Olumlamaları" -> R.drawable.love_icon
             "Öz Değer Olumlamaları" -> R.drawable.ozdeger_icon
-            "Stres ve Kaygı Olumlamaları" -> R.drawable.stres_icon
-            "Pozitif Düşünce Olumlamaları" -> R.drawable.pozitif_icon
+            "Stres ve Kaygı Olumlamaları" -> R.drawable.stres2_icon
+            "Pozitif Düşünce Olumlamaları" -> R.drawable.pozitif2_icon
             "Başarı Olumlamaları" -> R.drawable.basari_icon
             "Kişisel Gelişim Olumlamaları" -> R.drawable.kisiselgelisim_icon
             "Zaman Yönetimi Olumlamaları" -> R.drawable.zaman_icon
-            "İlişki Olumlamaları" -> R.drawable.iliski_icon
-            "Dua ve İstek Olumlamaları" -> R.drawable.dua_icon
-            "Favori Olumlamalarım" -> R.drawable.genel_icon2
-            else -> R.drawable.kendi_icon// Varsayılan drawable, eğer kategori bulunamazsa
+            "İlişki Olumlamaları" -> R.drawable.iliski2_icon
+            "Dua ve İstek Olumlamaları" -> R.drawable.dua2_icon
+            "Favori Olumlamalarım" -> R.drawable.favori_icon
+            else -> R.drawable.kendi2_icon// Varsayılan drawable, eğer kategori bulunamazsa
         }
     }
 }
