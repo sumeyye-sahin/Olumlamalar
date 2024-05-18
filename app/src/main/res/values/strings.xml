@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">olumlamalar</string>
+    <string name="app_name">Olumlamalar</string>
+    <string name="add_affirmation_title">Kendi Olumlamalarım</string>
+    <string name="add_affirmation_hint">Olumlamalarını Buraya Ekle</string>
+    <string name="categories">KATEGORİLER</string>
+    <string name="remember_these">Şunları Hep Hatırla:</string>
+    <string name="no_favorites">Henüz favori olumlamanız bulunmamaktadır.</string>
+    <string name="main_quote">Hayatın senin için çizdiği resmi, pozitif dokunuşlarınla renklendir.</string>
+    <string name="categoriess">Kategoriler</string>
+    <string name="breathing_exercise">Nefes Egzersizi</string>
+    <string name="breathing_instruction">Hadi başlayalım.\nBu süreçte nefesini dinlemen çok önemli..</string>
+    <string name="start_button">Başla</string>
+    <string name="end_button">Sonlandır</string>
+    <string name="completed_rounds">Tamamlanan Turlar: 0</string>
+    <string name="initial_image_description">Başlangıç Görüntüsü</string>
+    <string name="toast_empty_affirmation">Lütfen olumlama metnini girin</string>
+    <string name="favorite_affirmations">Favori Olumlamalarım</string>
 </resources>

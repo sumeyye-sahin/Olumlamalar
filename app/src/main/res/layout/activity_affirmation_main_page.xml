@@ -69,7 +69,7 @@
                     android:letterSpacing="0.09"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:text="Kendini sevmeyi hak ediyorsun. Kendini sevmeyi hak ediyorsun.Kendini sevmeyi hak ediyorsun."
+                    android:text=""
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="24dp"

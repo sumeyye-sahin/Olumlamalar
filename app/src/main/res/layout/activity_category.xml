@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="KATEGORİLER"
+            android:text="@string/categories"
             android:fontFamily="@font/lobster"
             android:letterSpacing="0.09"
             android:textColor="#000000"

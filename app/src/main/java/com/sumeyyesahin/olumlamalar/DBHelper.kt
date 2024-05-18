@@ -5,12 +5,13 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
+import kotlin.coroutines.coroutineContext
 
 class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 //  val myDatabase= this.openOrCreateDatabase("Olumlamalar", MODE_PRIVATE,null)
 //            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS olumlamalar (id INTEGER PRIMARY KEY, affirmation VARCHAR, category VARCHAR, favorite BOOLEAN)")
-
+private val context = context
 
     companion object {
         private val DATABASE_NAME = "Olumlamalar"
@@ -930,7 +931,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
             val db = this.writableDatabase
             val values = ContentValues().apply {
                 put(COLUMN_AFFIRMATION, affirmation.affirmation)
-                put(COLUMN_CATEGORY, "Favori Olumlamalarım")
+                put(COLUMN_CATEGORY, context.getString(R.string.favorite_affirmations))
                 put(COLUMN_FAVORITE, isFavorite)
             }
             db.insert(TABLE_NAME, null, values)
@@ -1035,36 +1036,13 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
             }
         }
         // Kendi Olumlamalarım kategorisini kontrol et ve ekle
-        if (!kategoriListesi.contains("Kendi Olumlamalarım")) {
-            kategoriListesi.add("Kendi Olumlamalarım")
+        if (!kategoriListesi.contains(context.getString(R.string.add_affirmation_title))) {
+            kategoriListesi.add(context.getString(R.string.add_affirmation_title))
         }
 
         return kategoriListesi
     }
-
 }
 
-
-    /*
-    // get all affirmations
-    fun getAllAffirmations(): ArrayList<Olumlamalarlistmodel> {
-        val list = ArrayList<Olumlamalarlistmodel>()
-        val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1", null)
-        cursor.use {
-            while (it.moveToNext()) {
-                val olumlama = Olumlamalarlistmodel(
-                    it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
-                    it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
-                )
-                olumlamalar.add(olumlama)
-            }
-        }
-        return olumlamalar
-    }
-
-*/
 
 

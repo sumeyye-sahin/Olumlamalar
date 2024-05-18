@@ -21,7 +21,8 @@
         android:gravity="center"
         android:fontFamily="@font/lobster"
         android:letterSpacing="0.09"
-        android:text="Hadi başlayalım. \nBu süreçte nefesini dinlemen çok önemli.." />
+        android:text="@string/breathing_instruction" />
+
     <TextView
         android:id="@+id/talimat"
         android:layout_width="wrap_content"
@@ -35,8 +36,7 @@
         android:layout_marginBottom="15dp"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/circleView"
-        android:visibility="invisible"
-    ></TextView>
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -46,10 +46,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-
         android:layout_marginEnd="0dp"
-
-        android:contentDescription="Başlangıç Görüntüsü"
+        android:contentDescription="@string/initial_image_description"
         android:src="@drawable/imageflower" />
 
     <com.sumeyyesahin.olumlamalar.CircleView
@@ -57,10 +55,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:visibility="invisible">
-
-
-    </com.sumeyyesahin.olumlamalar.CircleView>
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnStart"
@@ -68,13 +63,13 @@
         android:layout_height="50dp"
         android:textColor="@color/black"
         android:textSize="18sp"
-               android:textStyle="bold"
+        android:textStyle="bold"
         android:background="@drawable/buttonmain"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="70dp"
-        android:text="Başla" />
+        android:text="@string/start_button" />
 
     <Button
         android:id="@+id/btnend"
@@ -89,7 +84,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="70dp"
         android:visibility="invisible"
-        android:text="Sonlandır" />
+        android:text="@string/end_button" />
+
     <TextView
         android:id="@+id/tvRoundCounter"
         android:layout_width="wrap_content"
@@ -103,5 +99,6 @@
         android:textColor="#000000"
         android:gravity="center"
         android:visibility="gone"
-        android:text="Tamamlanan Turlar: 0" />
+        android:text="@string/completed_rounds" />
+
 </RelativeLayout>

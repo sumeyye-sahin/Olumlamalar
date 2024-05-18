@@ -28,7 +28,7 @@ class FavoriesActivity : AppCompatActivity() {
         // RecyclerView ve Adapter'ı bağla
 
         if (favoriteAffirmations.isEmpty()) {
-            binding.textViewFav.text = "Henüz favori olumlamanız yok"
+            binding.textViewFav.visibility = View.VISIBLE
             binding.recyclerViewFav.visibility = View.GONE
             binding.baslik.visibility = View.GONE
             binding.topimage.visibility = View.GONE
