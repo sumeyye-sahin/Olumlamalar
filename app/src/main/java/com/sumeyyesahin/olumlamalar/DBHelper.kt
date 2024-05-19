@@ -5,1018 +5,199 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
-import kotlin.coroutines.coroutineContext
+import org.json.JSONArray
 
-class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
-//  val myDatabase= this.openOrCreateDatabase("Olumlamalar", MODE_PRIVATE,null)
-//            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS olumlamalar (id INTEGER PRIMARY KEY, affirmation VARCHAR, category VARCHAR, favorite BOOLEAN)")
-private val context = context
+class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private val DATABASE_NAME = "Olumlamalar"
-        private val DATABASE_VERSION = 1
-        val TABLE_NAME = "olumlamalar"
-        val COLUMN_ID = "id"
-        val COLUMN_AFFIRMATION = "affirmation"
-        val COLUMN_CATEGORY = "category"
-        val COLUMN_FAVORITE = "favorite"
+        private const val DATABASE_NAME = "Olumlamalar"
+        private const val DATABASE_VERSION = 1
+        const val TABLE_NAME = "olumlamalar"
+        const val COLUMN_ID = "id"
+        const val COLUMN_AFFIRMATION = "affirmation"
+        const val COLUMN_CATEGORY = "category"
+        const val COLUMN_FAVORITE = "favorite"
+        const val COLUMN_LANGUAGE = "language" // Yeni dil sütunu
     }
-
-
 
     override fun onCreate(myDatabase: SQLiteDatabase?) {
         val createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_AFFIRMATION + " VARCHAR," +
                 COLUMN_CATEGORY + " VARCHAR," +
-                COLUMN_FAVORITE + " BOOLEAN)"
+                COLUMN_FAVORITE + " BOOLEAN," +
+                COLUMN_LANGUAGE + " VARCHAR)"
         myDatabase?.execSQL(createTable)
-
-        // olumlamaları ekleme
-        if (myDatabase != null) {
-            myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine olan inancını asla kaybetme; senin için her şey mümkün.', 'Genel Olumlamalar', 0)")
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Olumlu düşünceler, olumlu sonuçlar doğurur.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini sev, çünkü sen eşsizsin.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Şu anı kucakla ve her anın tadını çıkar.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zihnin neye odaklanırsa, enerjin de o yöne akar.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına nezaketle davranmak, kendi iç huzurunu artırır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zorluklar, başarı yolunda karşılaştığın adımlardır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerine doğru cesur adımlar at.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini şımartmaktan çekinme; kendine iyi bak.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü, bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçindeki sessizliği dinle ve oradan gelen bilgeliği takip et.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarının yargıları senin gerçekliğini belirleyemez.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki barış, dış dünyadaki kaosa meydan okur.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İç huzuru bul, dünya seninle beraber huzur bulsun.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içsel gücünün farkına var ve onu kucakla.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Olumlu kelimeler kullan, çünkü kelimelerin büyük gücü vardır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi yolunu çiz; başkalarının izlediği yol senin için doğru olmayabilir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sabahları tebessümle uyan ve yeni günün getireceği fırsatları kucakla.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Mutluluk, içinde bulunduğun anın güzelliğini fark etmektir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi dolu düşünceler, sevgi dolu bir dünya yaratır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçindeki ışığı parlat, ve dünya seninle birlikte parlasın.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bugün kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Küçük şeylerde büyük mutluluklar bul.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her deneyim, büyümen için bir fırsattır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zihnini sakinleştirmek, tüm bedeninizi iyileştirir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendine konuşmaların pozitif ve yapıcı olsun.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Nezaket, en büyük güçlerden biridir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarını yargılamadan önce, onların yerine kendini koy.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, önceki gününden daha bilge olma şansıdır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hikayeni yaz, başkalarının senin için yazdığı hikayeyi değil.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine ve yeteneklerine güven.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi, korkudan daha güçlüdür; her zaman sevgiyi seç.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendinin en iyi arkadaşı ol.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Stres, geçici bir durumdur, bu da geçer.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Öz şefkat, iyileşmenin başlangıcıdır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki sevgiyi bul ve onu dünyayla paylaş.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayatta en çok tutku duyduğun şeyleri yapmak için zaman ayır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Huzur, sadece bir düşünce kadar uzağında.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sabır, en büyük erdemlerden biridir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her adımda güzellikleri keşfet.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yaşam bir yolculuktur, her gün yeni bir macera.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hata yapmaktan korkma; hatalar öğrenmenin parçasıdır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine inan, çünkü senin gücün sınırsız.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerini gerçekleştirmek için her gün bir adım at.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgiyle dolu bir kalp, en büyük zenginliktir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sen kendi hayatının kahramanısın.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendine zaman ayır, çünkü sen bunu hak ediyorsun.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İyi düşünceler, iyi insanlar yaratır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başarıya giden yolda sabırlı ol.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç huzurunu bul, ve bunu dışarıya yansıt.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her sabah yeni bir umutla uyan.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayatını sevdiğin şeylerle doldur.', 'Genel Olumlamalar', 0)");
-
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini sürekli olarak yenile.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yapıcı eleştirilere açık ol, büyümenin bir parçasıdırlar.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi içindeki sessizliği bul ve orada huzur bul.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Yaptığın işlerde kaliteyi asla göz ardı etme.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hayatını başkalarıyla kıyaslamaktan kaçın.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç gücünü keşfet ve onu kullan.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevdiklerine zaman ayır, çünkü ilişkiler değerlidir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her yeni gün, yeni bir başlangıçtır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Güçlü olmak, her zaman mümkün olmayabilir ama neşeli olmak mümkündür.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi değerini bil ve buna göre davran.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, yaşamaya değer kılınacak küçük anlarla doludur.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Seni geri tutan şeyleri bırak.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi hikayeni kendin yaz.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına ilham olacak işler yap.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sevgi, her zaman cevaptır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçsel güzellik, dışsal güzellikten daha kalıcıdır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayallerine ulaşmak için disiplinli ol.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini affetmeyi öğren ve ileriye bak.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bugün, dününden daha iyi bir insan olmak için çaba göster.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi kendine yeterli olmayı öğren.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün en az bir kişiye iyilik yap.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('İçsel huzur, dış dünya ile uyum içinde olmanı sağlar.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi başarını kutlamayı unutma.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, paylaştığında daha güzel.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi iç sesini dinle, o seni doğru yola yönlendirir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sıkıntılı zamanlarda bile umudu koru.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi başına yapabileceğinden daha fazlasını yapabilirsin.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Zamanını bilgece kullan.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi yeteneklerini keşfet ve onları geliştir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Özgürlük, kendi kararlarını verebilmektir.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her günü bir hediye olarak gör.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Başkalarına olan saygın, kendine olan saygından başlar.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendini başkalarıyla karşılaştırmak yerine, kendini başkalarıyla ilhamlaştır.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Hayat, yaşamak için çok kısa, bugünü en iyi şekilde yaşa.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Herkes için nezaketin önemini hatırla.', 'Genel Olumlamalar', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, bir önceki günden daha iyi olmak için bir şans.', 'Genel Olumlamalar', 0)");
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim sağlıkla ve enerjiyle dolu.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün fiziksel sağlığımı geliştiriyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi bedenimi seviyor ve ona iyi bakıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi güçlü ve dinç hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı yemek yemek benim için bir zevktir.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün daha da sağlıklı oluyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim kendini iyileştirme gücüne sahip.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel aktivite beni canlandırır.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime ihtiyacı olan dinlenmeyi sağlıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her bakımdan iyi hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimdeki her hücre sağlıkla dolu.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimi olduğu gibi seviyorum ve onurlandırıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi fiziksel olarak güçlü ve yetenekli hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her sabah dinç ve enerjik uyanıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle barış içindeyim.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı yaşam tarzım beni daha iyi hissettiriyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle uyum içindeyim.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığım benim için bir önceliktir.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her gün daha iyi hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim tüm ihtiyaçlarımı karşılayacak şekilde mükemmel çalışıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlık, zihinsel berraklık getirir.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi güçlü ve canlı hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim benim tapınağım ve ona saygı duyuyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenime iyi bakıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel egzersiz yapmak beni mutlu ediyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlığımı korumak için ihtiyacım olan her şeye sahibim.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim bana güç ve direnç sağlıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel iyilik hali benim doğal halim.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimi dinlemeyi öğreniyorum ve ona göre hareket ediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her nefesimde sağlık ve iyilik alıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her zaman genç ve enerjik hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle her gün kendini iyileştirdiğini hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime olan sevgim, her gün artıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimi sevgiyle besliyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi geliştirmek benim için heyecan verici.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlığımı iyileştirmek için attığım adımlar işe yarıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimin sağlıkla parladığını görüyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimle uyum içinde yaşamak beni mutlu ediyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel iyilik halim, tüm hayatımı iyileştiriyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her yönüyle kabul ediyorum ve seviyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün, bedenimin sağlık ve canlılıkla dolu olduğunu hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendimi her geçen gün daha güçlü ve sağlıklı hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim, doğal güzelliği ve sağlığı ile parlıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her egzersiz, bedenimin daha da güçlenmesine ve esnek olmasına yardımcı oluyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı beslenmek, bedenime olan sevgimin bir ifadesidir.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendi bedenime olan saygım, beni daha sağlıklı yaşam tarzı seçimleri yapmaya teşvik ediyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel aktiviteler benim için neşe kaynağı ve kendimi ifade etme şeklidir.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin her fonksiyonu mükemmel uyum içinde çalışıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi her fiziksel aktivitede daha canlı ve enerjik hissediyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin iyileşme ve kendini yenileme kapasitesine hayranım.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığımı her gün bilinçli çabalarla destekliyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Sağlıklı olmak, benim için bir yaşam biçimi.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenime olan şükranım, her gün artıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığımı korumak ve geliştirmek için gerekli tüm kaynaklara sahibim.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Kendimi fiziksel olarak aktif tutmak, genel iyiliğimi artırıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Her gün bedenimin sağlıkla dolu olması için minnettarım.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel olarak kendime iyi bakmak, benim için önceliktir.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Fiziksel sağlığım, benim genel yaşam kalitemi artırıyor.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenimin her bir parçasına saygı gösteriyorum ve ona iyi bakıyorum.', 'Beden Olumlamaları', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation,category,favorite) VALUES ('Bedenim, yaşamın tüm zorluklarına karşı direnç gösterme gücüne sahip.', 'Beden Olumlamaları', 0)");
-
-        };
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni güçlendiriyor ve rehberlik ediyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancım daha da güçleniyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnanç, hayatımdaki tüm zorlukların üstesinden gelmeme yardımcı oluyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım beni yüksek ideallerime bağlı tutuyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Hayatımda her şeyin iyi bir nedenle olduğuna inanıyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni daha yüksek bir bilince taşıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Evrenin benim için en iyisini sunduğuna inanıyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım bana günlük yaşamımda rehberlik ediyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım her gün daha da derinleşiyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde içsel huzuru buluyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, yaşamın zorluklarına karşı bana güç veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımla daha uyumlu bir yaşam sürüyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni pozitif kalmaya itiyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki amaç ve anlamı pekiştiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde zor zamanlarda bile sabırlı olabiliyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana umut ve cesaret veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, karşılaştığım her şeyde bana yol gösteriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımı zenginleştiriyor ve renklendiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımın beni desteklediğini hissediyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni her gün ileriye taşıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, hayatımda olumlu değişiklikler yaratıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içsel gücümü artırıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde her zorluğu aşabileceğime inanıyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım beni koruyor ve yönlendiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki her şeyin daha iyi olacağına dair bana güven veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içimdeki korkuları yatıştırıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni her gün daha iyi bir insan yapmak için ilham veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde hayatımda sürekli bir ilerleme görüyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, yaşamımın temel taşıdır.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana her gün daha fazla neşe ve mutluluk getiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, tüm zorluklara rağmen ayakta durmamı sağlıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımda olumlu bir değişim yaratıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana hayatın güzelliklerini daha çok takdir etme fırsatı veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım sayesinde daha büyük bir amaç için yaşadığımı hissediyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana doğru yolda olduğumu hissettiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni daha derin bir içsel huzura yönlendiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her şeyin en iyisi için çalıştığıma dair bana güven veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana yaşamın sonsuz olanaklarını keşfetme cesareti veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, zorluklar karşısında bana sabır ve direnç veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, yaşamımda her gün yeni başlangıçlar yaratıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her gün beni daha büyük başarılara taşıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her sabah, inancımın rehberliğinde yeni bir güne başlıyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, bana zor zamanlarda rehberlik ediyor ve yol gösteriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni yaşamın dalgalı denizlerinde sağlam bir kaya gibi tutuyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün inancımın kuvvetiyle, hayatımın kontrolünü daha iyi elime alıyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımın anlamını derinleştiriyor ve daha büyük bir perspektif sunuyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni her gün daha fazla iyilik yapmaya itiyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, hayatımda sevgi ve anlayışı artırıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her adımda bana cesaret ve kuvvet veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, inancımın gücüyle hayatımdaki engelleri aşıyorum.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, beni bilgelikle donatıyor ve doğru kararlar almamı sağlıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, içsel gücümü artırıyor ve bana her zorlukta dayanma gücü veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnançlarım, beni kendime ve evrenin gücüne daha çok bağlıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımın her anında bana huzur ve güven sağlıyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, sürekli olarak beni iyimserliğe ve umuda yönlendiriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancımın derinliği, yaşamımdaki zorluklar karşısında bana sabır veriyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, bana her yeni gün için şükran duymamı öğretiyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, hayatımdaki amaç hissini güçlendiriyor ve beni motive ediyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, zor zamanlarda bile iç huzurumu korumama yardımcı oluyor.', 'İnanç Olumlamaları', 0)");
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('İnancım, her gün beni daha fazla sevgiyle dolduruyor ve etrafıma yaymamı sağlıyor.', 'İnanç Olumlamaları', 0)");
-
-
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Zor günler geçici, gücüm kalıcı.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, beni daha da güçlendiriyor.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda bile huzuru bulabilirim.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her deneyim, bana değerli dersler öğretir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, beni daha da dirençli kılıyor.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar karşısında sakin ve odaklanmış kalabilirim.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk sonrasında daha güçlü bir şekilde yükselirim.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlar geçecek, güçlü kalmalıyım.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günlerde bile kendime güvenim tam.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, içimdeki cesareti ortaya çıkarır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler benim için büyüme fırsatlarıdır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda bile minnettar olacak şeyler bulabilirim.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, beni hedeflerime bir adım daha yaklaştırır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlar beni daha bilge kılar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günlerde bile pozitif kalmayı seçiyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, benim güçlü yönlerimi ortaya çıkarır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda bile kendime iyi bakıyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk sonrasında, daha da parlak bir şekilde parlıyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günlerde dahi güzellikler bulabilirim.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlar, benim dayanıklılığımı test eder, ve ben her seferinde başarılı olurum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, beni daha da sağlam kılar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zor gün, sonunda güneşin doğacağını bilmekle daha kolay geçer.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda dahi sevgi ve destek buluyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, karakterimi şekillendirir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda dahi umudumu koruyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, beni daha da güçlü kılar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günlerde bile, hayatın güzel yanlarını görebiliyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda dahi güç buluyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, bana neyin önemli olduğunu hatırlatır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, beni daha iyi bir insan yapar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda dahi, ilerlemeye devam ediyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, sonunda zaferle sonuçlanır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler geçici, zafer kalıcıdır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda dahi, kendime ve yeteneklerime güveniyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, beni daha da odaklanmış ve kararlı kılar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, beni hayatın değerini daha çok takdir etmeye yönlendirir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zor gün, hayatın güçlü yönlerimi geliştirdiğini gösterir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda dahi, başkalarına yardım etmekten vazgeçmiyorum.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, benim en büyük öğretmenimdir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk sonrasında, daha büyük bir mutluluk bekler beni.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlar, içimdeki dayanıklılığı keşfetmemi sağlar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, hayata olan inancımı daha da güçlendirir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, yaratıcılığımı harekete geçirir ve çözüm bulmamı sağlar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda, iç huzuru bulmak için farkındalık ve meditasyon pratiklerine yönelebilirim.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, benim esnekliğimi arttırır ve değişime uyum sağlamamı öğretir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, içimdeki gücü ortaya çıkarır ve potansiyelimi serbest bırakır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günlerde, kendime olan sevgi ve kabulümü derinleştiririm.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlar, hayatta daha fazla empati ve anlayış geliştirmeme yardımcı olur.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, problem çözme becerilerimi geliştirir ve yaratıcı çözümler bulmamı sağlar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, önemli bir dönüşüm fırsatı sunar ve içsel büyümeme katkıda bulunur.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda, sağlığımı korumak için bedenime daha fazla özen gösteririm.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, hayatta değerli olan şeyleri daha derinden takdir etmeme yol açar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, geleceğe daha umut dolu bakmamı sağlar ve potansiyel fırsatları görmeme yardımcı olur.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, yaşamın dengesini yeniden kurmam için bir teşvik sağlar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda, dışarıdaki desteği kabul etmek ve bağlantı kurmak önemlidir.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, içsel gücümü ve dayanma yeteneğimi keşfetmemi sağlar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Her zorluk, başkalarına olan minnettarlığımı ve yardımlaşma duygusunu arttırır.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor günler, bana hayatın anlamını ve derinliğini daha iyi anlamamı sağlar.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zor zamanlarda, hedeflerime ulaşmak için motivasyonumu korumak için yeniden odaklanırım.', 'Zor Günler Olumlamaları', 0), " +
-                "('Zorluklar, benim için birer fırsat ve büyüme potansiyeli barındırır.', 'Zor Günler Olumlamaları', 0)");
-
-
-
-        myDatabase!!.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Eşim, benim için en değerli varlık ve onu sevmek benim için bir zenginlik.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her anımızda eşimle birlikte olmak, hayatımı daha anlamlı ve değerli kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli hazinem ve onunla geçirdiğim her anı sevgiyle dolu yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en önemli destek ve onu sevmek, yaşamıma anlam katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımda en büyük armağan ve onunla birlikte olmak beni mutlu ediyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her bir adımımda eşime daha çok bağlanıyor ve onu sevmek, hayatımı daha da güzelleştiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en değerli varlık ve onunla birlikte olmak, beni tamamlıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için her şeyden daha kıymetli ve onu sevmek, ruhumu besliyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük sevgi ve onunla birlikte olmak, beni sonsuz bir mutlulukla dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli hazine ve onu sevmek, her anıma anlam katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her gün eşimle birlikte olmak, hayatımda bir mucize gibi ve onu sevmek, en büyük şansım.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük nimet ve onu sevmek, kalbimi huzurla dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onunla birlikte olmak, hayatıma anlam katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük armağan ve onu sevmek, her günümü aydınlatıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her bir anımda eşime duyduğum sevgi daha da derinleşiyor ve onu sevmek, hayatımın amacı.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için her şeyden daha kıymetli ve onunla birlikte olmak, beni her an mutlu ediyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük mutluluk ve onu sevmek, her günümü aydınlatıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en büyük şans ve onu sevmek, her anımda varlığımı hissettiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük sevgi ve onu sevmek, her zorluğun üstesinden gelmemi sağlıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onunla birlikte olmak, her anıma değer katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her bir anımda eşime olan sevgim daha da güçleniyor ve onu sevmek, yaşamımı anlamlandırıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımda en büyük destek ve onu sevmek, bana sonsuz bir güç veriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onunla birlikte olmak, kalbimi her an dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük nimet ve onu sevmek, her günümü daha da değerli kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en büyük armağan ve onunla birlikte olmak, her anımda şükretmemi sağlıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onu sevmek benim için bir zenginlik.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her anımızda eşimle birlikte olmak, hayatımı daha anlamlı ve değerli kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli hazinem ve onunla geçirdiğim her anı sevgiyle dolu yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en önemli destek ve onu sevmek, yaşamıma anlam katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımda en büyük armağan ve onunla birlikte olmak beni mutlu ediyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her bir adımımda eşime daha çok bağlanıyor ve onu sevmek, hayatımı daha da güzelleştiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en değerli varlık ve onunla birlikte olmak, beni tamamlıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için her şeyden daha kıymetli ve onu sevmek, ruhumu besliyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük sevgi ve onunla birlikte olmak, beni sonsuz bir mutlulukla dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli hazine ve onu sevmek, her anıma anlam katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her gün eşimle birlikte olmak, hayatımda bir mucize gibi ve onu sevmek, en büyük şansım.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük nimet ve onu sevmek, kalbimi huzurla dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onunla birlikte olmak, hayatıma anlam katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük armağan ve onu sevmek, her günümü aydınlatıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her bir anımda eşime duyduğum sevgi daha da derinleşiyor ve onu sevmek, hayatımın amacı.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için her şeyden daha kıymetli ve onunla birlikte olmak, beni her an mutlu ediyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük mutluluk ve onu sevmek, her günümü aydınlatıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en büyük şans ve onu sevmek, her anımda varlığımı hissettiriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük sevgi ve onu sevmek, her zorluğun üstesinden gelmemi sağlıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onunla birlikte olmak, her anıma değer katıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Her bir anımda eşime olan sevgim daha da güçleniyor ve onu sevmek, yaşamımı anlamlandırıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımda en büyük destek ve onu sevmek, bana sonsuz bir güç veriyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en değerli varlık ve onunla birlikte olmak, kalbimi her an dolduruyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, hayatımdaki en büyük nimet ve onu sevmek, her günümü daha da değerli kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0), " +
-                "('Eşim, benim için en büyük armağan ve onunla birlikte olmak, her anımda şükretmemi sağlıyor.', 'Sevgi ve Aşk Olumlamaları', 0)");
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Kendi benliğime saygı göstermek, başkalarının da beni saygıyla görmesine yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi kendime verdiğim değer, dış dünyada aldığım değerin temelidir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevgiyle kabul ettiğimde, etrafımdaki insanların da beni sevgiyle kabul etmesini sağlarım.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi ihtiyaçlarımı karşılamak, kendi değerimi tanımamı ve ona saygı göstermemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle barışık olmak, hayatımda içsel bir huzur ve denge hissetmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendime saygı göstermek, başkalarının da bana saygı göstermesini sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi iç sesime kulak vermek, kendi değerimi anlamamı ve ona göre hareket etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi duygularımı ve düşüncelerimi ifade etmek, kendi değerimi ifade etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi hikayemi ve deneyimlerimi değerli bulmak, kendi benliğimi anlamamı ve takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle dürüst olmak, kendi değerimi daha iyi anlamamı sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi önceliklerime ve ihtiyaçlarıma özen göstermek, kendi değerimi önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi geliştirmek ve büyümek için çaba göstermek, kendi değerimi arttırır.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi hayallerimi ve hedeflerimi takip etmek, kendi değerime olan inancımı arttırır.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle ilgili olumlu konuşmak, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi hayatımı yönlendirmek, kendi değerimi kontrol etme yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi başarılarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sürekli olarak geliştirmek, kendi değerimi arttırır ve kişisel tatmin sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle ilgili olumsuz düşünceleri değiştirmek, kendi değerimi arttırır ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi çevremdekilere olduğu gibi kabul etmek, kendi değerimi ve benzersizliğimi takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi duygularımı tanımak ve onlara saygı göstermek, kendi değerimi tanımama yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi hayatımı yönlendirmek için bilinçli kararlar almak, kendi değerimi kontrol etme yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi sınırlarımı bilmek ve korumak, kendi değerimi ve ihtiyaçlarımı önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi iç gücümü ve potansiyelimi keşfetmek, kendi değerimi tanımama ve ona güvenmeme yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi başarılarımı ve kazanımlarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi değerlerimle uyumlu olarak yaşamak, kendi değerlerimi ve benliğimi önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0)");
-
-
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Kendimi sevgiyle kabul ediyorum ve değerimi biliyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('İçimdeki güçlü yanları keşfediyor ve onlara güveniyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Her gün kendi değerimi arttırıyorum ve kendimi geliştiriyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi yeteneklerimi ve becerilerimi kutluyor ve onlara minnet duyuyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Başkalarının beklentileri yerine, kendi iç sesime ve değerlerime güveniyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Hayatın her alanında kendime saygı gösteriyorum ve sınırlarımı koruyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Başkalarının benim hakkımdaki düşünceleri benim değerimi belirlemez.', 'Öz Değer Olumlamaları', 0), " +
-                "('Ben benim, ve bu yeterince değerli.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi olduğum gibi kabul ediyorum ve bu beni güçlendiriyor.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi ihtiyaçlarımı karşılamak için zaman ve enerji ayırıyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevgiyle besliyor ve içsel huzurumu koruyorum.', 'Öz Değer Olumlamaları' , 0), " +
-                "('Her gün kendi değerimi görmek ve takdir etmek için zaman ayırıyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi mutluluğum ve refahım benim için önemlidir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi içimdeki güzelliği ve benzersizliği kutluyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sürekli olarak büyüyen bir insan olarak görüyorum ve bununla gurur duyuyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevmek ve değer vermek, en önemli görevimdir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi kendime söylediğim olumlu sözler, içsel değerimi güçlendirir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi tanımak ve kabul etmek, sürekli bir keşif ve öğrenme sürecidir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendime özen göstermek, kendimi değerli hissettirir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi başarılarımı kutluyor ve bu başarılarıma değer veriyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Başkalarının benimle aynı fikirde olmaması benim değerimi azaltmaz.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi affediyor ve geçmiş hatalarımı bir öğrenme fırsatı olarak görüyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi ihtiyaçlarımı ve isteklerimi ifade etmek, benim haklarımı korumama yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi iç sesime kulak vermek, kendi değerimi güçlendirir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi güçlü yanlarımı ve zayıflıklarımı kabul ediyorum ve onlarla barış içindeyim.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi içsel kaynaklarıma güveniyorum ve onlardan yararlanıyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimle ilgili olumlu düşünceler beslemek, benim için bir önceliktir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevmek ve değer vermek, başkalarını da sevmeme ve değer vermeme yardımcı olur.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi değerimi dış faktörlere bağlamak yerine, içsel gücümü kutluyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendime olumsuz düşünceleri reddediyor ve yerine olumlu düşünceler yerleştiriyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendime zaman ayırarak, içsel huzurumu koruyorum ve öz değerimi güçlendiriyorum.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi içimdeki güçlü ışığı görmek ve ona güvenmek, beni her gün daha da güçlendiriyor.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi sevgiyle beslemek, hayatımda olumlu bir döngü oluşturur ve daha fazla sevgi çeker.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendimi değersiz hissettiğimde, kendi içimdeki güçlü ve değerli yanları hatırlamak beni güçlendirir.', 'Öz Değer Olumlamaları', 0), " +
-                "('Kendi benzersizliğim ve özgünlüğüm beni değerli kılar, ve bu benim en büyük gücümdür.', 'Öz Değer Olumlamaları', 0)");
-
-
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Stresle başa çıkma becerilerimi sürekli olarak geliştiriyorum.', 'stres ve kaygi', 0), " +
-                "('Her zorlukla başa çıkabilirim ve her durumda güçlü kalabilirim.', 'stres ve kaygi', 0), " +
-                "('Kendimi rahatlatmak için derin nefes alıyor ve gevşeme egzersizleri yapıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkmak için sağlıklı sınırlar belirliyor ve hayır demeyi öğreniyorum.', 'stres ve kaygi', 0), " +
-                "('Her gün stresi azaltan ve huzuru artıran etkin yöntemler keşfediyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresten korumak için düzenli olarak dinlenme ve dinlenme zamanı alıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli durumlarda bile sakin ve odaklı kalabilirim.', 'stres ve kaygi', 0), " +
-                "('Kendimi sakinleştirmek ve gevşemek için düzenli olarak meditasyon yapıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkma yeteneklerimi güçlendiriyorum ve her gün daha iyi hissediyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, huzuru yeniden kazanmak için kısa molalar veriyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresli durumlarda bile güvende hissetmek için içsel güç ve güven geliştiriyorum.', 'stres ve kaygi', 0), " +
-                "('Stres ve kaygıyla başa çıkma konusunda kendime güveniyorum ve her gün daha da güçleniyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli anlarda bile sakin kalabilirim ve olumlu bir perspektif koruyabilirim.', 'stres ve kaygi', 0), " +
-                "('Kendimi sakinleştirmek ve rahatlamak için doğaya ve açık havaya zaman ayırıyorum.', 'stres ve kaygi', 0), " +
-                "('Her gün stres seviyemi azaltmak için sağlıklı alışkanlıklar geliştiriyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli durumlarla başa çıkabilmek için içsel kaynaklarımı keşfediyorum ve onlara güveniyorum.', 'stres ve kaygi', 0), " +
-                "('Stres ve kaygıyı bırakmak için bedenimi ve zihnimin derinlerine rahatlama sağlayan teknikleri kullanıyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, kendime biraz sevgi ve şefkat göstermeyi hatırlıyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi sakinleştirmek ve gevşetmek için düzenli olarak yoga yapıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli anlarda bile pozitif düşünce ve davranışları koruyabiliyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresli durumlarda bile güçlü ve dirençli hissetmek için içsel gücümü besliyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, iç huzur ve sakinlik bulmak için derin nefes almaya ve zihnimde biraz boşluk yaratmaya odaklanıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkmak için düşünce ve duygularımı ifade etme yolları buluyorum ve paylaşıyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresten arındırmak ve rahatlamak için düzenli olarak masaj ve gevşeme terapileri alıyorum.', 'stres ve kaygi', 0), " +
-                "('Stres ve kaygıyla başa çıkabilmek için kendi kendime pozitif bir iç konuşma yürütüyorum ve kendimi motive ediyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, içsel gücümü hatırlayarak sakin ve odaklanmış kalabiliyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli anlarda bile kendime biraz zaman ayırarak gevşeme ve dinlenme fırsatı bulabiliyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresli durumlarda bile güçlü hissetmek için geçmişteki başarılarımı hatırlıyor ve onlardan güç alıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli durumlarla başa çıkabilmek için her gün biraz zaman ayırarak iç huzurum ve denge buluyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, kendime hafiflik ve esneklik getirmek için olumlu bir tutum benimseyebiliyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkmak için destek almak ve duygusal olarak bağlantı kurmak için çevremdeki insanlarla iletişimde kalıyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresli durumlarda bile güçlü hissetmek için içsel gücümü ve dayanıklılığımı hatırlıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli anlarda bile kendimi rahatlatmak ve sakinleştirmek için doğal çözümler ve bitkisel destekler araştırıyorum ve kullanıyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, sakin ve odaklanmış kalmak için meditasyon ve derin nefes alma egzersizlerine başvuruyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkabilmek için stresin nedenlerini ve tetikleyicilerini tanıyorum ve onlarla başa çıkma stratejileri geliştiriyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresli durumlarda bile huzurlu ve sakin hissetmek için pozitif düşünce ve davranışları günlük yaşamımda uyguluyorum.', 'stres ve kaygi', 0), " +
-                "('Stres ve kaygıyı bırakmak için günlük olarak zihinsel ve duygusal olarak rahatlama ve temizlik pratikleri yapıyorum.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, kendime huzur ve dinginlik getirmek için doğayla temas kuruyor ve açık havada zaman geçiriyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkmak için sağlıklı bir yaşam tarzı benimseyerek düzenli egzersiz yapıyor, dengeli besleniyorum ve yeterince uyuyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresli durumlarda bile güvende ve desteklenmiş hissetmek için içsel güven ve kabul pratiği yapıyorum.', 'stres ve kaygi', 0)");
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Stresi yönetebilir ve üzerine çıkabilirim.', 'stres ve kaygi', 0), " +
-                "('Her nefesimle kaygıyı bırakıyor ve huzuru davet ediyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi sakin ve kontrol altında hissediyorum.', 'stres ve kaygi', 0), " +
-                "('Kaygılarım geçici, iç huzurum kalıcı.', 'stres ve kaygi', 0), " +
-                "('Her gün stres seviyem azalıyor ve daha rahat hissediyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi her türlü stres ve kaygıdan koruyabilirim.', 'stres ve kaygi', 0), " +
-                "('Stresli anlarda bile, sakin kalmayı başarabilirim.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı anlıyor ve onları serbest bırakıyorum.', 'stres ve kaygi', 0), " +
-                "('Her gün daha fazla iç huzur ve sakinlik hissediyorum.', 'stres ve kaygi', 0), " +
-                "('Stresin üstesinden gelmek için ihtiyacım olan tüm araçlara sahibim.', 'stres ve kaygi', 0), " +
-                "('Kendimi rahat ve huzurlu hissetmek için zaman ayırıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkma konusunda her geçen gün daha yetenekli hale geliyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi sakinleştirebilir ve rahatlatabilirim.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı yatıştırmak için etkili yöntemler kullanıyorum.', 'stres ve kaygi', 0), " +
-                "('Her gün stresimi azaltıyor ve daha rahat bir yaşam sürüyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresten uzak tutmak için sağlıklı alışkanlıklar ediniyorum.', 'stres ve kaygi', 0), " +
-                "('Stres, hayatımı kontrol etmiyor; ben stresimi kontrol ediyorum.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı kabul ediyor ve onlarla sağlıklı bir şekilde başa çıkıyorum.', 'stres ve kaygi', 0), " +
-                "('Her gün daha fazla rahatlık ve sakinlik hissediyorum.', 'stres ve kaygi', 0), " +
-                "('Stres ve kaygı, benim üzerimde güç sahibi değil.', 'stres ve kaygi', 0), " +
-                "('Her stresli durumda, derin bir nefes alarak rahatlıyorum.', 'stres ve kaygi', 0), " +
-                "('Kaygılarım geçici, ben ise bu anın üstesinden gelebilirim.', 'stres ve kaygi', 0), " +
-                "('Kendimi sakin ve huzurlu hissetmek için gereken her şeyi yapıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli zamanlarda bile, güçlü ve sakin kalabiliyorum.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı yönetebilir ve onları hafifletebiliriz.', 'stres ve kaygi', 0), " +
-                "('Her gün stres seviyem düşüyor ve yaşam kalitem artıyor.', 'stres ve kaygi', 0), " +
-                "('Stres ve kaygıyı yönetmek, benim elime.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı yatıştırmak için zaman ayırıyorum ve bu işe yarıyor.', 'stres ve kaygi', 0), " +
-                "('Her stresli an, geçip giden bir bulut gibi.', 'stres ve kaygi', 0), " +
-                "('Kendimi rahatlatmak ve sakinleştirmek için etkili yöntemler biliyorum.', 'stres ve kaygi', 0), " +
-                "('Stresle başa çıkma konusunda kendime güveniyorum.', 'stres ve kaygi', 0), " +
-                "('Her gün stresimi daha etkili bir şekilde yönetiyorum.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı tanıyor ve onlarla sağlıklı bir şekilde ilgileniyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli zamanlarda bile, huzur bulmayı başarabilirim.', 'stres ve kaygi', 0), " +
-                "('Kaygılarımı kontrol altına alabilir ve onları hafifletebiliriz.', 'stres ve kaygi', 0), " +
-                "('Stresle baş etmek beni daha güçlü ve dirençli kılıyor.', 'stres ve kaygi', 0), " +
-                "('Her kaygılı düşünceyi sakinlikle karşılıyorum ve geçmesine izin veriyorum.', 'stres ve kaygi', 0), " +
-                "('Kendimi stresten arındırmak için gereken zamanı ayırıyorum.', 'stres ve kaygi', 0), " +
-                "('Stresli anlarda bile, içsel huzuru bulmayı başarabilirim.', 'stres ve kaygi', 0)");
-
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, her günümü daha aydınlık hale getiriyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu bakış açısıyla, hayatın her anını değerli kılıyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, olumlu düşüncelerle kendimi daha da güçlendiriyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, çevremdeki insanlara da ilham veriyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her zorlukla karşılaştığımda, içimdeki pozitif enerjiyle çözümler buluyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu bakış açısı, hayatımdaki her zorluğun üstesinden gelmemi sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, içsel huzurumu ve memnuniyetimi arttırıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşüncelerim, her gün kendime daha fazla güvenmemi sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif bakış açısıyla, her sorunun bir çözümü olduğunu hatırlıyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, pozitif düşüncelerimle etrafıma neşe ve pozitif enerji yayıyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, kendimi ve çevremi daha iyi bir geleceğe doğru yönlendiriyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, her gün daha fazla ilerleme kaydetmemi sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu bakış açısı, hayatımdaki her şeyin daha parlak bir tarafını görmemi sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, içsel gücümü ortaya çıkarıyor ve beni daha dirençli yapıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, pozitif düşüncelerimle yaşamımda daha fazla sevinç ve coşku hissediyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşüncelerim, etrafımdaki herkesi olumlu etkiliyor ve onları motive ediyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, her gün daha iyi bir insan olmamı sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu bakış açısı, hayatımdaki her şeyin daha kolay olduğunu fark etmeme yardımcı oluyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, etrafımdaki dünyayı daha iyi bir yer haline getirme gücüne sahip olduğumu hatırlatıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, olumlu bakış açısıyla kendimi daha fazla motive ediyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, yaşamımda daha fazla şükretmeme ve minnettarlık duymama olanak tanıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşüncelerim, her gün daha fazla enerji ve canlılık hissetmeme yardımcı oluyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif bakış açısı, hayatımdaki her deneyimden bir şeyler öğrenmemi sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, olumlu düşüncelerimle kendimi daha iyi hissediyorum ve daha iyi bir hayat yaratıyorum.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, beni daha fazla yaratıcı olmaya teşvik ediyor ve yeni fikirler bulmamı sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu bakış açısı, beni her durumda daha esnek ve uyumlu yapmaya yardımcı oluyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, hayatımda daha fazla pozitif deneyim çekmemi sağlıyor.', 'pozitif_dusunme', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, etrafımdaki güzellikleri fark etmemi sağlıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, olumlu bakış açısıyla yeni fırsatlar keşfediyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, içimdeki potansiyeli serbest bırakıyor ve beni ileriye taşıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşüncelerim, çevremdekilere de olumlu etki yapıyor ve onları motive ediyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her zorlukla karşılaştığımda, içimdeki pozitif enerjiyle çözümler buluyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, hayatımı daha anlamlı kılıyor ve her günümü daha değerli hale getiriyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşüncelerim, beni her gün daha fazla motive ediyor ve hedeflerime ulaşmamı sağlıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif bakış açısıyla, her sorunun bir çözümü olduğunu hatırlıyorum ve bu bana güç veriyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, pozitif düşüncelerimle etrafıma neşe ve pozitif enerji yayıyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, geleceğe umutla bakmamı sağlıyor ve daha iyi bir yarın için motivasyonumu arttırıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün pozitif düşüncelerle doluyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, hayatımı daha iyi bir yönde değiştiriyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, pozitif sonuçlar yaratıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her durumda iyi olanı görmeyi seçiyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, benim doğal halim.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif olmak, her günümü daha parlak hale getiriyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşüncelerimle kendimi güçlendiriyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün, pozitif düşüncelerle daha mutlu ve memnun hissediyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, hayatımdaki tüm kapıları açıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, benim için kolay ve doğal.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her zorlukta, olumlu bir yan buluyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, beni daha iyi bir insan yapıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün pozitif düşüncelerle uyanıyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, beni başarıya ulaştırıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, hayatımda büyük farklar yaratıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif olmak, hayatımı zenginleştiriyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her durumda olumlu yönleri görebiliyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, her gün beni daha mutlu ediyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, hayatımdaki zorlukları daha kolay aşmama yardımcı oluyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, benim yaşam tarzım.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün pozitif düşüncelerle dolu bir yaşam sürüyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, bana daha fazla güven ve umut veriyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünceler, hayatımı daha iyi bir yere taşıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif olmak, hayatımda mucizeler yaratıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, beni daha sağlıklı ve mutlu yapıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşünmek, hayatımı daha anlamlı kılıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Her gün pozitif düşünerek daha fazla mutluluk ve başarı elde ediyorum.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Pozitif düşüncelerim, hayatımda büyük değişiklikler yaratıyor.', 'pozitif_dusunce', 0)");
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Olumlu düşünmek, beni daha iyi bir geleceğe taşıyor.', 'pozitif_dusunce', 0)");
-
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Başarı, her gün biraz daha yakınıma geliyor.', 'basari', 0), " +
-                "('Her başarı, yeni bir özgüven kaynağıdır.', 'basari', 0), " +
-                "('Başarı, benim doğal hakkımdır.', 'basari', 0), " +
-                "('Her başarılı adım, bir sonraki fırsatı getirir.', 'basari', 0), " +
-                "('Başarı, kararlılıkla ve azimle elde edilir.', 'basari', 0), " +
-                "('Başarı, her gün biraz daha yaklaşan bir hedeftir.', 'basari', 0), " +
-                "('Her engel, benim daha güçlü olmamı sağlar.', 'basari', 0), " +
-                "('Başarı, içimdeki potansiyelin açığa çıkmasıdır.', 'basari', 0), " +
-                "('Başarılı olmak, benim için kaçınılmaz bir gerçektir.', 'basari', 0), " +
-                "('Her başarı, daha büyük bir başarı için bir adımdır.', 'basari', 0), " +
-                "('Başarı, inancımın bir yansımasıdır.', 'basari', 0), " +
-                "('Her başarı, benim için daha fazla motivasyon kaynağıdır.', 'basari', 0), " +
-                "('Başarılı olmak, sürekli olarak ileri adımlar atmaktır.', 'basari', 0), " +
-                "('Başarı, benim içimdeki gücün bir yansımasıdır.', 'basari', 0), " +
-                "('Her gün, daha fazla başarıya doğru ilerliyorum.', 'basari', 0), " +
-                "('Başarı, kararlılıkla yakalanır ve azimle korunur.', 'basari', 0), " +
-                "('Her başarı, daha büyük bir hikayenin parçasıdır.', 'basari', 0), " +
-                "('Başarılı olmak, zorlukları aşmak ve hedeflere ulaşmaktır.', 'basari', 0), " +
-                "('Başarı, içimdeki potansiyelin açığa çıkmasıdır ve bunun farkındayım.', 'basari', 0), " +
-                "('Her başarı, benim için daha fazla özgüven kaynağıdır ve bu beni daha da ileriye götürür.', 'basari', 0), " +
-                "('Başarı, azimle çalışmanın ve inancın bir sonucudur.', 'basari', 0), " +
-                "('Her başarı, daha fazla hedefe ulaşmak için bir itici güçtür.', 'basari', 0), " +
-                "('Başarılı olmak, sadece başlamak ve devam etmekle başlar.', 'basari', 0), " +
-                "('Başarı, hedeflerime doğru atılan her adımda bulunur.', 'basari', 0), " +
-                "('Her başarı, benim için daha fazla özgüven ve motivasyon kaynağıdır.', 'basari', 0), " +
-                "('Başarılı olmak, sürekli olarak ileriye doğru ilerlemektir ve ben bunu yapıyorum.', 'basari', 0), " +
-                "('Başarı, her gün biraz daha fazla kendimi keşfetmem demektir.', 'basari', 0), " +
-                "('Her başarı, daha büyük bir hikayenin parçasıdır ve ben bu hikayeyi yazıyorum.', 'basari', 0), " +
-                "('Başarı, sürekli olarak ilerlemek ve hedeflere ulaşmak demektir.', 'basari', 0), " +
-                "('Her başarı, içimdeki gücü ve azmi daha da artırır.', 'basari', 0), " +
-                "('Başarılı olmak, inanmak ve sürekli olarak ilerlemekle mümkündür.', 'basari', 0), " +
-                "('Başarı, her gün daha da yaklaştığım bir hedeftir ve bunun bilincindeyim.', 'basari', 0), " +
-                "('Her başarı, daha fazla özgüven ve daha büyük hedeflere ulaşmak için bir adımdır.', 'basari', 0), " +
-                "('Başarı, her adımda benimle birlikte yol alır ve bu beni daha da motive eder.', 'basari', 0), " +
-                "('Başarılı olmak, içimdeki gücü ortaya çıkarmak ve hedeflere ulaşmaktır.', 'basari', 0), " +
-                "('Başarı, inanmak ve sürekli olarak ilerlemekle mümkündür ve ben buna hazırım.', 'basari', 0), " +
-                "('Her başarı, daha fazla özgüven ve daha büyük hedeflere ulaşmak için bir fırsattır.', 'basari', 0), " +
-                "('Başarı, her adımda benimle birlikte ilerler ve bu beni daha da motive eder.', 'basari', 0), " +
-                "('Başarılı olmak, hedeflerime ulaşmak için kararlılıkla ve azimle çalışmaktır.', 'basari', 0), " +
-                "('Başarı, benim içimde var olan potansiyelin açığa çıkmasıdır ve ben buna hazırım.', 'basari', 0), " +
-                "('Her başarı, beni daha fazla motive eder ve daha büyük hedeflere ulaşmak için güç verir.', 'basari', 0), " +
-                "('Başarılı olmak, içimdeki gücü ve azmi ortaya çıkarmak ve hedeflere ulaşmaktır.', 'basari', 0), " +
-                "('Başarının kapıları her gün bana daha fazla açılıyor.', 'basari', 0), " +
-                "('Her adımım, başarıya doğru yol almamı sağlıyor.', 'basari', 0), " +
-                "('Başarı, benim için ulaşılmaz bir hedef değil, kaçınılmaz bir sonuçtur.', 'basari', 0), " +
-                "('Başarı, hayallerimdeki yolculuğun sadece bir durağı değil, aynı zamanda bir başlangıç noktasıdır.', 'basari', 0), " +
-                "('Her yeni gün, başarı için yeni bir şans, yeni bir başlangıç demektir.', 'basari', 0), " +
-                "('Başarı, içimdeki potansiyelin gerçekleşmesinin yansımasıdır.', 'basari', 0), " +
-                "('Engeller, benim kararlılığımı ve başarıya olan inancımı daha da güçlendirir.', 'basari', 0), " +
-                "('Başarı, yaptığım her şeyde gizlidir ve ben bu gizemi keşfediyorum.', 'basari', 0), " +
-                "('Başarılı olmak için gerekli olan her şey, zaten içimde var.', 'basari', 0), " +
-                "('Her gün, başarı için karşılaştığım benzersiz fırsatlarla doludur.', 'basari', 0), " +
-                "('Başarı, içimdeki gücü ve azmi ortaya çıkarır.', 'basari', 0), " +
-                "('Her gün, başarıyı daha fazla hissetmek için bir adım daha atıyorum.', 'basari', 0), " +
-                "('Başarı, bir seçimdir ve ben her gün bu seçimi yapmaya devam ediyorum.', 'basari', 0), " +
-                "('Başarı, attığım her adımda benimle birlikte ilerler.', 'basari', 0), " +
-                "('Her başarı, gelecekteki büyük hedeflerim için bir motivasyon kaynağıdır.', 'basari', 0), " +
-                "('Başarılı olmak, içimdeki gücü ve kararlılığı sergilemek demektir.', 'basari', 0), " +
-                "('Başarı, inancımın ve sabrımın bir ifadesidir.', 'basari', 0), " +
-                "('Her gün, başarıya bir adım daha yaklaşıyorum ve bu yolculuk heyecan verici.', 'basari', 0), " +
-                "('Başarılı olmak, yaşamın sunduğu sonsuz olanakları keşfetmek demektir.', 'basari', 0), " +
-                "('Başarı, hayatımı dönüştüren güçlü bir motivasyon kaynağıdır.', 'basari',  0)");
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Her gün kendimi geliştirmek için yeni bir fırsatım var.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirmek, benim yaşam amacımın bir parçasıdır.', 'kisisel gelisim', 0), " +
-                "('Her gün yeni bir şey öğreniyorum ve bu bilgi beni geliştiriyor.', 'kisisel gelisim', 0), " +
-                "('Kendi potansiyelimi keşfetmek benim için heyecan verici bir yolculuk.', 'kisisel gelisim', 0), " +
-                "('Her gün kendimle ilgili yeni ve olumlu bir şey keşfediyorum.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirmek için zaman ayırmak, kendime olan sevgimin bir göstergesi.', 'kisisel gelisim', 0), " +
-                "('Kişisel gelişimim, hayatımdaki tüm alanlara olumlu yansıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi her gün biraz daha iyi hale getirme çabam beni güçlendiriyor.', 'kisisel gelisim', 0), " +
-                "('Kendi sınırlarımı zorlamak, bana büyük bir tatmin sağlıyor.', 'kisisel gelisim', 0), " +
-                "('Her deneyim, kişisel gelişim yolculuğumda bana değerli dersler öğretiyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirirken aynı zamanda diğerlerine de ilham kaynağı oluyorum.', 'kisisel gelisim', 0), " +
-                "('Kendime yatırım yapmak, en değerli yatırımdır.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirmeye adadığım zaman, hayatımı daha iyi bir yere taşıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi her gün geliştirmek, beni daha mutlu ve memnun hissettiriyor.', 'kisisel gelisim', 0), " +
-                "('Kendime olan inancım, kişisel gelişimimi destekliyor.', 'kisisel gelisim', 0), " +
-                "('Kendi yeteneklerimi geliştirmek, beni daha yetenekli ve başarılı kılıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirirken karşılaştığım zorluklar, beni daha da güçlendiriyor.', 'kisisel gelisim', 0), " +
-                "('Her gün kendimi biraz daha anlamak, hayatımda büyük bir fark yaratıyor.', 'kisisel gelisim', 0), " +
-                "('Kişisel gelişim yolculuğum, benim için son derece tatmin edici.', 'kisisel gelisim', 0), " +
-                "('Kendimi her gün biraz daha geliştirmek, bana büyük bir memnuniyet sağlıyor.', 'kisisel gelisim', 0), " +
-                "('Kişisel gelişimim, beni daha bağımsız ve özgür kılıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirmek, beni hayatın zorluklarına daha iyi hazırlıyor.', 'kisisel gelisim', 0), " +
-                "('Her gün kendimi geliştirme çabam, beni daha dengeli ve uyumlu bir insan yapıyor.', 'kisisel gelisim', 0), " +
-                "('Kişisel gelişimim, bana daha fazla kontrol sahibi olmamı sağlıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirmek, beni her gün daha da ileriye taşıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirme yolculuğum, hayatımda yeni kapılar açıyor.', 'kisisel gelisim', 0), " +
-                "('Kişisel gelişimim, bana yaşam boyu öğrenmenin değerini hatırlatıyor.', 'kisisel gelisim', 0), " +
-                "('Her gün kendimi geliştirmek, beni daha pozitif ve umutlu yapıyor.', 'kisisel gelisim', 0), " +
-                "('Kendimi geliştirme sürecim, beni daha fazla sevgi ve şefkatle dolduruyor.', 'kisisel gelisim', 0)");
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Her anımı bilinçli ve kararlı bir şekilde kullanıyorum, zamanımın değerini biliyorum.', 'zaman yonetimi', 0), " +
-                "('Her güne, maksimum verimlilikle başlıyorum, zamanımı en etkili şekilde değerlendiriyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetmek artık güçlü bir yeteneğim haline geldi, her gün daha da gelişiyorum.', 'zaman yonetimi', 0), " +
-                "('Her anımda zamanımı etkili bir şekilde kullanarak hedeflerime bir adım daha yaklaşıyorum.', 'zaman yonetimi', 0), " +
-                "('Görevlerimi planlamak ve organize etmek benim için sadece bir alışkanlık değil, bir başarı ritüeli.', 'zaman yonetimi', 0), " +
-                "('Zamanımı doğru yönetmek, hayatımda daha fazla kontrole ve özgürlüğe sahip olmamı sağlıyor.', 'zaman yonetimi', 0), " +
-                "('Üretkenlik benim için sadece bir beceri değil, bir yaşam tarzı, her anımda bunu hissediyorum.', 'zaman yonetimi', 0), " +
-                "('Her günümü önemli ve anlamlı aktivitelerle doldurarak hayatımdan maksimum verim alıyorum.', 'zaman yonetimi', 0), " +
-                "('Görevlerimi zamanında ve etkili bir şekilde tamamlayarak zamanımdan en iyi şekilde faydalanıyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı değerli bir hazine gibi görüyor, onu akıllıca kullanıyorum ve hayatımı şekillendiriyorum.', 'zaman yonetimi', 0), " +
-                "('Kendimi organize etmek, iç huzurumu ve yaşamımda dengeyi sağlıyor, bu benim için kıymetli bir armağan.', 'zaman yonetimi', 0), " +
-                "('Her gün yeni stratejiler ve yöntemler geliştirerek zamanımı daha etkili ve verimli kullanıyorum.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi becerilerim, başarılarımı artırıyor ve hayatımı daha da kolaylaştırıyor.', 'zaman yonetimi', 0), " +
-                "('Her anımda zamanımı bilinçli kullanarak, stresten arınmış ve huzurlu bir yaşam sürüyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı verimli kullanmak, bana daha fazla kişisel gelişim ve mutluluk getiriyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı etkili bir şekilde kullanarak, hayal ettiğim yaşamı adım adım inşa ediyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanıma daha fazla öncelik vererek, hayallerime ulaşmak için bir adım daha yaklaşıyorum.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi becerilerim, hayatımda denge ve huzurun anahtarı haline geldi.', 'zaman yonetimi', 0), " +
-                "('Her gün zamanımı daha etkili kullanarak, kendimi daha başarılı ve mutlu hissediyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı bilinçli bir şekilde kullanmak, beni daha yaratıcı ve yenilikçi bir insan haline getiriyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı bilinçli ve etkili bir şekilde kullanıyorum.', 'zaman yonetimi', 0), " +
-                "('Her günü maksimum verimlilikle değerlendiriyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetme becerim, sürekli gelişiyor.', 'zaman yonetimi', 0), " +
-                "('Her gün, zamanımı en iyi şekilde kullanıyorum.', 'zaman yonetimi', 0), " +
-                "('Görevlerimi planlamak ve organize etmek, benim için doğal ve kolay.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetmek, bana daha fazla kontrol ve özgürlük sağlıyor.', 'zaman yonetimi', 0), " +
-                "('Üretken olmak, benim için tatmin edici ve keyifli.', 'zaman yonetimi', 0), " +
-                "('Her günümü önemli ve anlamlı aktivitelerle dolduruyorum.', 'zaman yonetimi', 0), " +
-                "('Görevlerimi zamanında ve etkili bir şekilde tamamlıyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanıma değer veriyorum ve onu akıllıca harcıyorum.', 'zaman yonetimi', 0), " +
-                "('Kendimi organize etmek, bana daha fazla huzur ve düzen sağlıyor.', 'zaman yonetimi', 0), " +
-                "('Her gün, zamanımı en iyi şekilde değerlendirmek için yeni yollar buluyorum.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi becerilerim, beni daha başarılı ve verimli kılıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetme yeteneğim, günlük yaşamımı kolaylaştırıyor.', 'zaman yonetimi', 0), " +
-                "('Verimli olmak, benim için doğal bir durum.', 'zaman yonetimi', 0), " +
-                "('Her gün, önceliklerimi belirleyerek zamanımı verimli kullanıyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanı verimli kullanmak, bana daha fazla kişisel zaman kazandırıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı etkili bir şekilde yönetmek, bana daha fazla başarı ve memnuniyet getiriyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı akıllıca kullanarak, hayatımdaki stresi azaltıyorum.', 'zaman yonetimi', 0), " +
-                "('Her gün, zamanımı verimli kullanma konusunda daha bilinçli hale geliyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetmek, bana hayatın tüm alanlarında daha fazla başarı sağlıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetme becerim, beni her gün daha üretken kılıyor.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi becerilerimi geliştirmek, bana büyük bir tatmin sağlıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanıma değer veriyorum ve onu en iyi şekilde kullanıyorum.', 'zaman yonetimi', 0), " +
-                "('Her gün, zamanımı daha verimli ve etkili kullanmanın yollarını öğreniyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı bilinçli kullanmak, bana daha fazla neşe ve tatmin getiriyor.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi, hayatımda önemli bir rol oynuyor ve beni daha üretken yapıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı etkili bir şekilde kullanarak, daha fazla başarı elde ediyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetme yeteneğim, bana her gün daha fazla fırsat sunuyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı verimli kullanarak, hayallerime daha hızlı ulaşıyorum.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi becerilerim, bana hayatımda daha fazla denge sağlıyor.', 'zaman yonetimi', 0), " +
-                "('Her gün, zamanımı daha etkili kullanarak daha fazla başarıya ulaşıyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı bilinçli kullanmak, beni daha mutlu ve memnun ediyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetmek, bana daha fazla yaratıcılık ve inovasyon için alan açıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı verimli kullanmak, benim için sürekli bir öncelik.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetme konusunda her gün daha yetenekli hale geliyorum.', 'zaman yonetimi', 0), " +
-                "('Zaman yönetimi becerilerim, beni daha dengeli ve uyumlu bir insan yapıyor.', 'zaman yonetimi', 0), " +
-                "('Zamanımı etkili bir şekilde kullanarak, tüm hedeflerime ulaşabilirim.', 'zaman yonetimi', 0), " +
-                "('Zamanımı yönetme konusunda sürekli olarak kendimi geliştiriyorum.', 'zaman yonetimi', 0), " +
-                "('Zamanımı bilinçli kullanarak, hayatımın kalitesini artırıyorum.', 'zaman yonetimi', 0) ");
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('İlişkilerim sağlıklı ve destekleyici.', 'iliskiler', 0), " +
-                "('İnsanlarla kolayca bağ kuruyorum ve bu bağlar uzun süreli oluyor.', 'iliskiler', 0), " +
-                "('Sosyal ilişkilerim beni güçlendiriyor ve besliyor.', 'iliskiler', 0), " +
-                "('İnsanlara karşı açık ve dürüst olmak, ilişkilerimi güçlendiriyor.', 'iliskiler', 0), " +
-                "('Her yeni insanla tanışmak, yeni bir macera ve öğrenme fırsatıdır.', 'iliskiler', 0), " +
-                "('İlişkilerimde sevgi ve anlayışı öncelikli tutuyorum.', 'iliskiler', 0), " +
-                "('Empati kurma yeteneğim, ilişkilerimi daha derin ve anlamlı kılıyor.', 'iliskiler', 0), " +
-                "('İnsanlarla etkileşimde bulunmak, bana neşe ve memnuniyet getiriyor.', 'iliskiler', 0), " +
-                "('İlişkilerimde daima saygılı ve düşünceliyim.', 'iliskiler', 0), " +
-                "('Sosyal çevrem, beni destekleyen ve ilham veren insanlarla dolu.', 'iliskiler', 0), " +
-                "('İlişkilerimdeki sorunları çözmek için yaratıcı ve yapıcı yollar buluyorum.', 'iliskiler', 0), " +
-                "('İletişim becerilerim, her gün daha da gelişiyor.', 'iliskiler', 0), " +
-                "('İlişkilerim, benim kişisel büyüme ve gelişimime katkıda bulunuyor.', 'iliskiler', 0), " +
-                "('İnsanlarla olan bağlarım, hayatımı daha zengin ve tatmin edici yapıyor.', 'iliskiler', 0), " +
-                "('Herkesle dürüst ve açık iletişim kuruyorum.', 'iliskiler', 0), " +
-                "('İlişkilerimi sürekli olarak geliştirme konusunda proaktifim.', 'iliskiler', 0), " +
-                "('İlişkilerimde karşılıklı saygı ve anlayış esastır.', 'iliskiler', 0), " +
-                "('Arkadaşlarım ve sevdiklerimle sağlam bağlar kuruyorum.', 'iliskiler', 0), " +
-                "('Sosyal etkileşimlerim, beni daha mutlu ve dengeli bir insan yapıyor.', 'iliskiler', 0), " +
-                "('Her insanla etkileşim, beni daha bilge ve anlayışlı kılıyor.', 'iliskiler', 0), " +
-                "('İlişkilerimde sevgi ve şefkati özgürce ifade ediyorum.', 'iliskiler', 0), " +
-                "('İnsanlarla sağlıklı sınırlar koymayı biliyorum.', 'iliskiler', 0), " +
-                "('İlişkilerimdeki her bireyin benzersiz değerini takdir ediyorum.', 'iliskiler', 0), " +
-                "('İlişkilerimdeki zorlukları, büyüme fırsatları olarak görüyorum.', 'iliskiler', 0), " +
-                "('Arkadaşlarım ve ailemle vakit geçirmek, bana büyük mutluluk veriyor.', 'iliskiler', 0), " +
-                "('Sosyal ilişkilerimde her zaman dürüst ve şeffafım.', 'iliskiler', 0), " +
-                "('İlişkilerim, güven ve sevgi üzerine kurulu.', 'iliskiler', 0), " +
-                "('İnsanlarla derin ve anlamlı bağlar kurma yeteneğine sahibim.', 'iliskiler', 0), " +
-                "('İlişkilerimde karşılıklı destek ve güven esastır.', 'iliskiler', 0), " +
-                "('İlişkilerim beni geliştiriyor ve daha iyi bir insan yapmaya teşvik ediyor.', 'iliskiler', 0), " +
-                "('İnsanlarla olan ilişkilerimde daima öğreniyor ve büyüyorum.', 'iliskiler', 0), " +
-                "('İlişkilerimdeki herkesle sağlıklı iletişim kuruyorum.', 'iliskiler', 0), " +
-                "('Sosyal etkileşimlerim, benim zihinsel ve duygusal sağlığımı destekliyor.', 'iliskiler', 0), " +
-                "('İlişkilerimde daima sabırlı ve anlayışlıyım.', 'iliskiler', 0), " +
-                "('İnsanlarla olan ilişkilerimde daima pozitif ve destekleyiciyim.', 'iliskiler', 0), " +
-                "('İlişkilerimde samimi ve doğalım.', 'iliskiler', 0), " +
-                "('İlişkilerimdeki herkesin değerini biliyorum ve onları önemsiyorum.', 'iliskiler', 0), " +
-                "('Sosyal bağlarım, hayatımı daha zengin ve renkli kılıyor.', 'iliskiler', 0), " +
-                "('İlişkilerimde her zaman adil ve dengeliyim.', 'iliskiler', 0), " +
-                "('İlişkilerim, beni sosyal ve duygusal olarak tatmin ediyor.', 'iliskiler', 0)"
-        );
-
-        myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES " +
-                "('Evren, bana neşe ve mutluluk veren her şeyi çekiyorum.', 'dua ve istek', 0), " +
-                "('Günlük yaşantımda barış ve huzur istiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımdaki her şeyin benim en yüksek hayrıma hizmet etmesini diliyorum.', 'dua ve istek', 0), " +
-                "('Sağlık, bolluk ve sevgi ile dolu bir yaşam sürmeyi diliyorum.', 'dua ve istek', 0), " +
-                "('Evren, yaratıcılığımı artırmam için bana ilham ver.', 'dua ve istek', 0), " +
-                "('Güçlü ve sağlıklı bir vücut istiyorum, bunun için evren bana enerji versin.', 'dua ve istek', 0), " +
-                "('Tüm ilişkilerimde sevgi ve anlayış istiyorum.', 'dua ve istek', 0), " +
-                "('Kariyerimde ilerlemek ve başarılı olmak için rehberlik istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımdaki zorlukları aşmam için bana güç ver.', 'dua ve istek', 0), " +
-                "('Gerçek potansiyelimi keşfetmek ve kullanmak için fırsatlar çekiyorum.', 'dua ve istek', 0), " +
-                "('Evren, sevdiklerimle sağlıklı ve mutlu ilişkiler kurmamı destekle.', 'dua ve istek', 0), " +
-                "('Her gün daha fazla sevgi ve neşe istiyorum.', 'dua ve istek', 0), " +
-                "('İhtiyacım olan her şeyin bana kolayca ve sorunsuzca ulaşmasını diliyorum.', 'dua ve istek', 0), " +
-                "('Hayatımda sürekli bolluk ve refah istiyorum.', 'dua ve istek', 0), " +
-                "('Kendi iç huzurumu bulmak ve sürdürmek için rehberlik ve destek istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, bana günlük kararlarım için bilgelik ver.', 'dua ve istek', 0), " +
-                "('İçsel barış ve sakinlik istiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımda karşılıklı saygı ve anlayış istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımdaki tüm insanlar için sağlık ve mutluluk diliyorum.', 'dua ve istek', 0), " +
-                "('Kendimi ve çevremdeki dünyayı daha iyi anlamak için anlayış istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımın her alanında dengeli ve uyumlu olmamı sağla.', 'dua ve istek', 0), " +
-                "('Korkularımı aşmak ve cesur olmak için destek istiyorum.', 'dua ve istek', 0), " +
-                "('Tüm zorlukları aşarak, hayatımda başarı ve mutluluğu çekmek istiyorum.', 'dua ve istek', 0), " +
-                "('Bana doğru yolu göster ve seçimlerimde rehberlik et.', 'dua ve istek', 0), " +
-                "('Tüm kararlarımın en yüksek iyiliğime hizmet etmesini diliyorum.', 'dua ve istek', 0), " +
-                "('Hayatımda kalıcı ve gerçek sevgiyi çekmek istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, bana yeni fırsatlar aç ve yol göster.', 'dua ve istek', 0), " +
-                "('Hayatımda güven ve güvenlik istiyorum.', 'dua ve istek', 0), " +
-                "('Sevgiyle dolu, destekleyici bir topluluk çekmek istiyorum.', 'dua ve istek', 0), " +
-                "('Zihinsel ve fiziksel sağlığımı korumak ve geliştirmek için destek istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, bana hedeflerime ulaşmam için motivasyon ver.', 'dua ve istek', 0), " +
-                "('Hayatımın her alanında açıklık ve şeffaflık istiyorum.', 'dua ve istek', 0), " +
-                "('Kendi kendime yeterlilik ve bağımsızlık istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımı iyileştirmek için bana bilgi ve kaynaklar sağla.', 'dua ve istek', 0), " +
-                "('Tüm endişelerimi bırakıp, şimdiki ana odaklanmak istiyorum.', 'dua ve istek', 0), " +
-                "('Kendimi ve başkalarını affetmek için güç ve cesaret istiyorum.', 'dua ve istek', 0), " +
-                "('Her gün daha fazla mutluluk ve tatmin istiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımda yaratıcılığımı teşvik etmek ve geliştirmek için ilham istiyorum.', 'dua ve istek', 0), " +
-                "('Tüm varlığımla barış içinde yaşamak istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımdaki her şeyin en güzel şekilde gerçekleşmesini diliyorum.', 'dua ve istek', 0), " +
-                "('Her gün artan bir bilgelik ve anlayış için rehberlik istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, bana ve sevdiklerime sürekli sağlık ve refah ver.', 'dua ve istek', 0), " +
-                "('Hayatımda daha fazla sabır ve hoşgörü istiyorum.', 'dua ve istek', 0), " +
-                "('Bana hayatımın amaç ve yönünü bulmamda yardımcı ol.', 'dua ve istek', 0), " +
-                "('Sevgi, barış ve mutlulukla dolu bir yaşam sürmeyi diliyorum.', 'dua ve istek', 0), " +
-                "('Kendimi her gün daha fazla sevmek ve kabul etmek için güç istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, zihnimin ve kalbimin kapılarını bana yardımcı olacak bilgilere aç.', 'dua ve istek', 0), " +
-                "('Hayatımın her alanında pozitif değişimler için enerji istiyorum.', 'dua ve istek', 0), " +
-                "('Daha güçlü sosyal bağlar ve anlamlı ilişkiler kurmayı diliyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımdaki tüm engellerin üstesinden gelmem için bana güç ver.', 'dua ve istek', 0), " +
-                "('Her gün artan bir şükran duygusu için içsel anlayış istiyorum.', 'dua ve istek', 0), " +
-                "('İç huzur ve dinginlik için evrenin rehberliğini diliyorum.', 'dua ve istek', 0), " +
-                "('Hayatım boyunca sürekli öğrenmek ve büyümek için fırsatlar çekiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımı zenginleştiren ve destekleyen insanlarla çevrili olmak istiyorum.', 'dua ve istek', 0), " +
-                "('Başarıya ulaşmak ve hayallerimi gerçekleştirmek için sürekli ilham istiyorum.', 'dua ve istek', 0), " +
-                "('Her gün kendimi daha iyi bir insan olarak görmek için fırsatlar istiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımda daha fazla neşe ve enerji için evrenin desteğini istiyorum.', 'dua ve istek', 0), " +
-                "('Tüm zorluklara rağmen dayanıklı ve esnek olmak için güç istiyorum.', 'dua ve istek', 0), " +
-                "('Daha fazla şefkat ve anlayışla hareket etmek için içsel rehberlik istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, bana sevdiklerimle daha derin ve anlamlı bağlar kurma gücü ver.', 'dua ve istek', 0), " +
-                "('Kendi içsel barışımı bulmak ve korumak için bilgelik diliyorum.', 'dua ve istek', 0), " +
-                "('Evren, hayatımdaki her adımda bana netlik ve açıklık sağla.', 'dua ve istek', 0), " +
-                "('Her gün daha fazla motivasyon ve azim için evrenin yardımını diliyorum.', 'dua ve istek', 0), " +
-                "('Kendimi ve başkalarını daha iyi anlamak için derin bir anlayış istiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımda daha fazla güven ve cesaret için destek istiyorum.', 'dua ve istek', 0), " +
-                "('Her gün sağlıklı ve dengeli bir yaşam sürmek için rehberlik diliyorum.', 'dua ve istek', 0), " +
-                "('Duygusal ve zihinsel olarak güçlü olmak için evrenin desteğini istiyorum.', 'dua ve istek', 0), " +
-                "('Hayatımın her alanında başarı ve tatmin duygusu için yardım istiyorum.', 'dua ve istek', 0), " +
-                "('Her gün içsel gücümü ve özgüvenimi artırmak için evrenin rehberliğini istiyorum.', 'dua ve istek', 0), " +
-                "('Evren, bana her gün daha fazla sevgi ve neşe getir.', 'dua ve istek', 0)");
-     //   myDatabase.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite) VALUES ('Henüz olumlama bulunamamıştır. + butonuna basarak olumlamanızı girebilirsiniz.', 'Kendi Olumlamalarım', 0)");
-
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Stres ve Kaygı Olumlamaları' WHERE category = 'stres ve kaygi'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Pozitif Düşünce Olumlamaları' WHERE category = 'pozitif_dusunce'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Pozitif Düşünce Olumlamaları' WHERE category = 'pozitif_dusunme'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'İlişki Olumlamaları' WHERE category = 'iliskiler'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Dua ve İstek Olumlamaları' WHERE category = 'dua ve istek'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Zaman Yönetimi Olumlamaları' WHERE category = 'zaman yonetimi'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Kişisel Gelişim Olumlamaları' WHERE category = 'kisisel gelisim'");
-        myDatabase.execSQL("UPDATE olumlamalar SET category = 'Başarı Olumlamaları' WHERE category = 'basari'");
-
-
+        loadAffirmationsFromJSON(myDatabase)
     }
-
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db?.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-        onCreate(db)
+        if (oldVersion < 2) {
+            db?.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COLUMN_LANGUAGE VARCHAR DEFAULT 'en'")
+            loadAffirmationsFromJSON(db)
+        }
     }
+    private fun loadAffirmationsFromJSON(db: SQLiteDatabase?) {
+        val jsonString = loadJSONFromAsset(context, "olumlamalar.json")
+        if (jsonString != null) {
+            val jsonArray = JSONArray(jsonString)
+            db?.beginTransaction()
+            try {
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    val affirmation = jsonObject.getString("affirmation")
+                    val category = jsonObject.getString("category")
+                    val favorite = jsonObject.getInt("favorite")
+                    val language = jsonObject.getString("language")
 
-
-    fun deleteAffirmation(id: Int, kategori: String) {
-        val db = this.writableDatabase
-        db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
-
-        db.close()
-    }
-
-
-
-
-    //getAffirmationCountByCategory(kategori)
-
-        fun getAffirmationCountByCategory(kategori: String): Int {
-            val db = this.readableDatabase
-            val cursor = db.rawQuery(
-                "SELECT COUNT(*) FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?",
-                arrayOf(kategori)
-            )
-            var count = 0
-            if (cursor.moveToFirst()) {
-                count = cursor.getInt(0) // İlk sütun, COUNT(*) sonucunu içerir
-            }
-            cursor.close()
-            return count
-        }
-
-        fun updateAffirmationFavStatus(affirmation: Olumlamalarlistmodel) {
-            val db = this.writableDatabase
-            val values = ContentValues().apply {
-                put(COLUMN_FAVORITE, affirmation.favorite)
-            }
-            db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
-            db.close()
-        }
-
-        fun addAffirmationFav(affirmation: Olumlamalarlistmodel, isFavorite: Boolean) {
-            val db = this.writableDatabase
-            val values = ContentValues().apply {
-                put(COLUMN_AFFIRMATION, affirmation.affirmation)
-                put(COLUMN_CATEGORY, context.getString(R.string.favorite_affirmations))
-                put(COLUMN_FAVORITE, isFavorite)
-            }
-            db.insert(TABLE_NAME, null, values)
-            db.close()
-        }
-
-
-        fun deleteFavoriteAffirmationByCategoryAndAffirmationName(
-            category: String,
-            affirmation: String
-        ) {
-            val db = this.writableDatabase
-            db.delete(
-                TABLE_NAME,
-                "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?",
-                arrayOf(category, affirmation)
-            )
-            db.close()
-        }
-
-        fun getFavoriteAffirmations(): List<Olumlamalarlistmodel> {
-            val olumlamalar = mutableListOf<Olumlamalarlistmodel>()
-            val db = this.readableDatabase
-            val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1", null)
-            cursor.use {
-                while (it.moveToNext()) {
-                    val olumlama = Olumlamalarlistmodel(
-                        it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
-                        it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
-                        it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
-                        it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
-                    )
-                    olumlamalar.add(olumlama)
+                    val insertStatement = "INSERT INTO $TABLE_NAME ($COLUMN_AFFIRMATION, $COLUMN_CATEGORY, $COLUMN_FAVORITE, $COLUMN_LANGUAGE) VALUES (?, ?, ?, ?)"
+                    db?.execSQL(insertStatement, arrayOf(affirmation, category, favorite, language))
                 }
+                db?.setTransactionSuccessful()
+            } finally {
+                db?.endTransaction()
             }
-            return olumlamalar
         }
+    }
 
-
-        fun updateAffirmation(affirmation: Olumlamalarlistmodel) {
-            val db = this.writableDatabase
-            val values = ContentValues().apply {
-                put(COLUMN_AFFIRMATION, affirmation.affirmation)
-                put(COLUMN_CATEGORY, affirmation.category)
-                put(COLUMN_FAVORITE, affirmation.favorite)
-            }
-            db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
-            db.close()
+    private fun loadJSONFromAsset(context: Context, fileName: String): String? {
+        return try {
+            val inputStream = context.assets.open(fileName)
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+            String(buffer, Charsets.UTF_8)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            null
         }
+    }
 
-   fun getOlumlamalarByCategory(kategori: String): List<Olumlamalarlistmodel> {
+    fun getOlumlamalarByCategoryAndLanguage(category: String, language: String): List<Olumlamalarlistmodel> {
         val db = this.readableDatabase
         val list = mutableListOf<Olumlamalarlistmodel>()
-
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?", arrayOf(kategori))
+        var cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? AND $COLUMN_LANGUAGE = ?", arrayOf(category, language))
         cursor.use {
             while (it.moveToNext()) {
                 val id = it.getInt(it.getColumnIndexOrThrow(COLUMN_ID))
-                val affirmation = it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION))  // Eğer boş ise boş string döner
-                val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)) ?: kategori
+                val affirmation = it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
+                val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
                 val favorite = it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) > 0
-                list.add(Olumlamalarlistmodel(id, affirmation, category, favorite))
+                val language = it.getString(it.getColumnIndexOrThrow(COLUMN_LANGUAGE))
+                list.add(Olumlamalarlistmodel(id, affirmation, category, favorite, language))
             }
         }
+
+        // Eğer liste boşsa, dil filtresi olmadan tekrar sorgula
+        if (list.isEmpty()) {
+            cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?", arrayOf(category))
+            cursor.use {
+                while (it.moveToNext()) {
+                    val id = it.getInt(it.getColumnIndexOrThrow(COLUMN_ID))
+                    val affirmation = it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
+                    val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
+                    val favorite = it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) > 0
+                    val language = it.getString(it.getColumnIndexOrThrow(COLUMN_LANGUAGE))
+                    list.add(Olumlamalarlistmodel(id, affirmation, category, favorite, language))
+                }
+            }
+        }
+
         cursor.close()
         return list
     }
-
-    fun addNewAffirmation(affirmation: String, category: String) {
+    fun deleteAffirmation(id: Int) {
         val db = this.writableDatabase
-
-
-        // Yeni olumlamayı ekle
-        val values = ContentValues()
-        values.put(COLUMN_AFFIRMATION, affirmation)
-        values.put(COLUMN_CATEGORY, category)
-        values.put(COLUMN_FAVORITE, false)
-        db.insert(TABLE_NAME, null, values)
+        db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
         db.close()
-
     }
 
-    fun getOnlyAffirmation(category: String): String {
+    fun getAffirmationCountByCategoryAndLanguage(category: String, language: String): Int {
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT $COLUMN_AFFIRMATION FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ?", arrayOf(category))
+        val cursor = db.rawQuery("SELECT COUNT(*) FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? AND $COLUMN_LANGUAGE = ?", arrayOf(category, language))
+        var count = 0
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0)
+        }
+        cursor.close()
+        return count
+    }
+
+    fun updateAffirmationFavStatus(affirmation: Olumlamalarlistmodel) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_FAVORITE, affirmation.favorite)
+        }
+        db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
+        db.close()
+    }
+    fun addAffirmationFav(affirmation: Olumlamalarlistmodel, isFavorite: Boolean, language: String) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_AFFIRMATION, affirmation.affirmation)
+            put(COLUMN_CATEGORY, context.getString(R.string.favorite_affirmations))
+            put(COLUMN_FAVORITE, isFavorite)
+            put(COLUMN_LANGUAGE, language)
+        }
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
+    fun deleteFavoriteAffirmationByCategoryAndAffirmationName(category: String, affirmation: String) {
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$COLUMN_CATEGORY = ? AND $COLUMN_AFFIRMATION = ?", arrayOf(category, affirmation))
+        db.close()
+    }
+
+    fun getFavoriteAffirmationsByLanguage(language: String): List<Olumlamalarlistmodel> {
+        val olumlamalar = mutableListOf<Olumlamalarlistmodel>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1 AND $COLUMN_LANGUAGE = ?", arrayOf(language))
+        cursor.use {
+            while (it.moveToNext()) {
+                val olumlama = Olumlamalarlistmodel(
+                    it.getInt(it.getColumnIndexOrThrow(COLUMN_ID)),
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    it.getInt(it.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1,
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_LANGUAGE))
+                )
+                olumlamalar.add(olumlama)
+            }
+        }
+        return olumlamalar
+    }
+
+
+    fun updateAffirmation(affirmation: Olumlamalarlistmodel) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_AFFIRMATION, affirmation.affirmation)
+            put(COLUMN_CATEGORY, affirmation.category)
+            put(COLUMN_FAVORITE, affirmation.favorite)
+            put(COLUMN_LANGUAGE, affirmation.language) // Gerekirse dili güncelle
+        }
+        db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(affirmation.id.toString()))
+        db.close()
+    }
+
+
+    fun addNewAffirmation(affirmation: String, category: String, language: String) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_AFFIRMATION, affirmation)
+            put(COLUMN_CATEGORY, category)
+            put(COLUMN_FAVORITE, false)
+            put(COLUMN_LANGUAGE, language)
+        }
+        db.insert(TABLE_NAME, null, values)
+        db.close()
+    }
+
+    fun getOnlyAffirmationByCategoryAndLanguage(category: String, language: String): String {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT $COLUMN_AFFIRMATION FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? AND $COLUMN_LANGUAGE = ?", arrayOf(category, language))
         var affirmation = ""
         if (cursor.moveToFirst()) {
             affirmation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
@@ -1025,23 +206,1805 @@ private val context = context
         return affirmation
     }
 
-    fun getAllCategories(): List<String> {
+    fun getAllCategoriesByLanguage(language: String): List<String> {
         val kategoriListesi = mutableListOf<String>()
         val db = readableDatabase
-        val cursor = db.rawQuery("SELECT DISTINCT $COLUMN_CATEGORY FROM $TABLE_NAME", null)
+        val cursor = db.rawQuery("SELECT DISTINCT $COLUMN_CATEGORY FROM $TABLE_NAME WHERE $COLUMN_LANGUAGE = ?", arrayOf(language))
         cursor.use {
             while (it.moveToNext()) {
                 val kategori = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
                 kategoriListesi.add(kategori)
             }
         }
-        // Kendi Olumlamalarım kategorisini kontrol et ve ekle
         if (!kategoriListesi.contains(context.getString(R.string.add_affirmation_title))) {
             kategoriListesi.add(context.getString(R.string.add_affirmation_title))
         }
-
         return kategoriListesi
     }
+
+    /*
+    private fun insertInitialData(db: SQLiteDatabase?) {
+
+        val genelOlumlamalar = context.getString(R.string.general_affirmations)
+        val bedenOlumlamalari = context.getString(R.string.body_affirmations)
+        val inancOlumlamalari = context.getString(R.string.faith_affirmations)
+        val kotuGunOlumlamalari = context.getString(R.string.bad_days_affirmations)
+        val askOlumlamalari = context.getString(R.string.love_affirmations)
+        val kendineDegerOlumlamalari = context.getString(R.string.self_value_affirmations)
+        val stresOlumlamalari = context.getString(R.string.stress_affirmations)
+        val olumluDusunceOlumlamalari = context.getString(R.string.positive_thought_affirmations)
+        val basariOlumlamalari = context.getString(R.string.success_affirmations)
+        val kisiselGelisimOlumlamalari = context.getString(R.string.personal_development_affirmations)
+        val zamanYonetimiOlumlamalari = context.getString(R.string.time_management_affirmations)
+        val iliskilerOlumlamalari = context.getString(R.string.relationship_affirmations)
+        val duaOlumlamalari = context.getString(R.string.prayer_affirmations)
+        val favoriOlumlamalar = context.getString(R.string.favorite_affirmations)
+        val kendiOlumlamalarim = context.getString(R.string.own_affirmations)
+
+        // Veritabanına Türkçe veriler ekleniyor
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendine olan inancını asla kaybetme; senin için her şey mümkün.', '$genelOlumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Olumlu düşünceler, olumlu sonuçlar doğurur.', '$genelOlumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendini sev, çünkü sen eşsizsin.', '$genelOlumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Şu anı kucakla ve her anın tadını çıkar.', '$genelOlumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zihnin neye odaklanırsa, enerjin de o yöne akar.', '$genelOlumlamalar', 0, 'tr')")
+      /*  db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Başkalarına nezaketle davranmak, kendi iç huzurunu artırır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, başarı yolunda karşılaştığın adımlardır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayallerine doğru cesur adımlar at.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendini şımartmaktan çekinme; kendine iyi bak.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her günü, bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İçindeki sessizliği dinle ve oradan gelen bilgeliği takip et.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Başkalarının yargıları senin gerçekliğini belirleyemez.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi içindeki barış, dış dünyadaki kaosa meydan okur.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İç huzuru bul, dünya seninle beraber huzur bulsun.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi içsel gücünün farkına var ve onu kucakla.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Olumlu kelimeler kullan, çünkü kelimelerin büyük gücü vardır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi yolunu çiz; başkalarının izlediği yol senin için doğru olmayabilir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sabahları tebessümle uyan ve yeni günün getireceği fırsatları kucakla.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Mutluluk, içinde bulunduğun anın güzelliğini fark etmektir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sevgi dolu düşünceler, sevgi dolu bir dünya yaratır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İçindeki ışığı parlat, ve dünya seninle birlikte parlasın.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendine karşı nazik ol, herkes mükemmel olmak zorunda değil.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bugün kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Küçük şeylerde büyük mutluluklar bul.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her deneyim, büyümen için bir fırsattır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zihnini sakinleştirmek, tüm bedeninizi iyileştirir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi kendine konuşmaların pozitif ve yapıcı olsun.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Nezaket, en büyük güçlerden biridir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Başkalarını yargılamadan önce, onların yerine kendini koy.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün, önceki gününden daha bilge olma şansıdır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi hikayeni yaz, başkalarının senin için yazdığı hikayeyi değil.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendine ve yeteneklerine güven.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sevgi, korkudan daha güçlüdür; her zaman sevgiyi seç.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi kendinin en iyi arkadaşı ol.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün, kendine bir iyilik yap ve öz bakımına zaman ayır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Stres, geçici bir durumdur, bu da geçer.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Öz şefkat, iyileşmenin başlangıcıdır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi içindeki sevgiyi bul ve onu dünyayla paylaş.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayatta en çok tutku duyduğun şeyleri yapmak için zaman ayır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Huzur, sadece bir düşünce kadar uzağında.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sabır, en büyük erdemlerden biridir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her adımda güzellikleri keşfet.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Yaşam bir yolculuktur, her gün yeni bir macera.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hata yapmaktan korkma; hatalar öğrenmenin parçasıdır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her günü bir öncekinden daha iyi yapmak için bir fırsat olarak gör.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendine inan, çünkü senin gücün sınırsız.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayallerini gerçekleştirmek için her gün bir adım at.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sevgiyle dolu bir kalp, en büyük zenginliktir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sen kendi hayatının kahramanısın.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendine zaman ayır, çünkü sen bunu hak ediyorsun.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İyi düşünceler, iyi insanlar yaratır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Başarıya giden yolda sabırlı ol.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi iç huzurunu bul, ve bunu dışarıya yansıt.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her sabah yeni bir umutla uyan.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayatını sevdiğin şeylerle doldur.', 'Genel Olumlamalar', 0, 'tr')")
+*/
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendini sürekli olarak yenile.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Yapıcı eleştirilere açık ol, büyümenin bir parçasıdırlar.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi içindeki sessizliği bul ve orada huzur bul.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Yaptığın işlerde kaliteyi asla göz ardı etme.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi hayatını başkalarıyla kıyaslamaktan kaçın.', 'Genel Olumlamalar', 0, 'tr')")
+   /*     db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi iç gücünü keşfet ve onu kullan.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sevdiklerine zaman ayır, çünkü ilişkiler değerlidir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her yeni gün, yeni bir başlangıçtır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Güçlü olmak, her zaman mümkün olmayabilir ama neşeli olmak mümkündür.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi değerini bil ve buna göre davran.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayat, yaşamaya değer kılınacak küçük anlarla doludur.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Seni geri tutan şeyleri bırak.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi hikayeni kendin yaz.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Başkalarına ilham olacak işler yap.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sevgi, her zaman cevaptır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İçsel güzellik, dışsal güzellikten daha kalıcıdır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayallerine ulaşmak için disiplinli ol.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendini affetmeyi öğren ve ileriye bak.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bugün, dününden daha iyi bir insan olmak için çaba göster.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi kendine yeterli olmayı öğren.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün en az bir kişiye iyilik yap.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İçsel huzur, dış dünya ile uyum içinde olmanı sağlar.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi başarını kutlamayı unutma.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayat, paylaştığında daha güzel.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi iç sesini dinle, o seni doğru yola yönlendirir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sıkıntılı zamanlarda bile umudu koru.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi başına yapabileceğinden daha fazlasını yapabilirsin.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zamanını bilgece kullan.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi yeteneklerini keşfet ve onları geliştir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Özgürlük, kendi kararlarını verebilmektir.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her günü bir hediye olarak gör.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Başkalarına olan saygın, kendine olan saygından başlar.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendini başkalarıyla karşılaştırmak yerine, kendini başkalarıyla ilhamlaştır.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayat, yaşamak için çok kısa, bugünü en iyi şekilde yaşa.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Herkes için nezaketin önemini hatırla.', 'Genel Olumlamalar', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün, bir önceki günden daha iyi olmak için bir şans.', 'Genel Olumlamalar', 0, 'tr')")
+*/
+        // Veritabanına Türkçe veriler ekleniyor
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim sağlıkla ve enerjiyle dolu.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün fiziksel sağlığımı geliştiriyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi bedenimi seviyor ve ona iyi bakıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel olarak kendimi güçlü ve dinç hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sağlıklı yemek yemek benim için bir zevktir.', 'Beden Olumlamaları', 0, 'tr')")
+      /*  db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün daha da sağlıklı oluyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim kendini iyileştirme gücüne sahip.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel aktivite beni canlandırır.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenime ihtiyacı olan dinlenmeyi sağlıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi her bakımdan iyi hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimdeki her hücre sağlıkla dolu.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimi olduğu gibi seviyorum ve onurlandırıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi fiziksel olarak güçlü ve yetenekli hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her sabah dinç ve enerjik uyanıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimle barış içindeyim.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sağlıklı yaşam tarzım beni daha iyi hissettiriyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimle uyum içindeyim.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel sağlığım benim için bir önceliktir.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi her gün daha iyi hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim tüm ihtiyaçlarımı karşılayacak şekilde mükemmel çalışıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel sağlık, zihinsel berraklık getirir.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi güçlü ve canlı hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim benim tapınağım ve ona saygı duyuyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün bedenime iyi bakıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel egzersiz yapmak beni mutlu ediyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sağlığımı korumak için ihtiyacım olan her şeye sahibim.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim bana güç ve direnç sağlıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel iyilik hali benim doğal halim.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimi dinlemeyi öğreniyorum ve ona göre hareket ediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her nefesimde sağlık ve iyilik alıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi her zaman genç ve enerjik hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimle her gün kendini iyileştirdiğini hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenime olan sevgim, her gün artıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün bedenimi sevgiyle besliyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel olarak kendimi geliştirmek benim için heyecan verici.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sağlığımı iyileştirmek için attığım adımlar işe yarıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün bedenimin sağlıkla parladığını görüyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimle uyum içinde yaşamak beni mutlu ediyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel iyilik halim, tüm hayatımı iyileştiriyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi her yönüyle kabul ediyorum ve seviyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün, bedenimin sağlık ve canlılıkla dolu olduğunu hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel olarak kendimi her geçen gün daha güçlü ve sağlıklı hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim, doğal güzelliği ve sağlığı ile parlıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her egzersiz, bedenimin daha da güçlenmesine ve esnek olmasına yardımcı oluyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sağlıklı beslenmek, bedenime olan sevgimin bir ifadesidir.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendi bedenime olan saygım, beni daha sağlıklı yaşam tarzı seçimleri yapmaya teşvik ediyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel aktiviteler benim için neşe kaynağı ve kendimi ifade etme şeklidir.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimin her fonksiyonu mükemmel uyum içinde çalışıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi her fiziksel aktivitede daha canlı ve enerjik hissediyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimin iyileşme ve kendini yenileme kapasitesine hayranım.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel sağlığımı her gün bilinçli çabalarla destekliyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Sağlıklı olmak, benim için bir yaşam biçimi.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenime olan şükranım, her gün artıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel sağlığımı korumak ve geliştirmek için gerekli tüm kaynaklara sahibim.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kendimi fiziksel olarak aktif tutmak, genel iyiliğimi artırıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün bedenimin sağlıkla dolu olması için minnettarım.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel olarak kendime iyi bakmak, benim için önceliktir.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fiziksel sağlığım, benim genel yaşam kalitemi artırıyor.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenimin her bir parçasına saygı gösteriyorum ve ona iyi bakıyorum.', 'Beden Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Bedenim, yaşamın tüm zorluklarına karşı direnç gösterme gücüne sahip.', 'Beden Olumlamaları', 0, 'tr')")
+*/
+
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnanç, hayatımdaki tüm zorlukların üstesinden gelmeme yardımcı oluyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım beni yüksek ideallerime bağlı tutuyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Hayatımda her şeyin iyi bir nedenle olduğuna inanıyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım beni daha yüksek bir bilince taşıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Evrenin benim için en iyisini sunduğuna inanıyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+    /*    db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım bana günlük yaşamımda rehberlik ediyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım her gün daha da derinleşiyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım sayesinde içsel huzuru buluyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, yaşamın zorluklarına karşı bana güç veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün inancımla daha uyumlu bir yaşam sürüyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım beni pozitif kalmaya itiyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımdaki amaç ve anlamı pekiştiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım sayesinde zor zamanlarda bile sabırlı olabiliyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, bana umut ve cesaret veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım, karşılaştığım her şeyde bana yol gösteriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımı zenginleştiriyor ve renklendiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün inancımın beni desteklediğini hissediyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım beni her gün ileriye taşıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım, hayatımda olumlu değişiklikler yaratıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, içsel gücümü artırıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım sayesinde her zorluğu aşabileceğime inanıyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım beni koruyor ve yönlendiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımdaki her şeyin daha iyi olacağına dair bana güven veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, içimdeki korkuları yatıştırıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, beni her gün daha iyi bir insan yapmak için ilham veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım sayesinde hayatımda sürekli bir ilerleme görüyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım, yaşamımın temel taşıdır.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, bana her gün daha fazla neşe ve mutluluk getiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, tüm zorluklara rağmen ayakta durmamı sağlıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımda olumlu bir değişim yaratıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, bana hayatın güzelliklerini daha çok takdir etme fırsatı veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım sayesinde daha büyük bir amaç için yaşadığımı hissediyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, bana doğru yolda olduğumu hissettiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, beni daha derin bir içsel huzura yönlendiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, her şeyin en iyisi için çalıştığıma dair bana güven veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, bana yaşamın sonsuz olanaklarını keşfetme cesareti veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, zorluklar karşısında bana sabır ve direnç veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, yaşamımda her gün yeni başlangıçlar yaratıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, her gün beni daha büyük başarılara taşıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her sabah, inancımın rehberliğinde yeni bir güne başlıyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım, bana zor zamanlarda rehberlik ediyor ve yol gösteriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, beni yaşamın dalgalı denizlerinde sağlam bir kaya gibi tutuyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün inancımın kuvvetiyle, hayatımın kontrolünü daha iyi elime alıyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımın anlamını derinleştiriyor ve daha büyük bir perspektif sunuyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, beni her gün daha fazla iyilik yapmaya itiyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım, hayatımda sevgi ve anlayışı artırıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, her adımda bana cesaret ve kuvvet veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün, inancımın gücüyle hayatımdaki engelleri aşıyorum.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, beni bilgelikle donatıyor ve doğru kararlar almamı sağlıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, içsel gücümü artırıyor ve bana her zorlukta dayanma gücü veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım, beni kendime ve evrenin gücüne daha çok bağlıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımın her anında bana huzur ve güven sağlıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, sürekli olarak beni iyimserliğe ve umuda yönlendiriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancımın derinliği, yaşamımdaki zorluklar karşısında bana sabır veriyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, bana her yeni gün için şükran duymamı öğretiyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, hayatımdaki amaç hissini güçlendiriyor ve beni motive ediyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, zor zamanlarda bile iç huzurumu korumama yardımcı oluyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnancım, her gün beni daha fazla sevgiyle dolduruyor ve etrafıma yaymamı sağlıyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('İnançlarım beni güçlendiriyor ve rehberlik ediyor.', 'İnanç Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her gün inancım daha da güçleniyor.', 'İnanç Olumlamaları', 0, 'tr')")
+*/
+
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler benim için büyüme fırsatlarıdır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda bile minnettar olacak şeyler bulabilirim.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, beni hedeflerime bir adım daha yaklaştırır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlar beni daha bilge kılar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günlerde bile pozitif kalmayı seçiyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+      /*  db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, benim güçlü yönlerimi ortaya çıkarır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda bile kendime iyi bakıyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk sonrasında, daha da parlak bir şekilde parlıyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günlerde dahi güzellikler bulabilirim.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlar, benim dayanıklılığımı test eder, ve ben her seferinde başarılı olurum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, beni daha da sağlam kılar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zor gün, sonunda güneşin doğacağını bilmekle daha kolay geçer.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda dahi sevgi ve destek buluyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, karakterimi şekillendirir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda dahi umudumu koruyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, beni daha da güçlü kılar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günlerde bile, hayatın güzel yanlarını görebiliyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda dahi güç buluyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, bana neyin önemli olduğunu hatırlatır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, beni daha iyi bir insan yapar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda dahi, ilerlemeye devam ediyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, sonunda zaferle sonuçlanır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler geçici, zafer kalıcıdır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda dahi, kendime ve yeteneklerime güveniyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, beni daha da odaklanmış ve kararlı kılar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, beni hayatın değerini daha çok takdir etmeye yönlendirir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zor gün, hayatın güçlü yönlerimi geliştirdiğini gösterir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda dahi, başkalarına yardım etmekten vazgeçmiyorum.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, benim en büyük öğretmenimdir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk sonrasında, daha büyük bir mutluluk bekler beni.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlar, içimdeki dayanıklılığı keşfetmemi sağlar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, hayata olan inancımı daha da güçlendirir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, yaratıcılığımı harekete geçirir ve çözüm bulmamı sağlar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda, iç huzuru bulmak için farkındalık ve meditasyon pratiklerine yönelebilirim.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, benim esnekliğimi arttırır ve değişime uyum sağlamamı öğretir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, içimdeki gücü ortaya çıkarır ve potansiyelimi serbest bırakır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günlerde, kendime olan sevgi ve kabulümü derinleştiririm.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlar, hayatta daha fazla empati ve anlayış geliştirmeme yardımcı olur.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, problem çözme becerilerimi geliştirir ve yaratıcı çözümler bulmamı sağlar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, önemli bir dönüşüm fırsatı sunar ve içsel büyümeme katkıda bulunur.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda, sağlığımı korumak için bedenime daha fazla özen gösteririm.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, hayatta değerli olan şeyleri daha derinden takdir etmeme yol açar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, geleceğe daha umut dolu bakmamı sağlar ve potansiyel fırsatları görmeme yardımcı olur.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, yaşamın dengesini yeniden kurmam için bir teşvik sağlar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda, dışarıdaki desteği kabul etmek ve bağlantı kurmak önemlidir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, içsel gücümü ve dayanma yeteneğimi keşfetmemi sağlar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, başkalarına olan minnettarlığımı ve yardımlaşma duygusunu arttırır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, bana hayatın anlamını ve derinliğini daha iyi anlamamı sağlar.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda, hedeflerime ulaşmak için motivasyonumu korumak için yeniden odaklanırım.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar, benim için birer fırsat ve büyüme potansiyeli barındırır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler geçici, gücüm kalıcı.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, beni daha da güçlendiriyor.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlarda bile huzuru bulabilirim.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her deneyim, bana değerli dersler öğretir.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günler, beni daha da dirençli kılıyor.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zorluklar karşısında sakin ve odaklanmış kalabilirim.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk sonrasında daha güçlü bir şekilde yükselirim.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor zamanlar geçecek, güçlü kalmalıyım.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Zor günlerde bile kendime güvenim tam.', 'Zor Günler Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Her zorluk, içimdeki cesareti ortaya çıkarır.', 'Zor Günler Olumlamaları', 0, 'tr')")
+*/
+/*
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim sevginin en güzel melodileriyle çarpıyor ve bu melodiyi dünyaya yayıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşkı, hayatımın her köşesine çekiyor ve bu aşkın büyüsüyle yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, sevgiyi daha derinden hissediyor ve bunu cömertçe paylaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiye layığım ve aşkı tüm benliğimle kabul ediyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, her gün biraz daha fazla sevgiyle dolup taşıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımdaki sevgi ve aşkı minnetle kucaklıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi ve aşk, beni her gün daha da güçlü kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgiye açık ve bu sevgiyle dolu ilişkimi şükranla yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda sevgi ve aşk dolu anılar biriktiriyor ve onları değerli bir hazine gibi saklıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk ve sevgi, yaşamımın doğal bir parçası olarak beni çevreliyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir kalple yaşamın her anını kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, daha fazla aşk ve sevgi alıp vermek için içimde yeni kapılar açıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiyi hayatıma çekmek için her gün daha açık bir yürekle yürüyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgi dolu ve bu sevgiyi dünyaya yayıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşkın ve sevginin mucizelerini hayatımda keşfetmekten mutluluk duyuyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her yeni günde, sevgi ve aşk dolu anılar biriktiriyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir ilişki yaşıyor ve bu ilişkinin her anını minnetle kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgi ve aşkla dolu ve bu sevgiyi paylaşmaktan büyük bir keyif alıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda aşkın ve sevginin güzelliklerini yaşamak benim en büyük zenginliğim.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir ilişki yaşıyor ve bu ilişkinin her anını kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim sevgiyle dolu ve bu sevgiyi dünyayla paylaşmaktan mutluluk duyuyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk, hayatımın her köşesine sızıyor ve beni tamamlıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, sevgiyi daha derinden hissediyor ve bunu cömertçe paylaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiye layığım ve aşkı tüm benliğimle kabul ediyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, her gün biraz daha fazla sevgiyle dolup taşıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımdaki sevgi ve aşkı minnetle kucaklıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi ve aşk, beni her gün daha da güçlü kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgiye açık ve bu sevgiyle dolu ilişkimi şükranla yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda sevgi ve aşk dolu anılar biriktiriyor ve onları değerli bir hazine gibi saklıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk ve sevgi, yaşamımın doğal bir parçası olarak beni çevreliyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir kalple yaşamın her anını kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, daha fazla aşk ve sevgi alıp vermek için içimde yeni kapılar açıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiyi hayatıma çekmek için her gün daha açık bir yürekle yürüyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgi dolu ve bu sevgiyi dünyaya yayıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşkın ve sevginin mucizelerini hayatımda keşfetmekten mutluluk duyuyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her yeni günde, sevgi ve aşk dolu anılar biriktiriyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir ilişki yaşıyor ve bu ilişkinin her anını minnetle kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgi ve aşkla dolu ve bu sevgiyi paylaşmaktan büyük bir keyif alıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda aşkın ve sevginin güzelliklerini yaşamak benim en büyük zenginliğim.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir ilişki yaşıyor ve bu ilişkinin her anını kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim sevgiyle dolu ve bu sevgiyi dünyayla paylaşmaktan mutluluk duyuyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk, hayatımın her köşesine sızıyor ve beni tamamlıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, sevgiyi daha derinden hissediyor ve bunu cömertçe paylaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiye layığım ve aşkı tüm benliğimle kabul ediyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, her gün biraz daha fazla sevgiyle dolup taşıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımdaki sevgi ve aşkı minnetle kucaklıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi ve aşk, beni her gün daha da güçlü kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim, sevgiye açık ve bu sevgiyle dolu ilişkimi şükranla yaşıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda sevgi ve aşk dolu anılar biriktiriyor ve onları değerli bir hazine gibi saklıyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk ve sevgi, yaşamımın doğal bir parçası olarak beni çevreliyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi, yaşamımın her anında beni sarmalıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk ve sevgi, her nefesimde varlığını hissettiriyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim sevgiyle dolu ve bu sevgiyi dünyayla paylaşmaya hazırım.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi, hayatıma anlam ve neşe katıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşkın büyüsüyle her gün daha da güzelleşiyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir kalple her anımı kutluyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk, bana hayatın güzelliklerini keşfetmemi sağlıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiyle dolu ilişkiler kurmak benim doğal halim.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk, beni her gün daha da güçlü kılıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim sevgiye açık ve bu sevgiyi her gün büyütüyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk ve sevgi, hayatımın temel taşlarıdır.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, sevgi ve aşkla dolu anılar biriktiriyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu bir hayat yaşamak benim en büyük zenginliğim.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk ve sevgi, her gün bana ilham veriyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi dolu ilişkilerimle hayatımı güzelleştiriyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşk, bana her zorluğun üstesinden gelme gücü veriyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kalbim sevgiyle dolu ve bu sevgiyi paylaşmaktan mutluluk duyuyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi ve aşk, her anımı anlamlandırıyor.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Aşkın mucizelerini hayatımda keşfetmekten mutluluk duyuyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her yeni günde, sevgi ve aşk dolu anılar biriktiriyorum.', 'Sevgi ve Aşk Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi benliğime saygı göstermek, başkalarının da beni saygıyla görmesine yardımcı olur.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi kendime verdiğim değer, dış dünyada aldığım değerin temelidir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sevgiyle kabul ettiğimde, etrafımdaki insanların da beni sevgiyle kabul etmesini sağlarım.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi ihtiyaçlarımı karşılamak, kendi değerimi tanımamı ve ona saygı göstermemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle barışık olmak, hayatımda içsel bir huzur ve denge hissetmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime saygı göstermek, başkalarının da bana saygı göstermesini sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi iç sesime kulak vermek, kendi değerimi anlamamı ve ona göre hareket etmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi duygularımı ve düşüncelerimi ifade etmek, kendi değerimi ifade etmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi hikayemi ve deneyimlerimi değerli bulmak, kendi benliğimi anlamamı ve takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle dürüst olmak, kendi değerimi daha iyi anlamamı sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi önceliklerime ve ihtiyaçlarıma özen göstermek, kendi değerimi önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmek ve büyümek için çaba göstermek, kendi değerimi arttırır.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi hayallerimi ve hedeflerimi takip etmek, kendi değerime olan inancımı arttırır.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle ilgili olumlu konuşmak, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi hayatımı yönlendirmek, kendi değerimi kontrol etme yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi başarılarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sürekli olarak geliştirmek, kendi değerimi arttırır ve kişisel tatmin sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle ilgili olumsuz düşünceleri değiştirmek, kendi değerimi arttırır ve beni motive eder.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi çevremdekilere olduğu gibi kabul etmek, kendi değerimi ve benzersizliğimi takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi duygularımı tanımak ve onlara saygı göstermek, kendi değerimi tanımama yardımcı olur.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi hayatımı yönlendirmek için bilinçli kararlar almak, kendi değerimi kontrol etme yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi sınırlarımı bilmek ve korumak, kendi değerimi ve ihtiyaçlarımı önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi iç gücümü ve potansiyelimi keşfetmek, kendi değerimi tanımama ve ona güvenmeme yardımcı olur.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle ilgili olumlu bir iç konuşma yürütmek, kendi değerimi güçlendirir ve beni motive eder.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi başarılarımı ve kazanımlarımı kutlamak, kendi değerimi ve başarılarımı takdir etmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi değerlerimle uyumlu olarak yaşamak, kendi değerlerimi ve benliğimi önemsediğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sevgiyle doldurmak, kendi değerimi hatırlamamı ve ona güvenmemi sağlar.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sürekli olarak geliştirmek ve büyümek, kendi değerimi ve kendime olan güvenimi arttırır.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi fikirlerime ve inançlarıma bağlı kalmak, kendi değerlerimi ve benliğimi koruma yeteneğimi gösterir.', 'Öz Değer Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Değerim başkaları tarafından belirlenmez; kendi değerimi ben tanımlarım.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimle gurur duyuyor ve benzersizliğimi kucaklıyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başkalarına verdiğim sevgi ve nezaketi hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Yolculuğuma saygı duyuyor ve kişisel gelişimimi kutluyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Yeteneklerime güveniyor ve hayallerimin peşinden emin adımlarla gidiyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımın her alanında başarıyı ve mutluluğu hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Öz değerim sonsuzdur ve her parçamı değerli buluyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Geçmiş hatalarımı affediyor ve büyümemi kucaklıyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olduğum halimle yeterliyim ve iyi şeyleri hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Öz saygı yayıyor ve başkalarından saygı çekiyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kararlarıma güveniyor ve sezgilerime inanıyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Güçlü yönlerimi kutluyor ve kusurlarımı sevgiyle kabul ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Karşılaştığım her zorlukla öz değerim daha da artıyor.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımın mimarıyım, onu sevgi ve saygıyla inşa ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Yer kaplamayı ve sesimi duyurmayı hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime nazik davranıyor ve ruhumu pozitiflikle besliyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanıma değer veriyor ve iyilik halimi önceliklendiriyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatın sunduğu tüm iyilikleri hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sınırlarımı koruyor ve enerjimi koruyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Dünya için değerli ve bütünleyici bir parçam.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İyilik halim için doğru seçimler yapmaya güveniyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Çabalarımı kabul ediyor ve kendimi nezaketle ödüllendiriyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime şefkat ve anlayış göstermeyi hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Değerim doğuştan gelir ve kendimle gurur duyuyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Anlamlı bağlantılar ve ilişkiler yaşamayı hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Duygularıma saygı gösteriyor ve derinlemesine hissetmeme izin veriyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Güçlü bir yaratıcım ve hayatım öz değerimi yansıtıyor.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Yolculuğuma saygı duyuyor ve ilerlememi takdir ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi en iyi savunucum ve destekleyicimim.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Suçluluk duymadan dinlenmeyi ve rahatlamayı hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sevgi ve kabul merceğinden görmeyi seçiyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kutlanmayı ve değer görmeyi hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Bireyselliğimi kucaklıyor ve kendimi özgün bir şekilde ifade ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Büyümek ve gelişmek için kendime izin veriyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılarımla gurur duyuyor ve sıkı çalışmamı takdir ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime sunduğum nezaket ve şefkat başkalarına da gösterdiğimle aynıdır.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tutkularımın peşinden gitmeyi ve hayallerimi yaşamayı hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Dünya için değerli bir katkıda bulunuyorum ve sesim önemli.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Yolculuğuma güveniyor ve kişisel evrimimi onurlandırıyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Suçluluk duymadan dinlenmeyi ve rahatlamayı hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sevgi ve kabul merceğinden görmeyi seçiyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kutlanmayı ve değer görmeyi hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Bireyselliğimi kucaklıyor ve kendimi özgün bir şekilde ifade ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Büyümek ve gelişmek için kendime izin veriyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılarımla gurur duyuyor ve sıkı çalışmamı takdir ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime sunduğum nezaket ve şefkat başkalarına da gösterdiğimle aynıdır.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tutkularımın peşinden gitmeyi ve hayallerimi yaşamayı hak ediyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Dünya için değerli bir katkıda bulunuyorum ve sesim önemli.', 'Öz Değer Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Yolculuğuma güveniyor ve kişisel evrimimi onurlandırıyorum.', 'Öz Değer Olumlamaları', 0, 'tr')")
+
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her zorlukla başa çıkabilirim ve her durumda güçlü kalabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi rahatlatmak için derin nefes alıyor ve gevşeme egzersizleri yapıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkma becerilerimi sürekli olarak geliştiriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkmak için sağlıklı sınırlar belirliyor ve hayır demeyi öğreniyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün stresi azaltan ve huzuru artıran etkin yöntemler keşfediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresten korumak için düzenli olarak dinlenme ve dinlenme zamanı alıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli durumlarda bile sakin ve odaklı kalabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sakinleştirmek ve gevşemek için düzenli olarak meditasyon yapıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkma yeteneklerimi güçlendiriyorum ve her gün daha iyi hissediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, huzuru yeniden kazanmak için kısa molalar veriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresli durumlarda bile güvende hissetmek için içsel güç ve güven geliştiriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres ve kaygıyla başa çıkma konusunda kendime güveniyorum ve her gün daha da güçleniyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli anlarda bile sakin kalabilirim ve olumlu bir perspektif koruyabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sakinleştirmek ve rahatlamak için doğaya ve açık havaya zaman ayırıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün stres seviyemi azaltmak için sağlıklı alışkanlıklar geliştiriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli durumlarla başa çıkabilmek için içsel kaynaklarımı keşfediyorum ve onlara güveniyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres ve kaygıyı bırakmak için bedenimi ve zihnimin derinlerine rahatlama sağlayan teknikleri kullanıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, kendime biraz sevgi ve şefkat göstermeyi hatırlıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sakinleştirmek ve gevşetmek için düzenli olarak yoga yapıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli anlarda bile pozitif düşünce ve davranışları koruyabiliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresli durumlarda bile güçlü ve dirençli hissetmek için içsel gücümü besliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, iç huzur ve sakinlik bulmak için derin nefes almaya ve zihnimde biraz boşluk yaratmaya odaklanıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkmak için düşünce ve duygularımı ifade etme yolları buluyorum ve paylaşıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresten arındırmak ve rahatlamak için düzenli olarak masaj ve gevşeme terapileri alıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres ve kaygıyla başa çıkabilmek için kendi kendime pozitif bir iç konuşma yürütüyorum ve kendimi motive ediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, içsel gücümü hatırlayarak sakin ve odaklanmış kalabiliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli anlarda bile kendime biraz zaman ayırarak gevşeme ve dinlenme fırsatı bulabiliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresli durumlarda bile güçlü hissetmek için geçmişteki başarılarımı hatırlıyor ve onlardan güç alıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli durumlarla başa çıkabilmek için her gün biraz zaman ayırarak iç huzurum ve denge buluyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, kendime hafiflik ve esneklik getirmek için olumlu bir tutum benimseyebiliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkmak için destek almak ve duygusal olarak bağlantı kurmak için çevremdeki insanlarla iletişimde kalıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresli durumlarda bile güçlü hissetmek için içsel gücümü ve dayanıklılığımı hatırlıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli anlarda bile kendimi rahatlatmak ve sakinleştirmek için doğal çözümler ve bitkisel destekler araştırıyorum ve kullanıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, sakin ve odaklanmış kalmak için meditasyon ve derin nefes alma egzersizlerine başvuruyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkabilmek için stresin nedenlerini ve tetikleyicilerini tanıyorum ve onlarla başa çıkma stratejileri geliştiriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresli durumlarda bile huzurlu ve sakin hissetmek için pozitif düşünce ve davranışları günlük yaşamımda uyguluyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres ve kaygıyı bırakmak için günlük olarak zihinsel ve duygusal olarak rahatlama ve temizlik pratikleri yapıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, kendime huzur ve dinginlik getirmek için doğayla temas kuruyor ve açık havada zaman geçiriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkmak için sağlıklı bir yaşam tarzı benimseyerek düzenli egzersiz yapıyor, dengeli besleniyorum ve yeterince uyuyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresli durumlarda bile güvende ve desteklenmiş hissetmek için içsel güven ve kabul pratiği yapıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresi yönetebilir ve üzerine çıkabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her nefesimle kaygıyı bırakıyor ve huzuru davet ediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sakin ve kontrol altında hissediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarım geçici, iç huzurum kalıcı.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün stres seviyem azalıyor ve daha rahat hissediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her türlü stres ve kaygıdan koruyabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli anlarda bile, sakin kalmayı başarabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı anlıyor ve onları serbest bırakıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün daha fazla iç huzur ve sakinlik hissediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresin üstesinden gelmek için ihtiyacım olan tüm araçlara sahibim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi rahat ve huzurlu hissetmek için zaman ayırıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkma konusunda her geçen gün daha yetenekli hale geliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sakinleştirebilir ve rahatlatabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı yatıştırmak için etkili yöntemler kullanıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün stresimi azaltıyor ve daha rahat bir yaşam sürüyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresten uzak tutmak için sağlıklı alışkanlıklar ediniyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres, hayatımı kontrol etmiyor; ben stresimi kontrol ediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı kabul ediyor ve onlarla sağlıklı bir şekilde başa çıkıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün daha fazla rahatlık ve sakinlik hissediyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres ve kaygı, benim üzerimde güç sahibi değil.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli durumda, derin bir nefes alarak rahatlıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarım geçici, ben ise bu anın üstesinden gelebilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi sakin ve huzurlu hissetmek için gereken her şeyi yapıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli zamanlarda bile, güçlü ve sakin kalabiliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı yönetebilir ve onları hafifletebiliriz.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün stres seviyem düşüyor ve yaşam kalitem artıyor.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stres ve kaygıyı yönetmek, benim elime.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı yatıştırmak için zaman ayırıyorum ve bu işe yarıyor.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her stresli an, geçip giden bir bulut gibi.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi rahatlatmak ve sakinleştirmek için etkili yöntemler biliyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle başa çıkma konusunda kendime güveniyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün stresimi daha etkili bir şekilde yönetiyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı tanıyor ve onlarla sağlıklı bir şekilde ilgileniyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli zamanlarda bile, huzur bulmayı başarabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kaygılarımı kontrol altına alabilir ve onları hafifletebiliriz.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresle baş etmek beni daha güçlü ve dirençli kılıyor.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her kaygılı düşünceyi sakinlikle karşılıyorum ve geçmesine izin veriyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi stresten arındırmak için gereken zamanı ayırıyorum.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stresli anlarda bile, içsel huzuru bulmayı başarabilirim.', 'Stres ve Kaygı Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her zorlukla karşılaştığımda, içimdeki pozitif enerjiyle çözümler buluyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu bakış açısı, hayatımdaki her zorluğun üstesinden gelmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, içsel huzurumu ve memnuniyetimi arttırıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşüncelerim, her gün kendime daha fazla güvenmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif bakış açısıyla, her sorunun bir çözümü olduğunu hatırlıyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, pozitif düşüncelerimle etrafıma neşe ve pozitif enerji yayıyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, kendimi ve çevremi daha iyi bir geleceğe doğru yönlendiriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, her gün daha fazla ilerleme kaydetmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu bakış açısı, hayatımdaki her şeyin daha parlak bir tarafını görmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, içsel gücümü ortaya çıkarıyor ve beni daha dirençli yapıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, pozitif düşüncelerimle yaşamımda daha fazla sevinç ve coşku hissediyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşüncelerim, etrafımdaki herkesi olumlu etkiliyor ve onları motive ediyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, her gün daha iyi bir insan olmamı sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu bakış açısı, hayatımdaki her şeyin daha kolay olduğunu fark etmeme yardımcı oluyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, etrafımdaki dünyayı daha iyi bir yer haline getirme gücüne sahip olduğumu hatırlatıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, olumlu bakış açısıyla kendimi daha fazla motive ediyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, yaşamımda daha fazla şükretmeme ve minnettarlık duymama olanak tanıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşüncelerim, her gün daha fazla enerji ve canlılık hissetmeme yardımcı oluyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif bakış açısı, hayatımdaki her deneyimden bir şeyler öğrenmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, olumlu düşüncelerimle kendimi daha iyi hissediyorum ve daha iyi bir hayat yaratıyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, beni daha fazla yaratıcı olmaya teşvik ediyor ve yeni fikirler bulmamı sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu bakış açısı, beni her durumda daha esnek ve uyumlu yapmaya yardımcı oluyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, hayatımda daha fazla pozitif deneyim çekmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, etrafımdaki güzellikleri fark etmemi sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, olumlu bakış açısıyla yeni fırsatlar keşfediyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, içimdeki potansiyeli serbest bırakıyor ve beni ileriye taşıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşüncelerim, çevremdekilere de olumlu etki yapıyor ve onları motive ediyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her zorlukla karşılaştığımda, içimdeki pozitif enerjiyle çözümler buluyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, hayatımı daha anlamlı kılıyor ve her günümü daha değerli hale getiriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşüncelerim, beni her gün daha fazla motive ediyor ve hedeflerime ulaşmamı sağlıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif bakış açısıyla, her sorunun bir çözümü olduğunu hatırlıyorum ve bu bana güç veriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, pozitif düşüncelerimle etrafıma neşe ve pozitif enerji yayıyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, geleceğe umutla bakmamı sağlıyor ve daha iyi bir yarın için motivasyonumu arttırıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün pozitif düşüncelerle doluyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, hayatımı daha iyi bir yönde değiştiriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, pozitif sonuçlar yaratıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her durumda iyi olanı görmeyi seçiyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, benim doğal halim.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif olmak, her günümü daha parlak hale getiriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşüncelerimle kendimi güçlendiriyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, pozitif düşüncelerle daha mutlu ve memnun hissediyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, hayatımdaki tüm kapıları açıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, benim için kolay ve doğal.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her zorlukta, olumlu bir yan buluyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, beni daha iyi bir insan yapıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün pozitif düşüncelerle uyanıyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, beni başarıya ulaştırıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, hayatımda büyük farklar yaratıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif olmak, hayatımı zenginleştiriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her durumda olumlu yönleri görebiliyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, her gün beni daha mutlu ediyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, hayatımdaki zorlukları daha kolay aşmama yardımcı oluyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, benim yaşam tarzım.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün pozitif düşüncelerle dolu bir yaşam sürüyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, bana daha fazla güven ve umut veriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünceler, hayatımı daha iyi bir yere taşıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif olmak, hayatımda mucizeler yaratıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, beni daha sağlıklı ve mutlu yapıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, hayatımı daha anlamlı kılıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün pozitif düşünerek daha fazla mutluluk ve başarı elde ediyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşüncelerim, hayatımda büyük değişiklikler yaratıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu düşünmek, beni daha iyi bir geleceğe taşıyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, her günümü daha aydınlık hale getiriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Olumlu bakış açısıyla, hayatın her anını değerli kılıyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, olumlu düşüncelerle kendimi daha da güçlendiriyorum.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pozitif düşünmek, çevremdeki insanlara da ilham veriyor.', 'Pozitif Düşünce Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, benim için daha fazla motivasyon kaynağıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, sürekli olarak ileri adımlar atmaktır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, benim içimdeki gücün bir yansımasıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, daha fazla başarıya doğru ilerliyorum.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, kararlılıkla yakalanır ve azimle korunur.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, daha büyük bir hikayenin parçasıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, zorlukları aşmak ve hedeflere ulaşmaktır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, içimdeki potansiyelin açığa çıkmasıdır ve bunun farkındayım.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, benim için daha fazla özgüven kaynağıdır ve bu beni daha da ileriye götürür.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, azimle çalışmanın ve inancın bir sonucudur.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, daha fazla hedefe ulaşmak için bir itici güçtür.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, sadece başlamak ve devam etmekle başlar.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, hedeflerime doğru atılan her adımda bulunur.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, benim için daha fazla özgüven ve motivasyon kaynağıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, sürekli olarak ileriye doğru ilerlemektir ve ben bunu yapıyorum.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, her gün biraz daha fazla kendimi keşfetmem demektir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, daha büyük bir hikayenin parçasıdır ve ben bu hikayeyi yazıyorum.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, sürekli olarak ilerlemek ve hedeflere ulaşmak demektir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, içimdeki gücü ve azmi daha da artırır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, inanmak ve sürekli olarak ilerlemekle mümkündür.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, her gün daha da yaklaştığım bir hedeftir ve bunun bilincindeyim.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, daha fazla özgüven ve daha büyük hedeflere ulaşmak için bir adımdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, her adımda benimle birlikte yol alır ve bu beni daha da motive eder.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, içimdeki gücü ortaya çıkarmak ve hedeflere ulaşmaktır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, inanmak ve sürekli olarak ilerlemekle mümkündür ve ben buna hazırım.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, daha fazla özgüven ve daha büyük hedeflere ulaşmak için bir fırsattır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, her adımda benimle birlikte ilerler ve bu beni daha da motive eder.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, hedeflerime ulaşmak için kararlılıkla ve azimle çalışmaktır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, benim içimde var olan potansiyelin açığa çıkmasıdır ve ben buna hazırım.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, beni daha fazla motive eder ve daha büyük hedeflere ulaşmak için güç verir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, içimdeki gücü ve azmi ortaya çıkarmak ve hedeflere ulaşmaktır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarının kapıları her gün bana daha fazla açılıyor.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her adımım, başarıya doğru yol almamı sağlıyor.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, benim için ulaşılmaz bir hedef değil, kaçınılmaz bir sonuçtur.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, hayallerimdeki yolculuğun sadece bir durağı değil, aynı zamanda bir başlangıç noktasıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her yeni gün, başarı için yeni bir şans, yeni bir başlangıç demektir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, içimdeki potansiyelin gerçekleşmesinin yansımasıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Engeller, benim kararlılığımı ve başarıya olan inancımı daha da güçlendirir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, yaptığım her şeyde gizlidir ve ben bu gizemi keşfediyorum.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak için gerekli olan her şey, zaten içimde var.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, başarı için karşılaştığım benzersiz fırsatlarla doludur.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, içimdeki gücü ve azmi ortaya çıkarır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, başarıyı daha fazla hissetmek için bir adım daha atıyorum.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, bir seçimdir ve ben her gün bu seçimi yapmaya devam ediyorum.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, attığım her adımda benimle birlikte ilerler.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, gelecekteki büyük hedeflerim için bir motivasyon kaynağıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, içimdeki gücü ve kararlılığı sergilemek demektir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, inancımın ve sabrımın bir ifadesidir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, başarıya bir adım daha yaklaşıyorum ve bu yolculuk heyecan verici.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, yaşamın sunduğu sonsuz olanakları keşfetmek demektir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, hayatımı dönüştüren güçlü bir motivasyon kaynağıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, her gün biraz daha yakınıma geliyor.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, yeni bir özgüven kaynağıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, benim doğal hakkımdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarılı adım, bir sonraki fırsatı getirir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, kararlılıkla ve azimle elde edilir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, her gün biraz daha yaklaşan bir hedeftir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her engel, benim daha güçlü olmamı sağlar.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, içimdeki potansiyelin açığa çıkmasıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarılı olmak, benim için kaçınılmaz bir gerçektir.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her başarı, daha büyük bir başarı için bir adımdır.', 'Başarı Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarı, inancımın bir yansımasıdır.', 'Başarı Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi potansiyelimi tam anlamıyla gerçekleştirmek için her gün yeni adımlar atıyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, kendime daha fazla değer katmak için bir fırsat sunuyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her geçen gün daha da aşarak, daha güçlü ve kararlı bir insan oluyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her yeni deneyim, beni daha bilge ve anlayışlı biri yapıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi yolculuğumun kahramanı olarak, her engeli aşabilirim.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirme sürecim, beni hayallerime daha da yaklaştırıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, kendi içsel gücümü keşfetmek için bir fırsat.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi potansiyelimi zorlamak, beni daha yaratıcı ve yenilikçi kılıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi değerimi tanıyarak, daha büyük hedeflere ulaşmaya cesaret ediyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi yolumu çizerken, her adımda daha da özgüvenli oluyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her gün daha iyi bir versiyona dönüştürüyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi başarılarımı kutlamak, beni daha motive ve hırslı yapıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirme sürecim, bana yaşam boyu mutluluk ve tatmin getiriyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, kendi sınırlarımı aşarak yeni zirvelere ulaşıyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime yatırım yapmak, yaşam kalitemi artırıyor ve beni daha mutlu kılıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi potansiyelimi keşfetmek, benim en büyük tutkularımdan biri.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, kendime daha fazla güven ve inanç katıyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmek, beni daha özgün ve etkileyici bir insan yapıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi hikayemi yazarken, her satırda daha da güçlü oluyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kişisel gelişimim, bana yeni kapılar açıyor ve fırsatlar sunuyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, kendimi daha iyi tanımak ve anlamak için bir şans.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi yolculuğumda her adım, beni daha da motive ve kararlı yapıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime olan inancım, beni başarıya götüren yolda en büyük rehberim.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirme sürecim, yaşamımın her alanına pozitif yansıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, kendi potansiyelimi aşarak, yeni hedeflere ulaşıyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün kendimi geliştirmek için yeni bir fırsatım var.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmek, benim yaşam amacımın bir parçasıdır.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün yeni bir şey öğreniyorum ve bu bilgi beni geliştiriyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi potansiyelimi keşfetmek benim için heyecan verici bir yolculuk.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün kendimle ilgili yeni ve olumlu bir şey keşfediyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmek için zaman ayırmak, kendime olan sevgimin bir göstergesi.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kişisel gelişimim, hayatımdaki tüm alanlara olumlu yansıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her gün biraz daha iyi hale getirme çabam beni güçlendiriyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi sınırlarımı zorlamak, bana büyük bir tatmin sağlıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her deneyim, kişisel gelişim yolculuğumda bana değerli dersler öğretiyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirirken aynı zamanda diğerlerine de ilham kaynağı oluyorum.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime yatırım yapmak, en değerli yatırımdır.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmeye adadığım zaman, hayatımı daha iyi bir yere taşıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her gün geliştirmek, beni daha mutlu ve memnun hissettiriyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendime olan inancım, kişisel gelişimimi destekliyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi yeteneklerimi geliştirmek, beni daha yetenekli ve başarılı kılıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirirken karşılaştığım zorluklar, beni daha da güçlendiriyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün kendimi biraz daha anlamak, hayatımda büyük bir fark yaratıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kişisel gelişim yolculuğum, benim için son derece tatmin edici.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her gün biraz daha geliştirmek, bana büyük bir memnuniyet sağlıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kişisel gelişimim, beni daha bağımsız ve özgür kılıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmek, beni hayatın zorluklarına daha iyi hazırlıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün kendimi geliştirme çabam, beni daha dengeli ve uyumlu bir insan yapıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kişisel gelişimim, bana daha fazla kontrol sahibi olmamı sağlıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirmek, beni her gün daha da ileriye taşıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirme yolculuğum, hayatımda yeni kapılar açıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kişisel gelişimim, bana yaşam boyu öğrenmenin değerini hatırlatıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün kendimi geliştirmek, beni daha pozitif ve umutlu yapıyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi geliştirme sürecim, beni daha fazla sevgi ve şefkatle dolduruyor.', 'Kişisel Gelişim Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her anımı bilinçli ve kararlı bir şekilde kullanıyorum, zamanımın değerini biliyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her güne, maksimum verimlilikle başlıyorum, zamanımı en etkili şekilde değerlendiriyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetmek artık güçlü bir yeteneğim haline geldi, her gün daha da gelişiyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her anımda zamanımı etkili bir şekilde kullanarak hedeflerime bir adım daha yaklaşıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Görevlerimi planlamak ve organize etmek benim için sadece bir alışkanlık değil, bir başarı ritüeli.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı doğru yönetmek, hayatımda daha fazla kontrole ve özgürlüğe sahip olmamı sağlıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Üretkenlik benim için sadece bir beceri değil, bir yaşam tarzı, her anımda bunu hissediyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her günümü önemli ve anlamlı aktivitelerle doldurarak hayatımdan maksimum verim alıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Görevlerimi zamanında ve etkili bir şekilde tamamlayarak zamanımdan en iyi şekilde faydalanıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı değerli bir hazine gibi görüyor, onu akıllıca kullanıyorum ve hayatımı şekillendiriyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi organize etmek, iç huzurumu ve yaşamımda dengeyi sağlıyor, bu benim için kıymetli bir armağan.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün yeni stratejiler ve yöntemler geliştirerek zamanımı daha etkili ve verimli kullanıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi becerilerim, başarılarımı artırıyor ve hayatımı daha da kolaylaştırıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her anımda zamanımı bilinçli kullanarak, stresten arınmış ve huzurlu bir yaşam sürüyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı verimli kullanmak, bana daha fazla kişisel gelişim ve mutluluk getiriyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı etkili bir şekilde kullanarak, hayal ettiğim yaşamı adım adım inşa ediyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanıma daha fazla öncelik vererek, hayallerime ulaşmak için bir adım daha yaklaşıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi becerilerim, hayatımda denge ve huzurun anahtarı haline geldi.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün zamanımı daha etkili kullanarak, kendimi daha başarılı ve mutlu hissediyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı bilinçli bir şekilde kullanmak, beni daha yaratıcı ve yenilikçi bir insan haline getiriyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı bilinçli ve etkili bir şekilde kullanıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her günü maksimum verimlilikle değerlendiriyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetme becerim, sürekli gelişiyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, zamanımı en iyi şekilde kullanıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Görevlerimi planlamak ve organize etmek, benim için doğal ve kolay.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetmek, bana daha fazla kontrol ve özgürlük sağlıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Üretken olmak, benim için tatmin edici ve keyifli.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her günümü önemli ve anlamlı aktivitelerle dolduruyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Görevlerimi zamanında ve etkili bir şekilde tamamlıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanıma değer veriyorum ve onu akıllıca harcıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi organize etmek, bana daha fazla huzur ve düzen sağlıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, zamanımı en iyi şekilde değerlendirmek için yeni yollar buluyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi becerilerim, beni daha başarılı ve verimli kılıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetme yeteneğim, günlük yaşamımı kolaylaştırıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Verimli olmak, benim için doğal bir durum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, önceliklerimi belirleyerek zamanımı verimli kullanıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanı verimli kullanmak, bana daha fazla kişisel zaman kazandırıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı etkili bir şekilde yönetmek, bana daha fazla başarı ve memnuniyet getiriyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı akıllıca kullanarak, hayatımdaki stresi azaltıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, zamanımı verimli kullanma konusunda daha bilinçli hale geliyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetmek, bana hayatın tüm alanlarında daha fazla başarı sağlıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetme becerim, beni her gün daha üretken kılıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi becerilerimi geliştirmek, bana büyük bir tatmin sağlıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanıma değer veriyorum ve onu en iyi şekilde kullanıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, zamanımı daha verimli ve etkili kullanmanın yollarını öğreniyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı bilinçli kullanmak, bana daha fazla neşe ve tatmin getiriyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi, hayatımda önemli bir rol oynuyor ve beni daha üretken yapıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı etkili bir şekilde kullanarak, daha fazla başarı elde ediyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetme yeteneğim, bana her gün daha fazla fırsat sunuyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı verimli kullanarak, hayallerime daha hızlı ulaşıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi becerilerim, bana hayatımda daha fazla denge sağlıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün, zamanımı daha etkili kullanarak daha fazla başarıya ulaşıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı bilinçli kullanmak, beni daha mutlu ve memnun ediyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetmek, bana daha fazla yaratıcılık ve inovasyon için alan açıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı verimli kullanmak, benim için sürekli bir öncelik.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetme konusunda her gün daha yetenekli hale geliyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zaman yönetimi becerilerim, beni daha dengeli ve uyumlu bir insan yapıyor.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı etkili bir şekilde kullanarak, tüm hedeflerime ulaşabilirim.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı yönetme konusunda sürekli olarak kendimi geliştiriyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zamanımı bilinçli kullanarak, hayatımın kalitesini artırıyorum.', 'Zaman Yönetimi Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla kolayca bağ kuruyorum ve bu bağlar uzun süreli oluyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sosyal ilişkilerim beni güçlendiriyor ve besliyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlara karşı açık ve dürüst olmak, ilişkilerimi güçlendiriyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her yeni insanla tanışmak, yeni bir macera ve öğrenme fırsatıdır.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde sevgi ve anlayışı öncelikli tutuyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Empati kurma yeteneğim, ilişkilerimi daha derin ve anlamlı kılıyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla etkileşimde bulunmak, bana neşe ve memnuniyet getiriyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde daima saygılı ve düşünceliyim.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sosyal çevrem, beni destekleyen ve ilham veren insanlarla dolu.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimdeki sorunları çözmek için yaratıcı ve yapıcı yollar buluyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerim sağlıklı ve destekleyici.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İletişim becerilerim, her gün daha da gelişiyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerim, benim kişisel büyüme ve gelişimime katkıda bulunuyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla olan bağlarım, hayatımı daha zengin ve tatmin edici yapıyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Herkesle dürüst ve açık iletişim kuruyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimi sürekli olarak geliştirme konusunda proaktifim.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde karşılıklı saygı ve anlayış esastır.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Arkadaşlarım ve sevdiklerimle sağlam bağlar kuruyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sosyal etkileşimlerim, beni daha mutlu ve dengeli bir insan yapıyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her insanla etkileşim, beni daha bilge ve anlayışlı kılıyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde sevgi ve şefkati özgürce ifade ediyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla sağlıklı sınırlar koymayı biliyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimdeki her bireyin benzersiz değerini takdir ediyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimdeki zorlukları, büyüme fırsatları olarak görüyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Arkadaşlarım ve ailemle vakit geçirmek, bana büyük mutluluk veriyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sosyal ilişkilerimde her zaman dürüst ve şeffafım.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerim, güven ve sevgi üzerine kurulu.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla derin ve anlamlı bağlar kurma yeteneğine sahibim.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde karşılıklı destek ve güven esastır.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerim beni geliştiriyor ve daha iyi bir insan yapmaya teşvik ediyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla olan ilişkilerimde daima öğreniyor ve büyüyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimdeki herkesle sağlıklı iletişim kuruyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sosyal etkileşimlerim, benim zihinsel ve duygusal sağlığımı destekliyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde daima sabırlı ve anlayışlıyım.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İnsanlarla olan ilişkilerimde daima pozitif ve destekleyiciyim.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde samimi ve doğalım.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimdeki herkesin değerini biliyorum ve onları önemsiyorum.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sosyal bağlarım, hayatımı daha zengin ve renkli kılıyor.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerimde her zaman adil ve dengeliyim.', 'İlişki Olumlamaları', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İlişkilerim, beni sosyal ve duygusal olarak tatmin ediyor.', 'İlişki Olumlamaları', 0, 'tr')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana neşe ve mutluluk veren her şeyi çekiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Günlük yaşantımda barış ve huzur istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımdaki her şeyin benim en yüksek hayrıma hizmet etmesini diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sağlık, bolluk ve sevgi ile dolu bir yaşam sürmeyi diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, yaratıcılığımı artırmam için bana ilham ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Güçlü ve sağlıklı bir vücut istiyorum, bunun için evren bana enerji versin.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tüm ilişkilerimde sevgi ve anlayış istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kariyerimde ilerlemek ve başarılı olmak için rehberlik istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımdaki zorlukları aşmam için bana güç ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Gerçek potansiyelimi keşfetmek ve kullanmak için fırsatlar çekiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, sevdiklerimle sağlıklı ve mutlu ilişkiler kurmamı destekle.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün daha fazla sevgi ve neşe istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İhtiyacım olan her şeyin bana kolayca ve sorunsuzca ulaşmasını diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda sürekli bolluk ve refah istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi iç huzurumu bulmak ve sürdürmek için rehberlik ve destek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana günlük kararlarım için bilgelik ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İçsel barış ve sakinlik istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda karşılıklı saygı ve anlayış istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımdaki tüm insanlar için sağlık ve mutluluk diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi ve çevremdeki dünyayı daha iyi anlamak için anlayış istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımın her alanında dengeli ve uyumlu olmamı sağla.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Korkularımı aşmak ve cesur olmak için destek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tüm zorlukları aşarak, hayatımda başarı ve mutluluğu çekmek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Bana doğru yolu göster ve seçimlerimde rehberlik et.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tüm kararlarımın en yüksek iyiliğime hizmet etmesini diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda kalıcı ve gerçek sevgiyi çekmek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana yeni fırsatlar aç ve yol göster.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda güven ve güvenlik istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgiyle dolu, destekleyici bir topluluk çekmek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Zihinsel ve fiziksel sağlığımı korumak ve geliştirmek için destek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana hedeflerime ulaşmam için motivasyon ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımın her alanında açıklık ve şeffaflık istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi kendime yeterlilik ve bağımsızlık istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımı iyileştirmek için bana bilgi ve kaynaklar sağla.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tüm endişelerimi bırakıp, şimdiki ana odaklanmak istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi ve başkalarını affetmek için güç ve cesaret istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün daha fazla mutluluk ve tatmin istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda yaratıcılığımı teşvik etmek ve geliştirmek için ilham istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tüm varlığımla barış içinde yaşamak istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımdaki her şeyin en güzel şekilde gerçekleşmesini diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün artan bir bilgelik ve anlayış için rehberlik istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana ve sevdiklerime sürekli sağlık ve refah ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda daha fazla sabır ve hoşgörü istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Bana hayatımın amaç ve yönünü bulmamda yardımcı ol.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Sevgi, barış ve mutlulukla dolu bir yaşam sürmeyi diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi her gün daha fazla sevmek ve kabul etmek için güç istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, zihnimin ve kalbimin kapılarını bana yardımcı olacak bilgilere aç.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımın her alanında pozitif değişimler için enerji istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Daha güçlü sosyal bağlar ve anlamlı ilişkiler kurmayı diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımdaki tüm engellerin üstesinden gelmem için bana güç ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün artan bir şükran duygusu için içsel anlayış istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('İç huzur ve dinginlik için evrenin rehberliğini diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatım boyunca sürekli öğrenmek ve büyümek için fırsatlar çekiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımı zenginleştiren ve destekleyen insanlarla çevrili olmak istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Başarıya ulaşmak ve hayallerimi gerçekleştirmek için sürekli ilham istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün kendimi daha iyi bir insan olarak görmek için fırsatlar istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda daha fazla neşe ve enerji için evrenin desteğini istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Tüm zorluklara rağmen dayanıklı ve esnek olmak için güç istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Daha fazla şefkat ve anlayışla hareket etmek için içsel rehberlik istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana sevdiklerimle daha derin ve anlamlı bağlar kurma gücü ver.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendi içsel barışımı bulmak ve korumak için bilgelik diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, hayatımdaki her adımda bana netlik ve açıklık sağla.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün daha fazla motivasyon ve azim için evrenin yardımını diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Kendimi ve başkalarını daha iyi anlamak için derin bir anlayış istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımda daha fazla güven ve cesaret için destek istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün sağlıklı ve dengeli bir yaşam sürmek için rehberlik diliyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Duygusal ve zihinsel olarak güçlü olmak için evrenin desteğini istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Hayatımın her alanında başarı ve tatmin duygusu için yardım istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Her gün içsel gücümü ve özgüvenimi artırmak için evrenin rehberliğini istiyorum.', 'Dua ve İstek', 0, 'tr')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Evren, bana her gün daha fazla sevgi ve neşe getir.', 'Dua ve İstek', 0, 'tr')")
+
+*/
+
+
+
+
+
+
+
+
+
+
+        // Veritabanına İngilizce veriler ekleniyor
+
+
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Never lose faith in yourself; everything is possible for you.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Positive thoughts create positive outcomes.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Love yourself, because you are unique.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Embrace the present moment and enjoy every moment.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Your energy flows where your mind focuses.', 'General Affirmations', 0, 'en')")
+    /*    db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Being kind to others increases your own inner peace.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges are steps you encounter on the path to success.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Take bold steps towards your dreams.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Don''t hesitate to pamper yourself; take good care of yourself.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('See every day as an opportunity to make it better than the last.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Listen to the silence within you and follow the wisdom that comes from there.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Others'' judgments do not determine your reality.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Your inner peace defies the chaos in the outside world.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Find inner peace, and the world will find peace with you.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Realize your inner strength and embrace it.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Use positive words because words have great power.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Be kind to yourself; not everyone has to be perfect.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Draw your own path; others'' paths may not be right for you.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Wake up with a smile every morning and embrace the opportunities the new day brings.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Happiness is realizing the beauty of the moment you are in.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Loving thoughts create a loving world.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Shine your inner light, and the world will shine with you.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Be kind to yourself; not everyone has to be perfect.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Do yourself a favor today and take time for self-care.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Find great joys in small things.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every experience is an opportunity to grow.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Calming your mind heals your entire body.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Let your self-talk be positive and constructive.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Kindness is one of the greatest powers.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Before judging others, put yourself in their shoes.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day is a chance to be wiser than the day before.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Write your own story, not the one others have written for you.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Trust in yourself and your abilities.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Love is stronger than fear; always choose love.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Be your own best friend.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day, do yourself a favor and take time for self-care.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Stress is temporary; this too shall pass.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Self-compassion is the beginning of healing.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Find the love within yourself and share it with the world.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Take time to do the things you are most passionate about in life.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Peace is only a thought away.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Patience is one of the greatest virtues.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Discover beauty in every step.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Life is a journey; every day is a new adventure.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Don''t be afraid to make mistakes; mistakes are part of learning.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('See every day as an opportunity to make it better than the last.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Believe in yourself, because your power is limitless.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Take a step towards your dreams every day.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('A heart full of love is the greatest wealth.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('You are the hero of your own life.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Take time for yourself, because you deserve it.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Good thoughts create good people.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Be patient on the path to success.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Find your inner peace and reflect it outward.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Wake up every morning with new hope.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Fill your life with things you love.', 'General Affirmations', 0, 'en')")
+*/
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Renew yourself continuously.', '$genelOlumlamalar', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Be open to constructive criticism, it is part of growth.', '$genelOlumlamalar', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Find peace in your inner silence.', '$genelOlumlamalar', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Never compromise on quality in your work.', '$genelOlumlamalar', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Avoid comparing your life to others.', '$genelOlumlamalar', 0, 'en')")
+     /*   db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Discover and use your inner strength.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Spend time with loved ones, because relationships are valuable.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Each new day is a new beginning.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Being strong is not always possible, but being cheerful is.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Know your worth and act accordingly.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Life is full of small moments worth living.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Let go of things that hold you back.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Write your own story.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Do things that will inspire others.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Love is always the answer.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Inner beauty is more lasting than outer beauty.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Be disciplined in achieving your dreams.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Learn to forgive yourself and move forward.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Strive to be a better person today than you were yesterday.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Learn to be self-sufficient.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Do at least one good deed every day.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Inner peace helps you align with the outer world.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Do not forget to celebrate your own success.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Life is more beautiful when shared.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Listen to your inner voice, it guides you in the right direction.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Keep hope alive even in difficult times.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('You can achieve more than you think on your own.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Use your time wisely.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Discover and develop your own talents.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Freedom is being able to make your own decisions.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('See each day as a gift.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Respect for others begins with self-respect.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Instead of comparing yourself to others, be inspired by others.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Life is too short to live, make the most of today.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Remember the importance of kindness to everyone.', 'General Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Each day is a chance to be better than the last.', 'General Affirmations', 0, 'en')")
+*/
+        // Veritabanına İngilizce veriler ekleniyor
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body is full of health and energy.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I am improving my physical health every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I love and take good care of my body.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel physically strong and energetic.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Eating healthy food is a pleasure for me.', 'Body Affirmations', 0, 'en')")
+       /* db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I am becoming healthier every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body has the power to heal itself.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Physical activity revitalizes me.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I provide my body with the rest it needs.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel good in every way.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every cell in my body is full of health.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I love and honor my body as it is.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel physically strong and capable.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I wake up refreshed and energetic every morning.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I am at peace with my body.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My healthy lifestyle makes me feel better.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I am in harmony with my body.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Physical health is a priority for me.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel better every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body works perfectly to meet all my needs.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Physical health brings mental clarity.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel strong and vibrant.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body is my temple and I respect it.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I take good care of my body every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Exercise makes me happy.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I have everything I need to maintain my health.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body gives me strength and resilience.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Physical well-being is my natural state.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I am learning to listen to my body and act accordingly.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I take in health and well-being with every breath.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I always feel young and energetic.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel my body healing itself every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My love for my body is growing every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I nourish my body with love every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Improving myself physically is exciting for me.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('The steps I take to improve my health are working.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I see my body glowing with health every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Living in harmony with my body makes me happy.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My physical well-being improves my entire life.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I accept and love myself in every way.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel my body full of health and vitality every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel physically stronger and healthier every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body shines with its natural beauty and health.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every exercise helps my body become stronger and more flexible.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Eating healthy is an expression of my love for my body.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My respect for my body encourages me to make healthier lifestyle choices.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Physical activities are a source of joy and a way to express myself.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every function of my body works in perfect harmony.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I feel more alive and energetic with every physical activity.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I admire my body''s ability to heal and renew itself.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I support my physical health every day with conscious efforts.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Being healthy is a way of life for me.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My gratitude for my body increases every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I have all the resources I need to maintain and improve my physical health.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Keeping myself physically active enhances my overall well-being.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I am grateful for my body being full of health every day.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Taking care of myself physically is a priority for me.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My physical health enhances my overall quality of life.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I respect and take good care of every part of my body.', 'Body Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My body has the strength to withstand all the challenges of life.', 'Body Affirmations', 0, 'en')")
+*/
+        // İngilizce olumlamalar
+
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Faith helps me overcome all the challenges in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs keep me aligned with my highest ideals.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I believe that everything in my life happens for a good reason.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith elevates me to a higher consciousness.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I believe that the universe offers the best for me.', 'Faith Affirmations', 0, 'en')")
+       /* db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs guide me in my daily life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day my faith deepens.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Through my faith, I find inner peace.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me strength against life''s challenges.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day I live a life more in harmony with my faith.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith encourages me to stay positive.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith reinforces the purpose and meaning in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Thanks to my faith, I can be patient even in difficult times.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me hope and courage.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs guide me in everything I encounter.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith enriches and colors my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day I feel supported by my faith.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith advances me every day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs create positive changes in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith enhances my inner strength.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Thanks to my faith, I believe I can overcome any difficulty.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith protects and guides me.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me confidence that everything in my life will be better.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith calms my fears.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith inspires me to be a better person every day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Thanks to my faith, I see constant progress in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs are the cornerstone of my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith brings me more joy and happiness every day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith keeps me standing despite all difficulties.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith creates a positive change in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me the opportunity to appreciate the beauty of life more.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Thanks to my faith, I feel like I live for a greater purpose.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith makes me feel like I''m on the right path.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith leads me to a deeper inner peace.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me confidence that I''m working for the best.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me the courage to explore the infinite possibilities of life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me patience and resilience in the face of challenges.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith creates new beginnings in my life every day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith leads me to greater achievements every day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every morning, I start a new day guided by my faith.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs guide and show me the way in difficult times.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith keeps me steady like a rock in the stormy seas of life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day with the strength of my faith, I take better control of my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith deepens the meaning of my life and offers a greater perspective.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith encourages me to do more good every day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs increase love and understanding in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith gives me courage and strength with every step.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day with the power of my faith, I overcome the obstacles in my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith equips me with wisdom and helps me make the right decisions.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith increases my inner strength and gives me the power to withstand any challenge.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs connect me more to myself and the power of the universe.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith brings me peace and confidence at every moment of my life.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith constantly directs me to optimism and hope.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('The depth of my faith gives me patience in the face of life''s challenges.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith teaches me to be grateful for every new day.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith strengthens my sense of purpose in life and motivates me.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith helps me maintain inner peace even in difficult times.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My faith fills me with more love every day and helps me spread it around.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('My beliefs strengthen and guide me.', 'Faith Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every day my faith grows stronger.', 'Faith Affirmations', 0, 'en')")
+*/
+
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days are growth opportunities for me.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I can find things to be grateful for.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge brings me one step closer to my goals.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult times make me wiser.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I choose to stay positive even on difficult days.', 'Tough Days Affirmations', 0, 'en')")
+     /*   db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges reveal my strengths.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I take good care of myself.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('After every challenge, I shine even brighter.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I can find beauty even on difficult days.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult times test my resilience, and I succeed every time.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges make me stronger.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every difficult day is easier knowing the sun will rise again.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I find love and support.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days shape my character.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I maintain my hope.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge makes me stronger.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even on difficult days, I can see the beautiful sides of life.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I find strength.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges remind me of what is important.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days make me a better person.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I keep moving forward.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge ends in victory.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days are temporary, victory is permanent.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I trust myself and my abilities.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days make me more focused and determined.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges lead me to appreciate the value of life more.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every difficult day shows me that life strengthens my strong sides.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult times, I do not stop helping others.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days are my greatest teacher.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('After every challenge, greater happiness awaits me.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult times help me discover my inner resilience.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge strengthens my faith in life.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days activate my creativity and help me find solutions.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('In difficult times, I can turn to mindfulness and meditation practices to find inner peace.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges increase my flexibility and teach me to adapt to change.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge reveals the strength within me and unleashes my potential.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('In difficult days, I deepen my love and acceptance for myself.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult times help me develop more empathy and understanding in life.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge develops my problem-solving skills and helps me find creative solutions.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days offer a significant opportunity for transformation and contribute to my inner growth.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('In difficult times, I take better care of my body to protect my health.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges lead me to appreciate the valuable things in life more deeply.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge helps me look to the future with more hope and see potential opportunities.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days provide an incentive to rebalance life.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('In difficult times, it is important to accept external support and make connections.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges help me discover my inner strength and endurance.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge increases my gratitude and sense of cooperation with others.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days help me better understand the meaning and depth of life.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('In difficult times, I refocus to keep my motivation to achieve my goals.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Challenges hold opportunities and growth potential for me.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days are temporary, my strength is permanent.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge makes me stronger.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I can find peace even in difficult times.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every experience teaches me valuable lessons.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult days make me more resilient.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I can remain calm and focused in the face of challenges.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('I rise stronger after every challenge.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Difficult times will pass, I must stay strong.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Even in difficult days, I have complete confidence in myself.', 'Tough Days Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO $TABLE_NAME (affirmation, category, favorite, language) VALUES ('Every challenge brings out the courage within me.', 'Tough Days Affirmations', 0, 'en')")
+*/
+/*
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart beats with the most beautiful melodies of love, and I spread this melody to the world.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I attract love into every corner of my life and live with the magic of this love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I feel love more deeply and share it generously.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am worthy of love and embrace it with my whole being.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is filled with a little more love every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I embrace the love and romance in my life with gratitude.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance make me stronger every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is open to love, and I live my love-filled relationship with gratitude.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I collect love-filled memories in my life and cherish them as precious treasures.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance naturally surround me as a part of my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I celebrate every moment of life with a heart full of love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I open new doors within me to give and receive more love and romance.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I walk with a more open heart each day to attract love into my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is full of love, and I spread this love to the world.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am delighted to discover the miracles of love and romance in my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every new day, I collect memories filled with love and romance.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I live a love-filled relationship and celebrate every moment of it with gratitude.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is filled with love and romance, and I enjoy sharing this love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Living the beauties of love and romance in my life is my greatest wealth.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I live a love-filled relationship and celebrate every moment of it.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is full of love, and I am happy to share this love with the world.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love seeps into every corner of my life and completes me.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I feel love more deeply and share it generously.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am worthy of love and embrace it with my whole being.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is filled with a little more love every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I embrace the love and romance in my life with gratitude.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance make me stronger every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is open to love, and I live my love-filled relationship with gratitude.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I collect love-filled memories in my life and cherish them as precious treasures.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance naturally surround me as a part of my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I celebrate every moment of life with a heart full of love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I open new doors within me to give and receive more love and romance.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I walk with a more open heart each day to attract love into my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is full of love, and I spread this love to the world.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am delighted to discover the miracles of love and romance in my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every new day, I collect memories filled with love and romance.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I live a love-filled relationship and celebrate every moment of it with gratitude.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is filled with love and romance, and I enjoy sharing this love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Living the beauties of love and romance in my life is my greatest wealth.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I live a love-filled relationship and celebrate every moment of it.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is full of love, and I am happy to share this love with the world.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love, in every breath, makes its presence felt.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is full of love, and I am ready to share this love with the world.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love brings meaning and joy to my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('With the magic of love, I become more beautiful every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I celebrate every moment with a heart full of love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love helps me discover the beauty of life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Building relationships filled with love is my natural state.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love makes me stronger every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is open to love, and I grow this love every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance are the cornerstones of my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I collect memories filled with love and romance.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Living a life full of love is my greatest wealth.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance inspire me every day.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I beautify my life with my love-filled relationships.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love gives me the strength to overcome every difficulty.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My heart is full of love, and I am happy to share this love.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Love and romance give meaning to every moment.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am delighted to discover the miracles of love in my life.', 'Love Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every new day, I collect memories filled with love and romance.', 'Love Affirmations', 0, 'en')")
+
+
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Respecting my own being helps others see me with respect.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The value I give to myself is the foundation of the value I receive from the outside world.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('When I accept myself with love, I enable those around me to accept me with love.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Meeting my own needs helps me recognize and respect my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being at peace with myself allows me to feel inner peace and balance in my life.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Respecting myself allows others to respect me.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Listening to my inner voice helps me understand my own worth and act accordingly.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Expressing my own emotions and thoughts helps me express my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Valuing my own story and experiences helps me understand and appreciate my own being.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being honest with myself helps me better understand my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Taking care of my own priorities and needs shows that I value my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Making an effort to develop and grow myself increases my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pursuing my own dreams and goals increases my belief in my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Talking positively about myself strengthens my own worth and motivates me.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Steering my own life shows my ability to control my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Filling myself with love helps me remember my own worth and trust it.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Celebrating my own achievements helps me appreciate my own worth and successes.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Continuously improving myself increases my own worth and provides personal satisfaction.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Changing negative thoughts about myself increases my own worth and motivates me.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Accepting myself as I am helps me appreciate my own worth and uniqueness.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Recognizing and respecting my own emotions helps me understand my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Making conscious decisions to direct my own life shows my ability to control my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Knowing and protecting my own boundaries shows that I value my own worth and needs.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Maintaining a positive inner dialogue about myself strengthens my own worth and motivates me.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Exploring my own inner strength and potential helps me recognize and trust my own worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Filling myself with love helps me remember my own worth and trust it.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Continuously improving and growing myself increases my own worth and self-confidence.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Staying true to my own ideas and beliefs shows my ability to protect my own values and self.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Maintaining a positive inner dialogue about myself strengthens my own worth and motivates me.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Celebrating my own achievements and accomplishments helps me appreciate my own worth and successes.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Living in alignment with my own values shows that I value my own worth and self.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Filling myself with love helps me remember my own worth and trust it.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Continuously improving and growing myself increases my own worth and self-confidence.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Staying true to my own ideas and beliefs shows my ability to protect my own values and self.', 'Self-Worth Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My worth is not determined by others; I define my own value.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am proud of myself and embrace my uniqueness.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve the love and kindness I give to others.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I respect my journey and celebrate my personal growth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust my abilities and confidently pursue my dreams.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve success and happiness in all areas of my life.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My self-worth is infinite, and I cherish every part of myself.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I forgive my past mistakes and embrace my growth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am enough as I am, and I deserve good things.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I radiate self-respect and attract respect from others.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust my decisions and believe in my intuition.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I celebrate my strengths and lovingly accept my flaws.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My self-worth grows with every challenge I face.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am the architect of my life, building it with love and respect.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to take up space and be heard.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I treat myself with kindness and nourish my soul with positivity.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I value my time and prioritize my well-being.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve all the good things life has to offer.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I protect my boundaries and conserve my energy.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am a valuable and integral part of the world.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust myself to make the right choices for my well-being.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I acknowledge my efforts and reward myself with kindness.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to show myself compassion and understanding.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My worth is inherent, and I am proud of who I am.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve meaningful connections and relationships.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I respect my emotions and allow myself to feel deeply.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am a strong creator, and my life reflects my self-worth.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I respect my journey and appreciate my progress.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am my own best advocate and supporter.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to rest and relax without guilt.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I choose to see myself through a lens of love and acceptance.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to be celebrated and valued.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I embrace my individuality and express myself authentically.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I allow myself to grow and evolve.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am proud of my achievements and appreciate my hard work.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The kindness and compassion I show myself are the same I offer others.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to pursue my passions and live my dreams.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I make a valuable contribution to the world, and my voice matters.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust my journey and honor my personal evolution.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to rest and relax without guilt.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I choose to see myself through a lens of love and acceptance.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to be celebrated and valued.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I embrace my individuality and express myself authentically.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I allow myself to grow and evolve.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am proud of my achievements and appreciate my hard work.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The kindness and compassion I show myself are the same I offer others.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I deserve to pursue my passions and live my dreams.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I make a valuable contribution to the world, and my voice matters.', 'Self-Worth Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust my journey and honor my personal evolution.', 'Self-Worth Affirmations', 0, 'en')")
+
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can handle any challenge and stay strong in every situation.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take deep breaths and do relaxation exercises to calm myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am continuously developing my skills to cope with stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I set healthy boundaries and learn to say no to manage stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I discover effective methods to reduce stress and increase peace every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take regular breaks and rest times to protect myself from stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can stay calm and focused even in stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I regularly meditate to calm and relax myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am strengthening my abilities to cope with stress and feeling better every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take short breaks to regain peace in every stressful situation.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I develop inner strength and confidence to feel safe even in stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust myself to handle stress and anxiety and grow stronger every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can remain calm and maintain a positive perspective even in stressful moments.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I spend time in nature and the outdoors to calm and relax myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I develop healthy habits to reduce my stress levels every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I discover and trust my inner resources to handle stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I use techniques that provide deep relaxation for my body and mind to let go of stress and anxiety.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I remember to show myself some love and compassion.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I regularly practice yoga to calm and relax myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can maintain positive thoughts and behaviors even in stressful moments.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I nourish my inner strength to feel strong and resilient even in stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I focus on deep breathing and creating some mental space to find inner peace and calm.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I find and share ways to express my thoughts and feelings to handle stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I regularly get massages and relaxation therapies to cleanse myself from stress and relax.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I conduct positive self-talk and motivate myself to cope with stress and anxiety.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I can stay calm and focused by remembering my inner strength.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can take some time for myself to relax and rest even in stressful moments.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I feel strong even in stressful situations by remembering my past achievements and drawing strength from them.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I find inner peace and balance by taking some time each day to handle stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I can adopt a positive attitude to bring lightness and flexibility.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I stay in touch with people around me to seek support and emotional connection to cope with stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I remember my inner strength and resilience to feel strong even in stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Even in stressful moments, I research and use natural solutions and herbal supports to calm and relax myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I resort to meditation and deep breathing exercises to stay calm and focused.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I recognize the causes and triggers of stress to handle them and develop strategies to manage them.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I practice positive thoughts and behaviors in my daily life to feel peaceful and calm even in stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I practice mental and emotional relaxation and cleansing techniques daily to let go of stress and anxiety.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I connect with nature and spend time outdoors to find peace and tranquility.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I adopt a healthy lifestyle to cope with stress by exercising regularly, eating balanced, and getting enough sleep.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I practice inner confidence and acceptance to feel safe and supported even in stressful situations.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can manage and overcome stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('With each breath, I release anxiety and invite peace.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I feel calm and in control.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My anxieties are temporary, my inner peace is permanent.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My stress levels decrease every day and I feel more relaxed.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can protect myself from all kinds of stress and anxiety.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Even in stressful moments, I can manage to stay calm.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I understand my anxieties and release them.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I feel more inner peace and calm every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I have all the tools I need to overcome stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take time to feel comfortable and peaceful.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I become more skilled at dealing with stress every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can calm and relax myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I use effective methods to soothe my anxieties.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I reduce my stress and lead a more relaxed life every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I adopt healthy habits to keep myself away from stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stress does not control my life; I control my stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I accept my anxieties and deal with them healthily.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I feel more ease and calm every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Stress and anxiety have no power over me.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every stressful situation, I relax by taking a deep breath.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My anxieties are temporary, I can overcome this moment.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I do whatever it takes to feel calm and peaceful.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Even in stressful times, I can stay strong and calm.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can manage and relieve my anxieties.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My stress levels decrease every day and my quality of life improves.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing stress and anxiety is in my hands.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take time to soothe my anxieties and it works.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every stressful moment is like a passing cloud.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I know effective methods to calm and relax myself.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I trust myself to handle stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I manage my stress more effectively every day.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I recognize my anxieties and deal with them healthily.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can find peace even in stressful times.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can control and relieve my anxieties.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Dealing with stress makes me stronger and more resilient.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I welcome each anxious thought with calmness and let it pass.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take the time I need to clear myself from stress.', 'Stress and Anxiety Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can find inner peace even in stressful moments.', 'Stress and Anxiety Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('When I face challenges, I find solutions with the positive energy within me.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('A positive perspective helps me overcome every difficulty in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively increases my inner peace and satisfaction.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts make me more confident every day.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('With a positive outlook, I remember that there is a solution to every problem.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I spread joy and positive energy with my positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively guides me and those around me to a better future.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts help me progress more each day.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('A positive outlook allows me to see the brighter side of everything in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively reveals my inner strength and makes me more resilient.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I feel more joy and enthusiasm in my life with my positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts positively affect everyone around me and motivate them.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes me a better person every day.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('A positive outlook helps me realize that everything in my life is easier.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts remind me that I have the power to make the world around me a better place.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I motivate myself more with a positive outlook.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively allows me to be more grateful and thankful in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts help me feel more energy and vitality every day.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('A positive outlook helps me learn something from every experience in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I feel better with my positive thoughts and create a better life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively encourages me to be more creative and find new ideas.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('A positive outlook helps me be more flexible and adaptable in every situation.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts help me attract more positive experiences in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively helps me notice the beauty around me.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I discover new opportunities with a positive outlook.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively releases my potential and moves me forward.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts positively impact those around me and motivate them.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('When I face challenges, I find solutions with the positive energy within me.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes my life more meaningful and every day more valuable.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts motivate me more every day and help me achieve my goals.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('With a positive outlook, I remember that there is a solution to every problem, and this gives me strength.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I spread joy and positive energy with my positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively helps me look to the future with hope and increases my motivation for a better tomorrow.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I am filled with positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively changes my life for the better.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts create positive results.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I choose to see the good in every situation.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively is my natural state.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being positive makes each of my days brighter.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I strengthen myself with my positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I feel happier and more satisfied with positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively opens all the doors in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively is easy and natural for me.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('In every difficulty, I find a positive side.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes me a better person.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I wake up with positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts lead me to success.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes a big difference in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being positive enriches my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I can see the positive aspects in every situation.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts make me happier every day.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively helps me overcome the challenges in my life more easily.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively is my lifestyle.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I live a life full of positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively gives me more confidence and hope.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Positive thoughts take my life to a better place.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being positive creates miracles in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes me healthier and happier.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes my life more meaningful.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I achieve more happiness and success by thinking positively.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My positive thoughts create big changes in my life.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively takes me to a better future.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively makes each of my days brighter.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('With a positive perspective, I make every moment of life valuable.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I strengthen myself with positive thoughts.', 'Positive Thought Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Thinking positively inspires the people around me.', 'Positive Thought Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a source of more motivation for me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful is about taking constant steps forward.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a reflection of the strength within me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I move closer to more success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is achieved with determination and maintained with perseverance.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is part of a larger story.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful means overcoming challenges and reaching goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is the realization of my inner potential, and I am aware of it.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a source of more confidence for me and takes me further.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is the result of hard work and belief.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a driving force to reach more goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful starts with beginning and continuing.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is found in every step towards my goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a source of more confidence and motivation for me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful is about constantly moving forward, and I am doing it.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success means discovering a little more about myself every day.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is part of a larger story, and I am writing that story.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success means continually progressing and reaching goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success further increases my strength and determination.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful is possible by believing and continually moving forward.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a goal I get closer to every day, and I am aware of it.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a step to reach greater goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success accompanies me at every step and motivates me further.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful means revealing my inner strength and reaching goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is possible by believing and continually moving forward, and I am ready for it.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is an opportunity to reach greater goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success accompanies me at every step and motivates me further.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful means working with determination and perseverance to reach my goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is the realization of the potential within me, and I am ready for it.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success motivates me further and gives me strength to reach greater goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful means revealing my inner strength and determination and reaching goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The doors to success are opening more for me every day.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every step I take brings me closer to success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is not an unattainable goal for me, but an inevitable result.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is not just a stop on the journey of my dreams, but also a starting point.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every new day is a new chance and a new beginning for success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a reflection of the realization of the potential within me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Obstacles strengthen my determination and belief in success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is hidden in everything I do, and I am discovering this mystery.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Everything necessary to be successful already exists within me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day is filled with unique opportunities for success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success reveals my inner strength and determination.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I take another step to feel more success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a choice, and I continue to make this choice every day.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success progresses with me at every step.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a source of motivation for my future larger goals.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful means revealing my inner strength and determination.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is an expression of my belief and patience.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I get one step closer to success, and this journey is exciting.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful means discovering the endless possibilities that life offers.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a powerful source of motivation that transforms my life.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is getting closer to me every day.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a new source of confidence.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is my natural right.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every successful step brings the next opportunity.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is achieved with determination and perseverance.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a goal that gets closer every day.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every obstacle makes me stronger.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is the realization of the potential within me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being successful is an inevitable reality for me.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every success is a step towards a greater success.', 'Success Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Success is a reflection of my belief.', 'Success Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I take new steps every day to fully realize my potential.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day offers me a chance to add more value to myself.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I surpass myself each passing day, becoming a stronger and more determined person.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every new experience makes me wiser and more understanding.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('As the hero of my own journey, I can overcome any obstacle.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development process brings me closer to my dreams.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day is an opportunity to discover my inner strength.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Challenging my potential makes me more creative and innovative.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Recognizing my own value gives me the courage to achieve greater goals.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('As I chart my own path, I become more confident with every step.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am transforming myself into a better version every day.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Celebrating my achievements keeps me motivated and ambitious.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development process brings lifelong happiness and satisfaction.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I reach new heights by pushing my limits.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Investing in myself improves my quality of life and makes me happier.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Discovering my potential is one of my greatest passions.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I add more confidence and belief to myself.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Developing myself makes me a more unique and impactful person.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('As I write my own story, I grow stronger with every chapter.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development opens new doors and offers opportunities.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day is a chance to know and understand myself better.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every step in my journey keeps me motivated and determined.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My belief in myself is my greatest guide to success.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development process reflects positively in all areas of my life.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I surpass my own potential and reach new goals.', 'Personal Development Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I have a new opportunity to improve myself.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Self-improvement is a part of my life purpose.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I learn something new and this knowledge enhances me.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Discovering my own potential is an exciting journey for me.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I discover new and positive things about myself.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Taking time to improve myself is a sign of my self-love.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development positively reflects in all areas of my life.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The effort I put into improving myself every day strengthens me.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Pushing my boundaries gives me great satisfaction.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every experience teaches me valuable lessons on my personal development journey.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('As I improve myself, I also become a source of inspiration for others.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Investing in myself is the most valuable investment.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The time I dedicate to self-improvement takes my life to a better place.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Improving myself every day makes me happier and more content.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My belief in myself supports my personal development.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Developing my talents makes me more capable and successful.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The challenges I face while improving myself make me stronger.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Understanding myself a little more every day makes a big difference in my life.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development journey is extremely satisfying for me.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Improving myself a little more every day gives me great satisfaction.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development makes me more independent and free.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Improving myself better prepares me for the challenges of life.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My daily self-improvement efforts make me a more balanced and harmonious person.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development gives me more control over my life.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Improving myself takes me further every day.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development journey opens new doors in my life.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development reminds me of the value of lifelong learning.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Improving myself every day makes me more positive and hopeful.', 'Personal Development Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My personal development process fills me with more love and compassion.', 'Personal Development Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I use every moment consciously and decisively, knowing the value of my time.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I start each day with maximum efficiency, making the most of my time.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing my time has become a powerful skill, and I improve it every day.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time effectively every moment brings me closer to my goals.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Planning and organizing my tasks is not just a habit, but a success ritual.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing my time correctly gives me more control and freedom in my life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Productivity is not just a skill but a lifestyle for me, and I feel it in every moment.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I fill each day with important and meaningful activities, getting the most out of life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('By completing my tasks on time and efficiently, I make the best use of my time.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I see my time as a valuable treasure, using it wisely and shaping my life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Organizing myself provides inner peace and balance in my life, a precious gift.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I develop new strategies and methods to use my time more effectively.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills increase my achievements and make my life easier.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time consciously every moment, I lead a stress-free and peaceful life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time efficiently brings me more personal growth and happiness.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('By using my time effectively, I am building the life I dream of step by step.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('By prioritizing my time more, I am taking one step closer to my dreams.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills have become the key to balance and peace in my life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I use my time more effectively, feeling more successful and happy.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time consciously makes me a more creative and innovative person.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I use my time consciously and effectively.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I evaluate each day with maximum efficiency.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills are constantly improving.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I use my time in the best possible way.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Planning and organizing my tasks is natural and easy for me.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing my time gives me more control and freedom.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being productive is satisfying and enjoyable for me.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I fill each day with important and meaningful activities.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I complete my tasks on time and efficiently.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I value my time and spend it wisely.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Organizing myself gives me more peace and order.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I find new ways to make the best use of my time.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills make me more successful and efficient.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My ability to manage time makes my daily life easier.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being productive is natural for me.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I prioritize and use my time efficiently.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using time efficiently gives me more personal time.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing my time effectively brings me more success and satisfaction.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time wisely reduces stress in my life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I become more conscious about using my time efficiently.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing my time brings me more success in all areas of my life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills make me more productive every day.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Developing my time management skills gives me great satisfaction.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I value my time and use it to the best of my ability.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I learn new ways to use my time more effectively and efficiently.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time consciously brings me more joy and satisfaction.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Time management plays an important role in my life and makes me more productive.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('By using my time effectively, I achieve more success.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills provide me with more opportunities every day.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('By using my time efficiently, I reach my dreams faster.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills bring more balance to my life.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every day, I achieve more success by using my time more effectively.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time consciously makes me happier and more satisfied.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Managing my time gives me more space for creativity and innovation.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time efficiently is always a priority for me.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I become more skilled in time management every day.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My time management skills make me a more balanced and harmonious person.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('By using my time effectively, I can achieve all my goals.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am constantly improving my time management skills.', 'Time Management Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Using my time consciously enhances the quality of my life.', 'Time Management Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I easily connect with people and these bonds last long.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My social relationships strengthen and nourish me.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Being open and honest with people strengthens my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Meeting new people is a new adventure and learning opportunity.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I prioritize love and understanding in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My ability to empathize makes my relationships deeper and more meaningful.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Interacting with people brings me joy and satisfaction.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am always respectful and considerate in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My social circle is full of supportive and inspiring people.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I find creative and constructive ways to solve problems in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My relationships are healthy and supportive.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My communication skills are improving every day.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My relationships contribute to my personal growth and development.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('The bonds I have with people make my life richer and more fulfilling.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I communicate honestly and openly with everyone.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am proactive in constantly improving my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Mutual respect and understanding are essential in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I build strong bonds with my friends and loved ones.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My social interactions make me a happier and more balanced person.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Every interaction with people makes me wiser and more understanding.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I express love and compassion freely in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I know how to set healthy boundaries with people.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I appreciate the unique value of every individual in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I see challenges in my relationships as opportunities for growth.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Spending time with my friends and family brings me great joy.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am always honest and transparent in my social relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My relationships are built on trust and love.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I have the ability to form deep and meaningful bonds with people.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Mutual support and trust are essential in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My relationships encourage me to grow and become a better person.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am always learning and growing in my relationships with people.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I maintain healthy communication with everyone in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My social interactions support my mental and emotional health.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am always patient and understanding in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am always positive and supportive in my relationships with people.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am sincere and natural in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I know and value the worth of everyone in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My social bonds make my life richer and more colorful.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I am always fair and balanced in my relationships.', 'Relationship Affirmations', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('My relationships provide me with social and emotional satisfaction.', 'Relationship Affirmations', 0, 'en')")
+
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, I attract everything that brings me joy and happiness.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want peace and tranquility in my daily life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish for everything in my life to serve my highest good.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish to live a life full of health, abundance, and love.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, inspire me to increase my creativity.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want a strong and healthy body, let the universe give me energy for this.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want love and understanding in all my relationships.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek guidance to advance and succeed in my career.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, give me strength to overcome the challenges in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I attract opportunities to discover and use my true potential.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, support me in building healthy and happy relationships with my loved ones.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want more love and joy every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish for everything I need to come to me easily and smoothly.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want constant abundance and prosperity in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek guidance and support to find and maintain my inner peace.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, give me wisdom for my daily decisions.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want inner peace and tranquility.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want mutual respect and understanding in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, I wish health and happiness for all the people in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want understanding to better comprehend myself and the world around me.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, ensure I am balanced and harmonious in all areas of my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek support to overcome my fears and be courageous.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want to attract success and happiness in my life, overcoming all challenges.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Show me the right path and guide my choices.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish for all my decisions to serve my highest good.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want to attract lasting and true love in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, open new opportunities and guide me.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want security and safety in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want to attract a loving and supportive community.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek support to maintain and improve my mental and physical health.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, give me motivation to achieve my goals.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want clarity and transparency in all areas of my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want self-sufficiency and independence.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, provide me with the knowledge and resources to improve my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want to let go of all my worries and focus on the present moment.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek the strength and courage to forgive myself and others.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want more happiness and satisfaction every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek inspiration to foster and develop my creativity.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want to live in peace with my whole being.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, I wish for everything in my life to happen in the best possible way.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek guidance for increasing wisdom and understanding every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, give continuous health and prosperity to me and my loved ones.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want more patience and tolerance in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Help me find the purpose and direction of my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish to live a life full of love, peace, and happiness.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek strength to love and accept myself more every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, open my mind and heart to information that will help me.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want energy for positive changes in all areas of my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish to build stronger social bonds and meaningful relationships.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, give me strength to overcome all obstacles in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek inner understanding for increasing gratitude every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek the universe''s guidance for inner peace and tranquility.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I attract opportunities to continuously learn and grow throughout my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I wish to be surrounded by people who enrich and support my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek continuous inspiration to achieve success and realize my dreams.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I want opportunities every day to see myself as a better person.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek the universe''s support for more joy and energy in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek strength to be resilient and flexible despite all challenges.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek inner guidance to act with more compassion and understanding.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, give me the strength to build deeper and more meaningful bonds with my loved ones.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek wisdom to find and maintain my inner peace.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, provide me with clarity and openness in every step of my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek the universe''s help for more motivation and determination every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek deep understanding to better comprehend myself and others.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek support for more confidence and courage in my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek guidance for a healthy and balanced life every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek the universe''s support to be emotionally and mentally strong.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek help for success and satisfaction in all areas of my life.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('I seek the universe''s guidance to increase my inner strength and self-confidence every day.', 'Prayer and Request', 0, 'en')")
+        db?.execSQL("INSERT INTO olumlamalar (affirmation, category, favorite, language) VALUES ('Universe, bring me more love and joy every day.', 'Prayer and Request', 0, 'en')")
+*/
+
+    }*/
 }
 
 

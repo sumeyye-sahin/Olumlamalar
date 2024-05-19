@@ -10,13 +10,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
+class KategoriAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
 
     inner class KategoriViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewKategoriAdi: TextView = itemView.findViewById(R.id.tvCategoryLabel)
         val imageViewKategoriFoto: ImageView = itemView.findViewById(R.id.ivCategoryIcon)
         val cardView: View = itemView.findViewById(R.id.touchcard)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KategoriViewHolder {
@@ -26,78 +25,77 @@ class KategoriAdapter(private val kategoriListesi: List<String>) : RecyclerView.
 
     override fun onBindViewHolder(holder: KategoriViewHolder, position: Int) {
         val currentKategori = kategoriListesi[position]
+        val context = holder.itemView.context
+
         // Kategori adını değiştirme
         val displayedKategori = when (currentKategori) {
-            "Genel Olumlamalar" -> "Genel"
-            "Beden Olumlamaları" -> "Beden"
-            "İnanç Olumlamaları" -> "İnanç"
-            "Zor Günler Olumlamaları" -> "Zor Günler"
-            "Sevgi ve Aşk Olumlamaları" -> "Sevgi ve Aşk"
-            "Öz Değer Olumlamaları" -> "Öz Değer"
-            "Stres ve Kaygı Olumlamaları" -> "Stres ve Kaygı"
-            "Pozitif Düşünce Olumlamaları" -> "Pozitif Düşünce"
-            "Başarı Olumlamaları" -> "Başarı"
-            "Kişisel Gelişim Olumlamaları" -> "Kişisel Gelişim"
-            "Zaman Yönetimi Olumlamaları" -> "Zaman Yönetimi"
-            "İlişki Olumlamaları" -> "İlişki"
-            "Dua ve İstek Olumlamaları" -> "Dua ve İstek"
-            "Favori Olumlamalarım" -> "Favorilerim"
-            "Kendi Olumlamalarım" -> "Kendi Olumlamalarım"
+            context.getString(R.string.general_affirmations) -> context.getString(R.string.general)
+            context.getString(R.string.body_affirmations) -> context.getString(R.string.body)
+            context.getString(R.string.faith_affirmations) -> context.getString(R.string.faith)
+            context.getString(R.string.bad_days_affirmations) -> context.getString(R.string.bad_days)
+            context.getString(R.string.love_affirmations) -> context.getString(R.string.love)
+            context.getString(R.string.self_value_affirmations) -> context.getString(R.string.self_value)
+            context.getString(R.string.stress_affirmations) -> context.getString(R.string.stress)
+            context.getString(R.string.positive_thought_affirmations) -> context.getString(R.string.positive_thought)
+            context.getString(R.string.success_affirmations) -> context.getString(R.string.success)
+            context.getString(R.string.personal_development_affirmations) -> context.getString(R.string.personal_development)
+            context.getString(R.string.time_management_affirmations) -> context.getString(R.string.time_management)
+            context.getString(R.string.relationship_affirmations) -> context.getString(R.string.relationship)
+            context.getString(R.string.prayer_affirmations) -> context.getString(R.string.prayer)
+            context.getString(R.string.favorite_affirmations) -> context.getString(R.string.favorites)
+            context.getString(R.string.own_affirmations) -> context.getString(R.string.own_affirmations)
             else -> currentKategori // Varsayılan değer, eğer kategori bulunamazsa
         }
 
         holder.textViewKategoriAdi.text = displayedKategori
         // Kategoriye göre drawable kaynağını atan
-        val drawableResourceId = getDrawableResourceId(holder.itemView.context, currentKategori)
+        val drawableResourceId = getDrawableResourceId(context, currentKategori)
         holder.imageViewKategoriFoto.setImageResource(drawableResourceId)
 
-
-        // intent
-
-
-        if (currentKategori == "Favori Olumlamalarım") {
+        if (currentKategori == context.getString(R.string.favorite_affirmations)) {
             holder.cardView.setOnClickListener {
-                val context = holder.textViewKategoriAdi.context
                 val intent = Intent(context, FavoriesActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
             }
         } else {
             holder.cardView.setOnClickListener {
-                val context = holder.textViewKategoriAdi.context
                 val intent = Intent(context, AffirmationMainPageActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
             }
         }
-
     }
+
     private fun isCategoryEmpty(context: Context, kategori: String): Boolean {
         // Burada DBHelper'ınızdan kategorinin içeriğini kontrol eden bir sorgu yapılabilir
         val dbHelper = DBHelper(context)
-        val count = dbHelper.getAffirmationCountByCategory(kategori)
+        val count = dbHelper.getAffirmationCountByCategoryAndLanguage(kategori, userLanguage)
         return count == 0
     }
+
     override fun getItemCount() = kategoriListesi.size
 
     // Kategoriye göre drawable kaynağını bulan yardımcı fonksiyon
     private fun getDrawableResourceId(context: Context, kategori: String): Int {
         return when (kategori) {
-            "Genel Olumlamalar" -> R.drawable.genel_icon
-            "Beden Olumlamaları" -> R.drawable.beden_icon
-            "İnanç Olumlamaları" -> R.drawable.dua_icon
-            "Zor Günler Olumlamaları" -> R.drawable.bad_day_icon
-            "Sevgi ve Aşk Olumlamaları" -> R.drawable.love_icon
-            "Öz Değer Olumlamaları" -> R.drawable.ozdeger_icon
-            "Stres ve Kaygı Olumlamaları" -> R.drawable.stres2_icon
-            "Pozitif Düşünce Olumlamaları" -> R.drawable.pozitif2_icon
-            "Başarı Olumlamaları" -> R.drawable.basari_icon
-            "Kişisel Gelişim Olumlamaları" -> R.drawable.kisiselgelisim_icon
-            "Zaman Yönetimi Olumlamaları" -> R.drawable.zaman_icon
-            "İlişki Olumlamaları" -> R.drawable.iliski2_icon
-            "Dua ve İstek Olumlamaları" -> R.drawable.dua2_icon
-            "Favori Olumlamalarım" -> R.drawable.favori_icon
-            else -> R.drawable.kendi2_icon// Varsayılan drawable, eğer kategori bulunamazsa
+            context.getString(R.string.general_affirmations) -> R.drawable.genel_icon
+            context.getString(R.string.body_affirmations) -> R.drawable.beden_icon
+            context.getString(R.string.faith_affirmations) -> R.drawable.dua_icon
+            context.getString(R.string.bad_days_affirmations) -> R.drawable.bad_day_icon
+            context.getString(R.string.love_affirmations) -> R.drawable.love_icon
+            context.getString(R.string.self_value_affirmations) -> R.drawable.ozdeger_icon
+            context.getString(R.string.stress_affirmations) -> R.drawable.stres2_icon
+            context.getString(R.string.positive_thought_affirmations) -> R.drawable.pozitif2_icon
+            context.getString(R.string.success_affirmations) -> R.drawable.basari_icon
+            context.getString(R.string.personal_development_affirmations) -> R.drawable.kisiselgelisim_icon
+            context.getString(R.string.time_management_affirmations) -> R.drawable.zaman_icon
+            context.getString(R.string.relationship_affirmations) -> R.drawable.iliski2_icon
+            context.getString(R.string.prayer_affirmations) -> R.drawable.dua2_icon
+            context.getString(R.string.favorite_affirmations) -> R.drawable.favori_icon
+            else -> R.drawable.kendi2_icon // Varsayılan drawable, eğer kategori bulunamazsa
         }
     }
 }
+
+

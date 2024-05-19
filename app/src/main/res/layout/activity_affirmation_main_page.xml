@@ -136,7 +136,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="right"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <Button

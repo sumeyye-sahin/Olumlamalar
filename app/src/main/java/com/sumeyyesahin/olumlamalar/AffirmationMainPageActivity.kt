@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
 import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
+import java.util.Locale
 
 class AffirmationMainPageActivity : AppCompatActivity() {
     private lateinit var olumlamalar: List<Olumlamalarlistmodel>
@@ -31,18 +32,20 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding.textView.text = Html.fromHtml("<u>$kategori2</u>")
 
         val kategori = intent.getStringExtra("kategori")
+        val language = getUserLanguage(this)
+        setUserLanguage(this, language)
 
         // Kullanıcının son görüntülenen olumlamadan ID'sini kontrol et
         currentIndex = getLastPosition(this, kategori!!)
 
         // DBHelper sınıfını kullanarak kategorinin olumlamalarını alıyoruz
-        olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
+        olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, language)
 
         // currentIndex değeriyle olumlamaları güncelle
         updateUI()
 
         // Delete butonunun görünürlüğünü ayarlama
-        setDeleteButtonVisibility(kategori)
+        setDeleteButtonVisibility(kategori, language)
 
         // İleri butonuna tıklandığında bir sonraki olumlamayı göster
         binding.ileri.setOnClickListener {
@@ -64,8 +67,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         binding.delete.setOnClickListener {
             if (olumlamalar.isNotEmpty()) {
-                DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id, kategori!!)
-                olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
+                DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id)
+                olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, language)
                 currentIndex = 0
                 updateUI()
             }
@@ -81,7 +84,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/*"
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-            startActivity(Intent.createChooser(shareIntent, "İçeriği Paylaş"))
+            startActivity(Intent.createChooser(shareIntent, "Share Content"))
         }
 
         binding.textView.setOnClickListener {
@@ -99,11 +102,11 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             clickedAffirmation.favorite = !clickedAffirmation.favorite
             // Favori durumunu güncelle
 
-            if( clickedAffirmation.favorite){
-                DBHelper(this).addAffirmationFav(clickedAffirmation,false)
+            if (clickedAffirmation.favorite) {
+                DBHelper(this).addAffirmationFav(clickedAffirmation, false, language)
                 DBHelper(this).updateAffirmationFavStatus(clickedAffirmation)
-            }else{
-                DBHelper(this).deleteFavoriteAffirmationByCategoryAndAffirmationName("Favori Olumlamalarım",clickedAffirmation.affirmation)
+            } else {
+                DBHelper(this).deleteFavoriteAffirmationByCategoryAndAffirmationName("My Affirmations", clickedAffirmation.affirmation)
                 DBHelper(this).updateAffirmationFavStatus(clickedAffirmation)
             }
 
@@ -121,7 +124,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         super.onResume()
         // Kategori değiştiğinde currentIndex değerini güncelle
         val kategori = intent.getStringExtra("kategori")
-        olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori!!)
+        val language = getUserLanguage(this)
+        olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori!!, language)
 
         // Listeyi güncelleme ve currentIndex'i sıfırlama
         if (olumlamalar.isNotEmpty()) {
@@ -131,24 +135,43 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
 
         // Delete butonunun görünürlüğünü ayarlama
-        setDeleteButtonVisibility(kategori)
+        setDeleteButtonVisibility(kategori, language)
 
         updateUI()
     }
+
     override fun onBackPressed() {
         val intent = Intent(this, CategoryActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_AFFIRMATION && resultCode == RESULT_OK) {
             // DBHelper kullanarak kategorinin güncel olumlamalarını al
             val kategori = intent.getStringExtra("kategori")!!
-            olumlamalar = DBHelper(this).getOlumlamalarByCategory(kategori)
+            olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, getUserLanguage(this))
             updateUI() // UI'yi güncelle
         }
+    }
+
+    fun getUserLanguage(context: Context): String {
+        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val language = sharedPreferences.getString("language", null)
+        val deviceLanguage = Locale.getDefault().language
+        return when {
+            language != null -> language
+            deviceLanguage == "tr" -> "tr"
+            deviceLanguage == "en" -> "en"
+            else -> "en"
+        }
+    }
+
+    fun setUserLanguage(context: Context, language: String) {
+        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("language", language).apply()
     }
 
     private fun updateUI() {
@@ -157,7 +180,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             updateLikeButtonIcon(currentIndex)
             enableButtons(true) // Butonları etkinleştir
         } else {
-            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz."
+            binding.olumlamalarTextView.text = getString(R.string.add_buton)
             binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
             binding.like.visibility = View.INVISIBLE
             binding.delete.visibility = View.INVISIBLE
@@ -170,7 +193,6 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             binding.ileri.isClickable = false
             binding.geri.isClickable = false
             binding.share.isClickable = false
-
         }
     }
 
@@ -188,8 +210,13 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         // Diğer butonları da bu şekilde ayarlayabilirsiniz.
     }
 
-    private fun setDeleteButtonVisibility(kategori: String) {
-        if (kategori == "Kendi Olumlamalarım") {
+    private fun setDeleteButtonVisibility(kategori: String, language: String) {
+        val myAffirmationsCategory = if (language == "tr") {
+            "Kendi Olumlamalarım"
+        } else {
+            "My Affirmations"
+        }
+        if (kategori == myAffirmationsCategory) {
             binding.delete.visibility = View.VISIBLE
         } else {
             binding.delete.visibility = View.GONE
@@ -247,7 +274,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     }
 
     // Kategori sayfasına gitmek için onClick fonksiyonu
-    fun kategori(view: View){
+    fun kategori(view: View) {
         val intent = Intent(this, CategoryActivity::class.java)
         startActivity(intent)
     }
@@ -257,3 +284,4 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         private const val REQUEST_CODE_ADD_AFFIRMATION = 1
     }
 }
+
