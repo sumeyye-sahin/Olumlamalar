@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:id="@+id/deneme"
     android:layout_height="match_parent"
-    tools:context=".FavoriesActivity">
+    tools:context=".FavoriesActivity"
+    android:background="@color/white"
+    >
 
     <ImageView
         android:id="@+id/topimage"

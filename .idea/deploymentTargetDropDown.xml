@@ -6,16 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="f4929b28" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\sumeyye\.android\avd\Pixel_2_API_30.avd" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-<<<<<<< Updated upstream
-    <timeTargetWasSelectedWithDropDown value="2024-05-18T07:42:02.392044100Z" />
-=======
-    <timeTargetWasSelectedWithDropDown value="2024-05-19T11:53:46.566993700Z" />
->>>>>>> Stashed changes
+    <timeTargetWasSelectedWithDropDown value="2024-05-19T21:50:46.668239700Z" />
   </component>
 </project>

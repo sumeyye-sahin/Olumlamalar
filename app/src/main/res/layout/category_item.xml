@@ -5,7 +5,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@color/white"
+    >
+
+
 
     <ImageView
         android:id="@+id/ivCategoryIcon"

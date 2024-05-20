@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
 import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
 import java.util.Locale
@@ -26,7 +27,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAffirmationMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         // Kategori adını al
         val kategori2 = intent.getStringExtra("kategori")
         binding.textView.text = Html.fromHtml("<u>$kategori2</u>")

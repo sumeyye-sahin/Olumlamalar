@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFavoriesBinding
@@ -19,7 +20,7 @@ class FavoriesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val language = getUserLanguage(this)
 
         // Favori olumlamaları veritabanından al

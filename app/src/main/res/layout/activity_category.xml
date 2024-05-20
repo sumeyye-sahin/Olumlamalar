@@ -6,7 +6,8 @@
     android:id="@+id/deneme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CategoryActivity">
+    tools:context=".CategoryActivity"
+    android:background="@color/white">
 
 
     <ImageView

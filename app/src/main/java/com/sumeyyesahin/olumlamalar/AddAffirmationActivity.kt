@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAddAffirmationBinding
 import java.util.Locale
 
@@ -15,7 +16,7 @@ class AddAffirmationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddAffirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding.geri.setOnClickListener {
             finish()
         }

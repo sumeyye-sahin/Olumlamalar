@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+
+
+
+    <style parent="Theme.Material3.Light.NoActionBar" name="Base.Theme.Olumlamalar">
+
+    <!-- Customize your dark theme here. -->
+
+
+    <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+
+</style>
+
+</resources>

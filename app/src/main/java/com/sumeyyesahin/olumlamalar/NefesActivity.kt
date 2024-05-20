@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.databinding.ActivityNefesBinding
 
 class NefesActivity : AppCompatActivity() {
@@ -25,7 +26,7 @@ class NefesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNefesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         circleView = findViewById(R.id.circleView)
         btnStart = findViewById(R.id.btnStart)
