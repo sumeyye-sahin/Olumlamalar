@@ -8,13 +8,24 @@
     android:layout_gravity="center"
     android:background="@color/purple">
 
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:text="4-7-8 Nefes egzersizi neden önemlidir?"
+        ></TextView>
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginLeft="20dp"
         android:background="@drawable/boldblack"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp">
 
         <TextView
@@ -41,5 +52,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Devam" />
+        android:text="Nefes Egzersizine 2 adım kaldı"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 </LinearLayout>
