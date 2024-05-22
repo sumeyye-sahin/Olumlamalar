@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -90,7 +89,7 @@ class NefesActivity : AppCompatActivity() {
             btnStart.visibility = View.INVISIBLE
             tvRoundCounter.visibility = View.INVISIBLE
             binding.talimat.visibility = View.INVISIBLE
-            btnend.visibility = View.INVISIBLE
+            btnend.visibility = View.VISIBLE
 
             // 3 saniye sonra aktiviteyi sonlandır
             handler.postDelayed({
@@ -106,13 +105,13 @@ class NefesActivity : AppCompatActivity() {
                 val progress = animation.animatedValue as Float
                 circleView.setProgress(progress, mode)
 
-                // Calculate remaining time
+                // Calculate remaining time for countdown
                 val remainingTime = if (startProgress < endProgress) {
-                    (initialSeconds * (1 - progress)).toInt()
+                    initialSeconds - (initialSeconds * progress).toInt()
                 } else {
-                    (initialSeconds * progress).toInt()
+                    initialSeconds - (initialSeconds * (1 - progress)).toInt()
                 }
-                circleView.setTimerText((initialSeconds - remainingTime).toString())
+                circleView.setTimerText(remainingTime.toString())
             }
             start()
         }
