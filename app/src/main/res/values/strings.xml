@@ -22,7 +22,7 @@
     <string name="bad_days_affirmations">Tough Days Affirmations</string>
     <string name="love_affirmations">Love Affirmations</string>
     <string name="self_value_affirmations">Self-Worth Affirmations</string>
-    <string name="stress_affirmations">Stress Affirmations</string>
+    <string name="stress_affirmations">Stress and Anxiety Affirmations</string>
     <string name="positive_thought_affirmations">Positive Thought Affirmations</string>
     <string name="success_affirmations">Success Affirmations</string>
     <string name="personal_development_affirmations">Personal Development Affirmations</string>
@@ -44,6 +44,6 @@
     <string name="relationship">Relationship</string>
     <string name="prayer">Prayer</string>
     <string name="favorites">Favorites</string>
-    <string name="add_buton">
-There is no affirmation yet. You can add an affirmation by clicking the + button.</string>
+    <string name="add_buton">There is no affirmation yet. You can add an affirmation by clicking the + button.</string>
+    <string name="breathingIntro">The 4-7-8 breathing technique was developed by Dr. Andrew Weil. \n\nThe aim of this technique is to reduce stress levels, improve heart health, and enhance sleep quality. \n\nThe physiological effects of the 4-7-8 breathing technique include a slower heart rate, reduced blood pressure, decreased cortisol (stress hormone) levels, and increased melatonin (sleep hormone) levels. This helps the body to relax and reduces stress.</string>
 </resources>

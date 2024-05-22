@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.sumeyyesahin.olumlamalar.databinding.ActivityCategoryBinding
@@ -20,7 +19,7 @@ class CategoryActivity : AppCompatActivity() {
         setUserLanguage(this, language)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         val db = DBHelper(this)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         val kategoriListesi = db.getAllCategoriesByLanguage(language)
         val adapter = KategoriAdapter(kategoriListesi, language) // language parametresini geçiriyoruz
         recyclerView.adapter = adapter
