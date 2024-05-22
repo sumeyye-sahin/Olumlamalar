@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/deneme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    tools:context=".MainActivity"
+
+    >
 
     <TextView
         android:id="@+id/textView3"
@@ -17,6 +21,7 @@
         android:paddingLeft="15dp"
         android:fontFamily="@font/lobster"
         android:gravity="center_horizontal"
+        android:layout_gravity="center"
         android:text="@string/main_quote"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -34,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="-4dp"
         android:layout_marginRight="-3dp"
+        android:layout_gravity="center"
         android:src="@drawable/line_7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +55,8 @@
         android:src="@drawable/mainflower"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
 
@@ -56,7 +64,7 @@
         android:id="@+id/buttonkategori"
         android:layout_width="289dp"
         android:layout_height="51dp"
-        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
         android:background="@drawable/buttonmain"
         android:drawableLeft="@drawable/baseline_diamond_24"
         android:paddingLeft="10dp"
@@ -66,15 +74,15 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonnefes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="20dp"
+         />
 
     <Button
         android:id="@+id/buttonnefes"
         android:layout_width="289dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="25dp"
+        android:layout_height="51dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:background="@drawable/buttonmain"
         android:drawableLeft="@drawable/star"
         android:paddingLeft="10dp"
@@ -82,9 +90,7 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
