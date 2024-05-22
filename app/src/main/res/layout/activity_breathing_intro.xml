@@ -49,10 +49,24 @@
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Nefes Egzersizine 2 adım kaldı"
+        android:text="Nefes Egzersizi Nasıl Yapılır?"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+    <Button
+        android:id="@+id/btnstart"
+        android:background="@drawable/buttonmain"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Başla buton"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"/>
 </LinearLayout>
