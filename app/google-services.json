@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "315340156437",
+    "project_id": "olumlamalar-224",
+    "storage_bucket": "olumlamalar-224.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315340156437:android:9828b64558a19e7cec281c",
+        "android_client_info": {
+          "package_name": "com.sumeyyesahin.olumlamalar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWjWrW0xjXcih66cLwfCL6NBHsLEQBLOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
