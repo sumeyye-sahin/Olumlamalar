@@ -39,24 +39,13 @@
         android:layout_above="@id/circleView"
         android:visibility="invisible" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:contentDescription="@string/initial_image_description"
-        android:src="@drawable/imageflower" />
 
     <com.sumeyyesahin.olumlamalar.CircleView
         android:id="@+id/circleView"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btnStart"

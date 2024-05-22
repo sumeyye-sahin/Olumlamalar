@@ -15,7 +15,6 @@ class NefesActivity : AppCompatActivity() {
     private lateinit var circleView: CircleView
     private lateinit var btnStart: Button
     private lateinit var tvInstruction: TextView
-    private lateinit var imageView: ImageView
     private lateinit var tvRoundCounter: TextView
     private lateinit var handler: Handler
     private lateinit var btnend: Button
@@ -31,13 +30,11 @@ class NefesActivity : AppCompatActivity() {
         circleView = findViewById(R.id.circleView)
         btnStart = findViewById(R.id.btnStart)
         tvInstruction = findViewById(R.id.tvInstruction)
-        imageView = findViewById(R.id.imageView)
         tvRoundCounter = findViewById(R.id.tvRoundCounter)
         btnend = findViewById(R.id.btnend)
         handler = Handler()
 
         btnStart.setOnClickListener {
-            imageView.visibility = View.INVISIBLE
             circleView.visibility = View.VISIBLE
             tvInstruction.visibility = View.INVISIBLE
             tvRoundCounter.visibility = View.VISIBLE
@@ -91,7 +88,6 @@ class NefesActivity : AppCompatActivity() {
             tvInstruction.visibility = View.VISIBLE
             circleView.visibility = View.INVISIBLE
             btnStart.visibility = View.INVISIBLE
-            imageView.visibility = View.INVISIBLE
             tvRoundCounter.visibility = View.INVISIBLE
             binding.talimat.visibility = View.INVISIBLE
             btnend.visibility = View.INVISIBLE
