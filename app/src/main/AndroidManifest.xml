@@ -75,7 +75,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <receiver android:name=".NotificationReceiver" />
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
@@ -94,7 +94,7 @@
                 android:resource="@xml/file_path" />
         </provider>
 
-        <receiver android:name=".NotificationReceiver" />
+
 
     </application>
 
