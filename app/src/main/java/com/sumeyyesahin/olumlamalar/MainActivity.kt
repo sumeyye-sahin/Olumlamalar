@@ -1,7 +1,10 @@
 package com.sumeyyesahin.olumlamalar
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.sumeyyesahin.olumlamalar.databinding.ActivityMainBinding
@@ -15,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val introSeen = sharedPreferences.getBoolean("intro_seen", false)
         val notificationSetupDone = sharedPreferences.getBoolean("notification_setup_done", false)
-
+        createNotificationChannel()
         val language = sharedPreferences.getString("language", "en")
         setLocale(language ?: "en")
 
@@ -63,5 +66,23 @@ class MainActivity : AppCompatActivity() {
         val config = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Olumlama Bildirim Kanalı",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Olumlama bildirimleri için kullanılır"
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    companion object {
+        const val CHANNEL_ID = "affirmation_notification_channel"
     }
 }
