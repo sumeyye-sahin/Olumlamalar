@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/diamond/baseline_diamond_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/settings_suggest/baseline_settings_suggest_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,8 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="logo" />
+                            <entry key="outputName" value="settings_icon" />
                             <entry key="sourceFile" value="C:\Users\sumeyye\Desktop\logo.svg" />
                           </map>
                         </option>

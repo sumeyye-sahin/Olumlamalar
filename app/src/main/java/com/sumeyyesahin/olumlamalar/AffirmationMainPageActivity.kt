@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Html
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -82,7 +83,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         binding.share.setOnClickListener {
             // Olumlamayı paylaşmak
-            val bitmap = takeScreenshot(binding.imageView, binding.olumlamalarTextView)
+            val bitmap = takeScreenshot(binding.affirmationBackground, binding.olumlamalarTextView)
 
             // Geçici dosya oluşturma
             val cachePath = File(cacheDir, "images")
@@ -195,6 +196,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
+
         if (olumlamalar.isNotEmpty()) {
             updateAffirmationText(currentIndex)
             updateLikeButtonIcon(currentIndex)
@@ -214,6 +216,34 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             binding.geri.isClickable = false
             binding.share.isClickable = false
         }
+
+        // Kategoriye göre arka planı değiştir
+        val kategori = intent.getStringExtra("kategori") ?: ""
+        Log.d("Kategori", "Kategori: $kategori") // Kategori adını loglayın
+
+        val backgroundResource = when (kategori) {
+            getString(R.string.general_affirmations) -> R.drawable.genel_background
+            getString(R.string.body_affirmations) -> R.drawable.body_background3
+            getString(R.string.faith_affirmations) -> R.drawable.inanc_background
+            getString(R.string.bad_days_affirmations) -> R.drawable.zor_background3
+            getString(R.string.love_affirmations) -> R.drawable.love_background
+            getString(R.string.self_value_affirmations) -> R.drawable.ozdeger_background
+            getString(R.string.stress_affirmations) -> R.drawable.stress_background
+            getString(R.string.positive_thought_affirmations) -> R.drawable.body_background2
+            getString(R.string.success_affirmations) -> R.drawable.basari_background
+            getString(R.string.personal_development_affirmations) -> R.drawable.kisisel_background
+            getString(R.string.time_management_affirmations) -> R.drawable.zaman_background
+            getString(R.string.relationship_affirmations) -> R.drawable.iliski_background
+            getString(R.string.prayer_affirmations) -> R.drawable.dua_background
+            getString(R.string.add_affirmation_title) -> R.drawable.kendi_background
+            else -> R.drawable.genel_background
+        }
+
+        Log.d("Arka Plan", "Arka Plan Resource ID: $backgroundResource") // Arka plan resource ID'sini loglayın
+        binding.affirmationBackground.setImageResource(backgroundResource) // ImageView'un src özelliğini değiştir
+
+
+
     }
 
     private fun enableButtons(enable: Boolean) {
@@ -275,7 +305,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         if (olumlamalar.isNotEmpty()) {
             binding.olumlamalarTextView.text = olumlamalar[currentIndex].affirmation
         } else {
-            binding.olumlamalarTextView.text = "Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz."
+            binding.olumlamalarTextView.text = "getResources().getString(R.string.add_buton)"
         }
     }
 

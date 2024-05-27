@@ -12,7 +12,7 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="40dp"
         android:paddingRight="15dp"
         android:paddingLeft="15dp"
         android:fontFamily="@font/lobster"
@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="-4dp"
         android:layout_marginRight="-3dp"
+        android:layout_marginTop="-15dp"
         android:src="@drawable/line_7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +45,8 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/buttonkategori"/>
 
     <Button
         android:id="@+id/buttonkategori"
@@ -71,7 +73,24 @@
         android:background="@drawable/buttonmain"
         android:drawableLeft="@drawable/star"
         android:paddingLeft="10dp"
+        android:shadowDx="0"
+        android:shadowDy="0"
         android:text="@string/breathing_exercise"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSettings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="10dp" />
+    <Button
+        android:id="@+id/buttonSettings"
+        android:layout_width="289dp"
+        android:layout_height="51dp"
+        android:background="@drawable/buttonmain"
+        android:drawableLeft="@drawable/settings_icon"
+        android:paddingLeft="10dp"
+        android:text="@string/button_settings"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
