@@ -69,26 +69,25 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
     }
 
     private fun setDailyNotification(hour: Int, minute: Int, category: String) {
-        val currentTime = Calendar.getInstance().timeInMillis
-        val targetTime = Calendar.getInstance().apply {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, NotificationReceiver::class.java).apply {
+            putExtra("category", category)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
-        }.timeInMillis
+        }
 
-        val delay = targetTime - currentTime
-
-        val inputData = Data.Builder()
-            .putString("title", "Olumlama Zamanı")
-            .putString("message", "Seçtiğiniz kategori: $category")
-            .build()
-
-        val notificationWork = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-            .setInputData(inputData)
-            .build()
-
-        WorkManager.getInstance(applicationContext).enqueue(notificationWork)
+        // Set the alarm to start at the selected time
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
     }
 
     private fun showPermissionRationale() {

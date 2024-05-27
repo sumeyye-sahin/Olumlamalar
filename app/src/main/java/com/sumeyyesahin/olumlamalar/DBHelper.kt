@@ -20,6 +20,7 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         const val COLUMN_CATEGORY = "category"
         const val COLUMN_FAVORITE = "favorite"
         const val COLUMN_LANGUAGE = "language" // Yeni dil sütunu
+        private const val COLUMN_TEXT = "text"
     }
 
     override fun onCreate(myDatabase: SQLiteDatabase?) {
@@ -75,6 +76,17 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
             ex.printStackTrace()
             null
         }
+    }
+
+    fun getRandomAffirmationByCategory(category: String): String {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT $COLUMN_AFFIRMATION FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? ORDER BY RANDOM() LIMIT 1", arrayOf(category))
+        var affirmation = "No affirmations available"
+        if (cursor.moveToFirst()) {
+            affirmation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
+        }
+        cursor.close()
+        return affirmation
     }
 
     fun getOlumlamalarByCategoryAndLanguage(category: String, language: String): List<Olumlamalarlistmodel> {
