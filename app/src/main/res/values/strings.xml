@@ -46,4 +46,24 @@
     <string name="favorites">Favorites</string>
     <string name="add_buton">There is no affirmation yet. You can add an affirmation by clicking the + button.</string>
     <string name="breathingIntro">The 4-7-8 breathing technique was developed by Dr. Andrew Weil. \n\nThe aim of this technique is to reduce stress levels, improve heart health, and enhance sleep quality. \n\nThe physiological effects of the 4-7-8 breathing technique include a slower heart rate, reduced blood pressure, decreased cortisol (stress hormone) levels, and increased melatonin (sleep hormone) levels. This helps the body to relax and reduces stress.</string>
+    <string-array name="categoriesNotification">
+        <item>General Affirmations</item>
+        <item>Body Affirmations</item>
+        <item>Faith Affirmations</item>
+        <item>Tough Days Affirmations</item>
+        <item>Love Affirmations</item>
+        <item>Self-Worth Affirmations</item>
+        <item>Stress and Anxiety Affirmations</item>
+        <item>Positive Thought Affirmations</item>
+        <item>Success Affirmations</item>
+        <item>Personal Development Affirmations</item>
+        <item>Time Management Affirmations</item>
+        <item>Relationship Affirmations</item>
+        <item>Prayer and Request</item>
+    </string-array>
+    <string-array name="languagesSelect">
+        <item>Please select a language</item>
+        <item>Türkçe</item>
+        <item>English</item>
+    </string-array>
 </resources>

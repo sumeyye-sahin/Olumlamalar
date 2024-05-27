@@ -46,4 +46,24 @@
     <string name="favorites">Favorilerim</string>
     <string name="add_buton">Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz.</string>
     <string name="breathingIntro">4-7-8 nefes tekniği, Dr. Andrew Weil tarafından geliştirilmiştir. \n\nBu tekniğin amacı; stres seviyesini azaltmak, kalp sağlığını geliştirmek ve uyku kalitesini artırmaktır. \n\n4-7-8 nefes tekniğinin fizyolojik etkileri;  Kalp atış hızında yavaşlama, kan basıncının düşmesi,  kortizol (stres hormonu) seviyesinin düşmesi ve melatonin (uyku hormonu) seviyesinin artmasıdır. Bu sayede vücut rahatlar ve stresi azaltır.</string>
+    <string-array name="categoriesNotification">
+        <item>Genel Olumlamalar</item>
+        <item>Beden Olumlamaları</item>
+        <item>İnanç Olumlamaları</item>
+        <item>Zor Günler Olumlamaları</item>
+        <item>Sevgi ve Aşk Olumlamaları</item>
+        <item>Öz Değer Olumlamaları</item>
+        <item>Stres ve Kaygı Olumlamaları</item>
+        <item>Pozitif Düşünce Olumlamaları</item>
+        <item>Başarı Olumlamaları</item>
+        <item>Kişisel Gelişim Olumlamaları</item>
+        <item>Zaman Yönetimi Olumlamaları</item>
+        <item>İlişki Olumlamaları</item>
+        <item>Dua ve İstek</item>
+    </string-array>
+    <string-array name="languagesSelect">
+        <item>Lütfen dil seçiniz</item>
+        <item>Türkçe</item>
+        <item>English</item>
+    </string-array>
 </resources>

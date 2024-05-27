@@ -11,9 +11,15 @@ import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.FileProvider
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
 import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Locale
 
 class AffirmationMainPageActivity : AppCompatActivity() {
@@ -26,7 +32,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAffirmationMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         // Kategori adını al
         val kategori2 = intent.getStringExtra("kategori")
         binding.textView.text = Html.fromHtml("<u>$kategori2</u>")
@@ -78,13 +84,27 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             // Olumlamayı paylaşmak
             val bitmap = takeScreenshot(binding.imageView, binding.olumlamalarTextView)
 
+            // Geçici dosya oluşturma
+            val cachePath = File(cacheDir, "images")
+            cachePath.mkdirs()
+            val file = File(cachePath, "shared_image.png")
+            val fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+            fileOutputStream.close()
+
+            val uri = FileProvider.getUriForFile(this, "${packageName}.provider", file)
+
             // Share intent
-            val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Olumlama", null)
-            val uri = Uri.parse(path)
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/*"
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(Intent.createChooser(shareIntent, "Share Content"))
+
+            // Paylaşımdan sonra dosyayı silme
+            shareIntent.resolveActivity(packageManager)?.also {
+                file.deleteOnExit()
+            }
         }
 
         binding.textView.setOnClickListener {

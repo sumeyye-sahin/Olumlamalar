@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IntroActivity"
-    android:background="@color/white"
-    >
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".IntroActivity">
 
     <TextView
-        android:id="@+id/tvIntro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="24sp"
-        android:text="Nefes egzersizi hakkında bilgi..."/>
+        android:text="Lütfen dil seçiniz"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/languagesSelect"
+         />
 
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvIntro"
-        android:layout_centerHorizontal="true"
+        android:text="Save"
+        android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:text="Devam" />
-</RelativeLayout>
+        />
+
+</LinearLayout>
