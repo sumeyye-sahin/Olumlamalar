@@ -40,6 +40,10 @@ class IntroActivity : AppCompatActivity() {
         }
         spinnerLanguage.setSelection(defaultPosition)
 
+        //introya birden fazla giriş yapılması durumu
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val introSeen = sharedPreferences.getBoolean("intro_deneme", false)
+
         btnContinue.setOnClickListener {
             val selectedPosition = spinnerLanguage.selectedItemPosition
             if (selectedPosition == 0) {
@@ -47,7 +51,7 @@ class IntroActivity : AppCompatActivity() {
                 Toast.makeText(this, "Lütfen bir dil seçiniz", Toast.LENGTH_SHORT).show()
             } else {
                 val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                sharedPreferences.edit().putBoolean("intro_seen", true).apply()
+                sharedPreferences.edit().putBoolean("intro_deneme", true).apply()
 
                 // Kullanıcının seçtiği dili alın
                 val selectedLanguage = when (selectedPosition) {
@@ -62,8 +66,19 @@ class IntroActivity : AppCompatActivity() {
                 // Dili ayarlayın
                 setLocale(selectedLanguage)
 
-                // Notification seçim aktivitesine geç
-                val intent = Intent(this, IntroUserNotificationSelectActivity::class.java)
+
+                val intent = if (introSeen) {
+                    val language = sharedPreferences.getString("language", "en")
+                    setLocale(language ?: "en")
+                    Intent(this, SettingsActivity::class.java)
+
+                } else {
+                    sharedPreferences.edit().putBoolean("intro_deneme", true).apply()
+                    val language = sharedPreferences.getString("language", "en")
+                    setLocale(language ?: "en")
+                    Intent(this, IntroUserNotificationSelectActivity::class.java)
+
+                }
                 startActivity(intent)
                 finish()
             }

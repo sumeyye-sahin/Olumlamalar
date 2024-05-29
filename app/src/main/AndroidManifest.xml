@@ -17,62 +17,57 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Olumlamalar"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".IntroUserNotificationSelectActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".BreathingIntroActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".IntroActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".NefesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".AddAffirmationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".SplashScreenActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".FavoriesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".CategoryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".AffirmationMainPageActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".NotificationReceiver" />
 
         <provider
@@ -84,9 +79,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
-
-
-
     </application>
 
 </manifest>

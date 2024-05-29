@@ -33,8 +33,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="settings_icon" />
-                            <entry key="sourceFile" value="C:\Users\sumeyye\Desktop\logo.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="rectangle_27" />
+                            <entry key="sourceFile" value="C:\Users\sumeyye\Desktop\aaaaa_background\regtengle.svg" />
                           </map>
                         </option>
                       </PersistentState>
