@@ -66,19 +66,12 @@ class IntroActivity : AppCompatActivity() {
                 // Dili ayarlayın
                 setLocale(selectedLanguage)
 
-
                 val intent = if (introSeen) {
-                    val language = sharedPreferences.getString("language", "en")
-                    setLocale(language ?: "en")
                     Intent(this, SettingsActivity::class.java)
-
                 } else {
-                    sharedPreferences.edit().putBoolean("intro_deneme", true).apply()
-                    val language = sharedPreferences.getString("language", "en")
-                    setLocale(language ?: "en")
                     Intent(this, IntroUserNotificationSelectActivity::class.java)
-
                 }
+                intent.putExtra("language", selectedLanguage)
                 startActivity(intent)
                 finish()
             }
