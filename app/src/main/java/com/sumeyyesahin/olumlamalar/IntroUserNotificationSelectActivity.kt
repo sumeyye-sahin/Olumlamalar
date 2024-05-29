@@ -90,7 +90,7 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         super.onResume()
 
         val currentLanguage = sharedPreferences.getString("language", "en")
-        updateCategoriesToSelectedLanguage(currentLanguage ?: "en")
+        updateCategoriesInSharedPreferences(currentLanguage ?: "en")
         loadCategoriesAndTimes(currentLanguage ?: "en")
         adapter.notifyDataSetChanged()
     }
@@ -201,7 +201,7 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         return data.joinToString(";") { "${it.first},${it.second.first},${it.second.second}" }
     }
 
-    private fun updateCategoriesToSelectedLanguage(language: String) {
+    private fun updateCategoriesInSharedPreferences(language: String) {
         val editor = sharedPreferences.edit()
         val serializedData = sharedPreferences.getString("categories_and_times", "")
         if (!serializedData.isNullOrEmpty()) {

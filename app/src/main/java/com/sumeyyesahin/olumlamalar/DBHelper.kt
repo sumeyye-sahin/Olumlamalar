@@ -21,6 +21,7 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         const val COLUMN_FAVORITE = "favorite"
         const val COLUMN_LANGUAGE = "language" // Yeni dil sütunu
         private const val COLUMN_TEXT = "text"
+
     }
 
     override fun onCreate(myDatabase: SQLiteDatabase?) {
@@ -79,8 +80,12 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
     }
 
     fun getRandomAffirmationByCategory(category: String): String {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val language = sharedPreferences.getString("language", "en") ?: "en"
+        val localizedCategory = getLocalizedCategoryName(context, category, language)
+
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT $COLUMN_AFFIRMATION FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? ORDER BY RANDOM() LIMIT 1", arrayOf(category))
+        val cursor = db.rawQuery("SELECT $COLUMN_AFFIRMATION FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? AND $COLUMN_LANGUAGE = ? ORDER BY RANDOM() LIMIT 1", arrayOf(localizedCategory, language))
         var affirmation = "No affirmations available"
         if (cursor.moveToFirst()) {
             affirmation = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AFFIRMATION))
@@ -89,6 +94,48 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         return affirmation
     }
 
+    private fun getLocalizedCategoryName(context: Context, category: String, language: String): String {
+        val resources = when (language) {
+            "tr" -> LocaleHelper.setLocale(context, "tr").resources
+            "en" -> LocaleHelper.setLocale(context, "en").resources
+            else -> LocaleHelper.setLocale(context, "en").resources
+        }
+        return when (language) {
+            "tr" -> when (category) {
+                "General Affirmations" -> resources.getString(R.string.general_affirmations)
+                "Body Affirmations" -> resources.getString(R.string.body_affirmations)
+                "Faith Affirmations" -> resources.getString(R.string.faith_affirmations)
+                "Tough Days Affirmations" -> resources.getString(R.string.bad_days_affirmations)
+                "Love Affirmations" -> resources.getString(R.string.love_affirmations)
+                "Self-Worth Affirmations" -> resources.getString(R.string.self_value_affirmations)
+                "Stress and Anxiety Affirmations" -> resources.getString(R.string.stress_affirmations)
+                "Positive Thought Affirmations" -> resources.getString(R.string.positive_thought_affirmations)
+                "Success Affirmations" -> resources.getString(R.string.success_affirmations)
+                "Personal Development Affirmations" -> resources.getString(R.string.personal_development_affirmations)
+                "Time Management Affirmations" -> resources.getString(R.string.time_management_affirmations)
+                "Relationship Affirmations" -> resources.getString(R.string.relationship_affirmations)
+                "Prayer and Request" -> resources.getString(R.string.prayer_affirmations)
+                else -> category
+            }
+            "en" -> when (category) {
+                "Genel Olumlamalar" -> resources.getString(R.string.general_affirmations)
+                "Beden Olumlamaları" -> resources.getString(R.string.body_affirmations)
+                "İnanç Olumlamaları" -> resources.getString(R.string.faith_affirmations)
+                "Zor Günler Olumlamaları" -> resources.getString(R.string.bad_days_affirmations)
+                "Sevgi ve Aşk Olumlamaları" -> resources.getString(R.string.love_affirmations)
+                "Öz Değer Olumlamaları" -> resources.getString(R.string.self_value_affirmations)
+                "Stres ve Kaygı Olumlamaları" -> resources.getString(R.string.stress_affirmations)
+                "Pozitif Düşünce Olumlamaları" -> resources.getString(R.string.positive_thought_affirmations)
+                "Başarı Olumlamaları" -> resources.getString(R.string.success_affirmations)
+                "Kişisel Gelişim Olumlamaları" -> resources.getString(R.string.personal_development_affirmations)
+                "Zaman Yönetimi Olumlamaları" -> resources.getString(R.string.time_management_affirmations)
+                "İlişki Olumlamaları" -> resources.getString(R.string.relationship_affirmations)
+                "Dua ve İstek" -> resources.getString(R.string.prayer_affirmations)
+                else -> category
+            }
+            else -> category
+        }
+    }
     fun getOlumlamalarByCategoryAndLanguage(category: String, language: String): List<Olumlamalarlistmodel> {
         val db = this.readableDatabase
         val list = mutableListOf<Olumlamalarlistmodel>()

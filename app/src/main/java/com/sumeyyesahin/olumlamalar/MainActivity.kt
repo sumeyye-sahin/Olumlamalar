@@ -14,17 +14,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        currentLanguage = intent.getStringExtra("language") ?: sharedPreferences.getString("language", "en") ?: "en"
+        setLocale(currentLanguage)
+
+        // Activite yeniden başlatma kontrolü
+        val savedInstanceStateLanguage = savedInstanceState?.getString("language")
+        if (savedInstanceStateLanguage != null && savedInstanceStateLanguage != currentLanguage) {
+            currentLanguage = savedInstanceStateLanguage
+            setLocale(currentLanguage)
+            recreate()
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val introSeen = sharedPreferences.getBoolean("intro_seen", false)
         val notificationSetupDone = sharedPreferences.getBoolean("notification_setup_done", false)
-        // Gelen intent ile dil bilgisini alın
-        currentLanguage =
-            (intent.getStringExtra("language") ?: sharedPreferences.getString("language", "en")) as String
-        //currentLanguage = sharedPreferences.getString("language", "en") ?: "en"
-        setLocale(currentLanguage)
 
         if (!introSeen) {
             val intent = Intent(this, IntroActivity::class.java)
@@ -67,18 +73,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setLocale(languageCode: String) {
-        LocaleHelper.setLocale(this, languageCode)
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     override fun onResume() {
         super.onResume()
-
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        val language = sharedPreferences.getString("language", "en") ?: "en"
+        val language = intent.getStringExtra("language") ?: sharedPreferences.getString("language", "en") ?: "en"
         if (language != currentLanguage) {
             currentLanguage = language
             setLocale(currentLanguage)
             recreate() // Aktiviteyi yeniden başlat
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("language", currentLanguage)
     }
 }
