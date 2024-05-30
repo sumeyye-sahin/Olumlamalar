@@ -71,7 +71,7 @@
         android:layout_width="289dp"
         android:layout_height="51dp"
         android:background="@drawable/buttonmain"
-        android:drawableLeft="@drawable/star"
+        android:drawableLeft="@drawable/star_icon"
         android:paddingLeft="10dp"
         android:shadowDx="0"
         android:shadowDy="0"

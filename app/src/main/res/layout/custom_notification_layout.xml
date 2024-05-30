@@ -3,13 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp"
-    android:background="@color/white">
+    android:padding="3dp"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
+    android:layout_marginTop="3dp"
+   >
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/favori_icon" />
 
     <LinearLayout
@@ -17,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
+        android:layout_marginBottom="3dp"
         android:paddingStart="10dp">
 
         <TextView
@@ -24,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Kendime Not:"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -34,6 +39,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="Message"
+
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

@@ -33,12 +33,7 @@ class IntroActivity : AppCompatActivity() {
         spinnerLanguage.adapter = adapter
 
         // Varsayılan dilin Spinner'da seçili olmasını sağla
-        val defaultPosition = when (defaultLanguage) {
-            "tr" -> 1
-            "en" -> 2
-            else -> 0
-        }
-        spinnerLanguage.setSelection(defaultPosition)
+        spinnerLanguage.setSelection(0)
 
         //introya birden fazla giriş yapılması durumu
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
@@ -48,7 +43,7 @@ class IntroActivity : AppCompatActivity() {
             val selectedPosition = spinnerLanguage.selectedItemPosition
             if (selectedPosition == 0) {
                 // Kullanıcı dil seçmedi, uyarı göster
-                Toast.makeText(this, "Lütfen bir dil seçiniz", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please select a language", Toast.LENGTH_SHORT).show()
             } else {
                 val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean("intro_deneme", true).apply()

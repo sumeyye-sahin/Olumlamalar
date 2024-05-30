@@ -36,7 +36,7 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         dbHelper = DBHelper(this)
-
+        requestNotificationPermission()
         // Seçilen dili uygulayın
         val selectedLanguage = intent.getStringExtra("language") ?: sharedPreferences.getString("language", "en")
         setLocale(selectedLanguage ?: "en")
@@ -97,7 +97,13 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         loadCategoriesAndTimes(currentLanguage ?: "en")
         adapter.notifyDataSetChanged()
     }
-
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), NOTIFICATION_PERMISSION_CODE)
+            }
+        }
+    }
     private fun setDailyNotification(hour: Int, minute: Int, category: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, NotificationReceiver::class.java).apply {
@@ -109,6 +115,9 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
+            if (before(Calendar.getInstance())) {
+                add(Calendar.DATE, 1) // Eğer alarm geçmişte ise, bir gün ekleyin
+            }
         }
 
         alarmManager.setRepeating(
