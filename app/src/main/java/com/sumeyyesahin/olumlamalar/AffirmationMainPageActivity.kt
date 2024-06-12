@@ -327,6 +327,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     fun kategori(view: View) {
         val intent = Intent(this, CategoryActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     // Request kod tanımı

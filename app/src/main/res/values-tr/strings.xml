@@ -47,6 +47,25 @@
     <string name="favorites">Favorilerim</string>
     <string name="add_buton">Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz.</string>
     <string name="breathingIntro">4-7-8 nefes tekniği, Dr. Andrew Weil tarafından geliştirilmiştir. \n\nBu tekniğin amacı; stres seviyesini azaltmak, kalp sağlığını geliştirmek ve uyku kalitesini artırmaktır. \n\n4-7-8 nefes tekniğinin fizyolojik etkileri;  Kalp atış hızında yavaşlama, kan basıncının düşmesi,  kortizol (stres hormonu) seviyesinin düşmesi ve melatonin (uyku hormonu) seviyesinin artmasıdır. Bu sayede vücut rahatlar ve stresi azaltır.</string>
+    <string name="nefes2">4-7-8 nefes tekniğine başlamadan önce nasıl uygulandığına bakalım.\n\nAdımlar:\n1-Hazırlık: Rahat bir pozisyonda oturun veya uzanın, dilinizi üst dişlerinizin arkasına yerleştirin.\n2-Nefes Alma: Burnunuzdan 4 saniye boyunca sessizce nefes alın.\n3-Nefes Tutma: Nefesinizi 7 saniye boyunca tutun.\n4-Nefes Verme: Ağızdan 8 saniye boyunca sesli bir şekilde nefes verin.\n\nBu adımlar 4 defa tekrarlanmalı.\nGünde iki kez (sabah ve akşam) pratik yapmak iyi bir başlangıç olabilir.</string>
+    <string name="nefestext">4-7-8 Nefes Tekniği</string>
+    <string name="introLanguageSelect">Dil Seçimi</string>
+    <string name="introLanguagetext">Lütfen dil seçiniz</string>
+    <string name="introLanguagebutton">Kaydet</string>
+    <string name="introBildirim">Bildirim Seçimi</string>
+    <string name="introBildirimbutton">Ekle</string>
+    <string name="introBildirimtext">Lütfen kategori ve saat seçiniz</string>
+    <string name="settings">Ayarlar</string>
+    <string name="settingsbutton1">Dil Seç</string>
+    <string name="settingsbutton2">Bildirimleri Düzenle</string>
+    <string name="settingstext">Kategori ve Bildirim Zamanları</string>
+    <string name="nefesintrotext">4-7-8 Nefes Tekniği: Nedir\n Neden Önemlidir?</string>
+    <string name="nefesintrobuton">İleri</string>
+    <string name="nefesAl">Nefes Al</string>
+    <string name="nefesTut">Nefesini Tut</string>
+    <string name="nefesVer">Nefes Ver</string>
+    <string name="nefestext2">Tamamlanan Turlar: </string>
+    <string name="breathing_exercise_complete">Nefes egzersiziniz tamamlanmıştır.\n Kendinize iyi bakmaya devam edin.</string>
     <string-array name="categoriesNotification">
         <item>Genel Olumlamalar</item>
         <item>Beden Olumlamaları</item>

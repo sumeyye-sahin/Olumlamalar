@@ -5,11 +5,47 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".IntroUserNotificationSelectActivity">
+    <TextView
+        android:id="@+id/basliknotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="1dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="left"
+        android:text="@string/introBildirim"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:drawableStart="@drawable/settings_icon"
+        android:drawablePadding="8dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000"
+        />
+
+    <TextView
+
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/introBildirimtext"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
 
     <Spinner
         android:id="@+id/spinnerCategories"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:entries="@array/categoriesNotification" />
 
     <TimePicker
@@ -23,7 +59,9 @@
         android:id="@+id/btnAddTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="@string/introBildirimbutton"
+        android:textStyle="bold"
+        android:background="@drawable/buttonmain"
         android:layout_gravity="center" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -31,13 +69,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         tools:listitem="@layout/item_category_time" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_gravity="center" />
+        android:text="@string/introLanguagebutton"
+        android:textStyle="bold"
+        android:background="@drawable/buttonmain"
+        android:layout_gravity="center"
+        android:layout_marginBottom="7dp"
+        />
 
 </LinearLayout>

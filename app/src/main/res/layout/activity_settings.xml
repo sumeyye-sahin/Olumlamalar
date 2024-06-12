@@ -1,61 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:orientation="vertical"
     tools:context=".SettingsActivity">
+
+
+    <TextView
+        android:id="@+id/baslikayarlar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="1dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="left"
+        android:text="@string/settings"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:drawableStart="@drawable/settings_icon"
+        android:drawablePadding="8dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#000000"
+    />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dil Seçimi"
-        android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="@string/introLanguageSelect"
+        android:layout_marginLeft="20dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/selectLanguageBtn"
+        app:layout_constraintStart_toStartOf="@+id/selectLanguageBtn" />
 
     <Button
         android:id="@+id/selectLanguageBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="dil seç"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/buttonmain"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/settingsbutton1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kategori ve Bildirim Zamanları"
-        android:textSize="18sp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/selectLanguageBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/settingstext"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnEditNotifications"
+        app:layout_constraintStart_toStartOf="@+id/btnEditNotifications" />
 
     <Button
         android:id="@+id/btnEditNotifications"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bildirimleri Düzenle"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <Button
-        android:id="@+id/btnSaveSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ayarları Kaydet"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/buttonmain"
+        android:paddingLeft="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingRight="15dp"
+        android:text="@string/settingsbutton2"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectLanguageBtn" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</LinearLayout>

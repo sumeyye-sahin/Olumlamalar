@@ -47,6 +47,18 @@
         android:layout_centerInParent="true"
         android:visibility="visible" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        app:lottie_loop="true"
+        app:lottie_fileName="nefes.json"
+        >
+
+    </com.airbnb.lottie.LottieAnimationView>
+
     <Button
         android:id="@+id/btnStart"
         android:layout_width="150dp"

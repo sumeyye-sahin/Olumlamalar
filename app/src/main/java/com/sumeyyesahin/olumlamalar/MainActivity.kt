@@ -2,7 +2,11 @@ package com.sumeyyesahin.olumlamalar
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.sumeyyesahin.olumlamalar.databinding.ActivityMainBinding
 import java.util.Locale
@@ -26,11 +30,12 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
 
+        checkBatteryOptimization()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val introSeen = sharedPreferences.getBoolean("intro_seen", false)
-        val notificationSetupDone = sharedPreferences.getBoolean("notification_setup_done", false)
 
         if (!introSeen) {
             val intent = Intent(this, IntroActivity::class.java)
@@ -39,13 +44,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        if (!notificationSetupDone) {
-            val intent = Intent(this, IntroUserNotificationSelectActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
-
+        // Ana aktivite içeriği burada kalacak
         val dbHelper = DBHelper(this)
         dbHelper.readableDatabase
 
@@ -55,23 +54,55 @@ class MainActivity : AppCompatActivity() {
             if (breathingIntroSeen) {
                 val intent = Intent(this, NefesActivity::class.java)
                 startActivity(intent)
+                finish()
             } else {
                 val intent = Intent(this, BreathingIntroActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
 
         binding.buttonSettings.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.buttonkategori.setOnClickListener {
             val intent = Intent(this, CategoryActivity::class.java)
+            intent.putExtra("language", currentLanguage)
             startActivity(intent)
+            finish()
         }
     }
 
+    private fun checkBatteryOptimization() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val intent = Intent()
+            val packageName = packageName
+            val pm = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                AlertDialog.Builder(this)
+                    .setTitle("Battery Optimization")
+                    .setMessage("To ensure notifications are delivered on time, please disable battery optimization for this app.")
+                    .setPositiveButton("OK") { dialog, _ ->
+                        intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                        intent.data = android.net.Uri.parse("package:$packageName")
+                        startActivity(intent)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        Toast.makeText(
+                            this,
+                            "Battery optimization not disabled",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        }
+    }
     private fun setLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)

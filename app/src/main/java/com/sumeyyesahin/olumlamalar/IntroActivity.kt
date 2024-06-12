@@ -8,7 +8,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import java.util.*
+import java.util.Locale
 
 class IntroActivity : AppCompatActivity() {
 
@@ -23,9 +23,17 @@ class IntroActivity : AppCompatActivity() {
         val btnContinue = findViewById<Button>(R.id.btnContinue)
 
         // Varsayılan sistem dilini ayarla
-        val defaultLanguage = Locale.getDefault().language
-        setLocale(defaultLanguage)
 
+
+        val defaultLanguage = Locale.getDefault().language
+       // setLocale(defaultLanguage)
+        // introya kaç kere giriş yapıldığını kontrol et
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+
+        val introVisitCount = sharedPreferences.getInt("intro_visit_count", 0)
+        if (introVisitCount == 0) {
+            setLocale(defaultLanguage)
+        }
         // Spinner'ı güncelle
         val languages = resources.getStringArray(R.array.languagesSelect)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
@@ -35,9 +43,6 @@ class IntroActivity : AppCompatActivity() {
         // Varsayılan dilin Spinner'da seçili olmasını sağla
         spinnerLanguage.setSelection(0)
 
-        //introya birden fazla giriş yapılması durumu
-        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        val introSeen = sharedPreferences.getBoolean("intro_deneme", false)
 
         btnContinue.setOnClickListener {
             val selectedPosition = spinnerLanguage.selectedItemPosition
@@ -45,8 +50,9 @@ class IntroActivity : AppCompatActivity() {
                 // Kullanıcı dil seçmedi, uyarı göster
                 Toast.makeText(this, "Please select a language", Toast.LENGTH_SHORT).show()
             } else {
-                val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                sharedPreferences.edit().putBoolean("intro_deneme", true).apply()
+                // introya giriş sayısını artır
+                val newVisitCount = introVisitCount + 1
+                sharedPreferences.edit().putInt("intro_visit_count", newVisitCount).apply()
 
                 // Kullanıcının seçtiği dili alın
                 val selectedLanguage = when (selectedPosition) {
@@ -61,10 +67,13 @@ class IntroActivity : AppCompatActivity() {
                 // Dili ayarlayın
                 setLocale(selectedLanguage)
 
-                val intent = if (introSeen) {
-                    Intent(this, SettingsActivity::class.java)
-                } else {
+                // intro_seen değerini güncelle
+                sharedPreferences.edit().putBoolean("intro_seen", true).apply()
+
+                val intent = if (newVisitCount == 1) {
                     Intent(this, IntroUserNotificationSelectActivity::class.java)
+                } else {
+                    Intent(this, MainActivity::class.java)
                 }
                 intent.putExtra("language", selectedLanguage)
                 startActivity(intent)
@@ -73,6 +82,9 @@ class IntroActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
     private fun setLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)

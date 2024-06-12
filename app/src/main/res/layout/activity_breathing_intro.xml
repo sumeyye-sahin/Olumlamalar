@@ -6,27 +6,41 @@
     tools:context=".BreathingIntroActivity"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:background="@color/purple">
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/basliknfs"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="4-7-8 Nefes egzersizi neden önemlidir?"
-        ></TextView>
+        android:layout_marginTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/nefesintrotext"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginRight="-4dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/line_7"
+ />
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="20dp"
-
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp">
+        android:paddingBottom="20dp"
+        android:layout_marginBottom="-30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <TextView
             android:id="@+id/tvBreathingIntro"
@@ -34,39 +48,67 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/boldblack"
+            android:gravity="center"
             android:padding="20dp"
             android:text="@string/breathingIntro"
-            android:textColor="@color/white"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-40dp"
+        >
 
-    <Button
-        android:id="@+id/btnnext"
-        android:background="@drawable/boldblack"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Nefes Egzersizi Nasıl Yapılır?"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
-    <Button
-        android:id="@+id/btnContinue"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Başla buton"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
+        <ImageView
+            android:id="@+id/imageIconNext"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/introflower"
+            android:layout_marginBottom="-30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            />
+
+        <Button
+            android:id="@+id/btnnext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="70dp"
+            android:background="@drawable/buttonmain"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/nefesintrobuton"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            />
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/buttonmain"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginRight="70dp"
+            android:text="@string/nefesintrobuton"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+
+            />
+
+    </RelativeLayout>
 </LinearLayout>

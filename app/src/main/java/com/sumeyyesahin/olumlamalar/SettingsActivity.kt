@@ -50,9 +50,6 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.btnSaveSettings.setOnClickListener {
-            finish()
-        }
     }
 
     override fun onBackPressed() {

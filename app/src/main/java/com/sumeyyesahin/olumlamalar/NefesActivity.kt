@@ -1,6 +1,7 @@
 package com.sumeyyesahin.olumlamalar
 
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -33,6 +34,8 @@ class NefesActivity : AppCompatActivity() {
         btnend = findViewById(R.id.btnend)
         handler = Handler()
 
+        val lottieAnimationView = binding.lt
+
         btnStart.setOnClickListener {
             circleView.visibility = View.VISIBLE
             tvInstruction.visibility = View.INVISIBLE
@@ -43,6 +46,8 @@ class NefesActivity : AppCompatActivity() {
             startBreathingExercise(4)
         }
         btnend.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
     }
@@ -58,32 +63,39 @@ class NefesActivity : AppCompatActivity() {
 
             handler.postDelayed({
                 // Step 1: Breathe In
-                binding.talimat.text = "Nefes Al"
+                binding.talimat.text = getText(R.string.nefesAl)
                 animateCircle(0f, 1f, breatheInDuration, 4, 0)
             }, delay)
 
             handler.postDelayed({
                 // Step 2: Hold
-                binding.talimat.text = "Nefesini Tut"
+                binding.talimat.text = getText(R.string.nefesTut)
                 animateCircle(1f, 0f, holdDuration, 7, 1)
             }, delay + breatheInDuration)
 
             handler.postDelayed({
                 // Step 3: Breathe Out
-                binding.talimat.text = "Nefes Ver"
+                binding.talimat.text = getText(R.string.nefesVer)
                 animateCircle(0f, 1f, breatheOutDuration, 8, 2)
             }, delay + breatheInDuration + holdDuration)
 
             // Her tur tamamlandığında tamamlanan tur sayısını güncelle
             handler.postDelayed({
                 val completedRounds = i + 1
-                tvRoundCounter.text = "Tamamlanan Turlar: $completedRounds"
+                tvRoundCounter.text = getString(R.string.nefestext2) + " $completedRounds / $repeatCount"
             }, delay + totalCycleDuration)
         }
 
         // Döngü tamamlandıktan sonra mesajı göstermek ve aktiviteyi sonlandırmak için gecikme
         handler.postDelayed({
-            tvInstruction.text = "Egzersiziniz tamamlanmıştır."
+            tvInstruction.text = getString(R.string.breathing_exercise_complete)
+            val lottieAnimationView = binding.lt
+            lottieAnimationView.setAnimation("nefes.json")
+            lottieAnimationView.playAnimation()
+            lottieAnimationView.loop(true)
+            lottieAnimationView.visibility = View.VISIBLE
+
+
             tvInstruction.visibility = View.VISIBLE
             circleView.visibility = View.INVISIBLE
             btnStart.visibility = View.INVISIBLE
@@ -94,7 +106,7 @@ class NefesActivity : AppCompatActivity() {
             // 3 saniye sonra aktiviteyi sonlandır
             handler.postDelayed({
                 finish()
-            }, 3000)
+            }, 5000)
         }, repeatCount * totalCycleDuration)
     }
 

@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Handler
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -19,8 +20,6 @@ class NotificationReceiver : BroadcastReceiver() {
     companion object {
         const val CHANNEL_ID = "affirmation_notification_channel"
         const val CHANNEL_NAME = "Olumlama Bildirim Kanalı"
-        const val TRANSIENT_CHANNEL_ID = "affirmation_transient_notification_channel"
-        const val TRANSIENT_CHANNEL_NAME = "Olumlama Geçici Bildirim Kanalı"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -31,16 +30,15 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val dbHelper = DBHelper(context)
         val affirmation = dbHelper.getRandomAffirmationByCategory(localizedCategory, language)
-        sendPersistentNotification(context, localizedCategory, affirmation)
-        sendTransientNotification(context, localizedCategory, affirmation)
+        sendNotification(context, localizedCategory, affirmation)
     }
 
-    private fun sendPersistentNotification(context: Context, title: String, message: String) {
+    private fun sendNotification(context: Context, title: String, message: String) {
         createNotificationChannel(context, CHANNEL_ID, CHANNEL_NAME)
 
         val intent = Intent(context, ShowAffirmationActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            putExtra("affirmation_message", message) // Mesajı Intent'e ekleyin
+            putExtra("affirmation_message", message)
         }
         val pendingIntent = PendingIntent.getActivity(
             context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -49,47 +47,8 @@ class NotificationReceiver : BroadcastReceiver() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.favori_icon)
-            .setContentTitle(title) // Basit başlık
-            .setContentText(message) // Basit mesaj
-            .setAutoCancel(true)
-            .setSound(defaultSoundUri)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setContentIntent(pendingIntent)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-           // .setCustomContentView(getCompactRemoteView(context, title, message))
-            .setCustomBigContentView(getExpandedRemoteView(context, title, message))
-
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(context, "android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_GRANTED) {
-                notificationManager.notify(1, notificationBuilder.build())
-            } else {
-                // İzin yoksa burada ne yapılması gerektiğini belirtebilirsiniz
-                Toast.makeText(context, "Bildirim izni verilmemiş.", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            notificationManager.notify(1, notificationBuilder.build())
-        }
-    }
-
-    private fun sendTransientNotification(context: Context, title: String, message: String) {
-        createNotificationChannel(context, TRANSIENT_CHANNEL_ID, TRANSIENT_CHANNEL_NAME)
-
-        val intent = Intent(context, ShowAffirmationActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            putExtra("affirmation_message", message) // Mesajı Intent'e ekleyin
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(context, TRANSIENT_CHANNEL_ID)
-            .setSmallIcon(R.drawable.favori_icon)
-            .setContentTitle(title) // Basit başlık
-            .setContentText(message) // Basit mesaj
+            .setContentTitle(title)
+            .setContentText(message)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -98,12 +57,34 @@ class NotificationReceiver : BroadcastReceiver() {
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(getExpandedRemoteView(context, title, message))
             .setCustomBigContentView(getExpandedRemoteView(context, title, message))
-            .setTimeoutAfter(8000) // Bildirim ekranın üst kısmında 8 saniye boyunca görünecek
 
 
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(2, notificationBuilder.build())
+
+
+        // Bildirimi hemen göster
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, "android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_GRANTED) {
+                // 8 saniye sonra bildirimi güncelleyerek kalıcı hale getirme
+                Handler().postDelayed({
+                    notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW)
+                        .setSound(null)
+                    notificationManager.notify(1, notificationBuilder.build())
+                }, 8000)
+            } else {
+                Toast.makeText(context, "Bildirim izni verilmemiş.", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // 8 saniye sonra bildirimi güncelleyerek kalıcı hale getirme
+            Handler().postDelayed({
+                notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setSound(null)
+                notificationManager.notify(1, notificationBuilder.build())
+            }, 8000)
+        }
+
+
     }
 
     private fun createNotificationChannel(context: Context, channelId: String, channelName: String) {
@@ -132,7 +113,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val remoteView = RemoteViews(context.packageName, R.layout.custom_notification_layout)
         remoteView.setTextViewText(R.id.title, title)
         remoteView.setTextViewText(R.id.message, message)
-        remoteView.setImageViewResource(R.id.image, R.drawable.favori_icon) // Resmi ekleme
+        remoteView.setImageViewResource(R.id.image, R.drawable.favori_icon)
         return remoteView
     }
 

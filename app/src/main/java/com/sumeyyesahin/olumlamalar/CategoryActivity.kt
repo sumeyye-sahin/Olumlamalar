@@ -15,8 +15,8 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val language = getUserLanguage(this)
-        setUserLanguage(this, language)
+        val language = intent.getStringExtra("language") ?: getUserLanguage(this)
+        setLocale(language)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         val db = DBHelper(this)
 
@@ -47,5 +47,13 @@ class CategoryActivity : AppCompatActivity() {
     fun setUserLanguage(context: Context, language: String) {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPreferences.edit().putString("language", language).apply()
+    }
+
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }

@@ -47,6 +47,25 @@
     <string name="favorites">Favorites</string>
     <string name="add_buton">There is no affirmation yet. You can add an affirmation by clicking the + button.</string>
     <string name="breathingIntro">The 4-7-8 breathing technique was developed by Dr. Andrew Weil. \n\nThe aim of this technique is to reduce stress levels, improve heart health, and enhance sleep quality. \n\nThe physiological effects of the 4-7-8 breathing technique include a slower heart rate, reduced blood pressure, decreased cortisol (stress hormone) levels, and increased melatonin (sleep hormone) levels. This helps the body to relax and reduces stress.</string>
+    <string name="nefes2">Before starting the 4-7-8 breathing technique, let\'s see how it is done.\n\nSteps:\n1-Preparation: Sit or lie down in a comfortable position, place your tongue behind your upper teeth.\n2-Inhale: Silently inhale through your nose for 4 seconds.\n3-Hold: Hold your breath for 7 seconds.\n4-Exhale: Exhale audibly through your mouth for 8 seconds.\n\nThese steps should be repeated 4 times.\nPracticing twice a day (morning and evening) can be a good start.</string>
+    <string name="nefestext">4-7-8 Breathing Technique</string>
+    <string name="introLanguageSelect">Language Selection</string>
+    <string name="introLanguagetext">Please select a language</string>
+    <string name="introLanguagebutton">Save</string>
+    <string name="introBildirim">Notification Selection</string>
+    <string name="introBildirimbutton">Add</string>
+    <string name="introBildirimtext">Please select a category and time</string>
+    <string name="settings">Settings</string>
+    <string name="settingsbutton1">Select Language</string>
+    <string name="settingsbutton2">Configure Notifications</string>
+    <string name="settingstext">Category and Notification Times</string>
+    <string name="nefesintrotext">4-7-8 Breathing Technique:\n What Is It\n and Why Is It Important?</string>
+    <string name="nefesintrobuton">Next</string>
+    <string name="nefesAl">Inhale</string>
+    <string name="nefesTut">Hold Breath</string>
+    <string name="nefesVer">Exhale</string>
+    <string name="nefestext2">Completed Rounds </string>
+    <string name="breathing_exercise_complete">Your breathing exercise is complete.\nKeep taking good care of yourself.</string>
     <string-array name="categoriesNotification">
         <item>General Affirmations</item>
         <item>Body Affirmations</item>

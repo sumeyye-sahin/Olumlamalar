@@ -57,12 +57,18 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
                 val intent = Intent(context, FavoriesActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
+                if (context is CategoryActivity) {
+                    context.finish()
+                }
             }
         } else {
             holder.cardView.setOnClickListener {
                 val intent = Intent(context, AffirmationMainPageActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
+                if (context is CategoryActivity) {
+                    context.finish()
+                }
             }
         }
     }
