@@ -66,6 +66,8 @@
     <string name="nefesVer">Nefes Ver</string>
     <string name="nefestext2">Tamamlanan Turlar: </string>
     <string name="breathing_exercise_complete">Nefes egzersiziniz tamamlanmıştır.\n Kendinize iyi bakmaya devam edin.</string>
+    <string name="note_to_myself">Kendime Hatırlatma:</string>
+    <string name="okey">Tamam</string>
     <string-array name="categoriesNotification">
         <item>Genel Olumlamalar</item>
         <item>Beden Olumlamaları</item>

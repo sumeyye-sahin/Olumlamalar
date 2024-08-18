@@ -1,22 +1,23 @@
 package com.sumeyyesahin.olumlamalar
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.math.log
 
 class CategoryTimeAdapter(
-
     private val context: Context,
-    private val items: MutableList<Pair<String, Pair<Int, Int>>>,
+    private var items: MutableList<Pair<String, Pair<Int, Int>>>,
     private val language: String,
-    private var sharedPreferences: SharedPreferences,
-
+    private val sharedPreferences: SharedPreferences,
 ) : RecyclerView.Adapter<CategoryTimeAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,59 +34,53 @@ class CategoryTimeAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
+        val category = item.first
+        val time = item.second
+
         val currentLanguage = sharedPreferences.getString("language", "en") ?: "en"
-        holder.tvCategory.text = getLocalizedCategoryName(item.first, currentLanguage)
-        holder.tvTime.text = String.format("%02d:%02d", item.second.first, item.second.second)
+        holder.tvCategory.text = getLocalizedCategoryName(category, currentLanguage)
+        holder.tvTime.text = String.format("%02d:%02d", time.first, time.second)
 
         holder.btnDelete.setOnClickListener {
+            val itemToRemove = items[position]
             items.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, items.size)
-        }
-    }
+            removeItemFromSharedPreferences(itemToRemove)
 
+            // Bildirimi iptal et
+            NotificationReceiver.cancelNotification(context, itemToRemove.first, itemToRemove.second.first, itemToRemove.second.second)
+        }
+
+    }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
+    fun updateItems(newItems: List<Pair<String, Pair<Int, Int>>>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
 
-    private fun getLocalizedCategoryName(category: String, language: String): String {
-        return when (language) {
-            "tr" -> when (category) {
-                "General Affirmations" -> context.getString(R.string.general_affirmations)
-                "Body Affirmations" -> context.getString(R.string.body_affirmations)
-                "Faith Affirmations" -> context.getString(R.string.faith_affirmations)
-                "Tough Days Affirmations" -> context.getString(R.string.bad_days_affirmations)
-                "Love Affirmations" -> context.getString(R.string.love_affirmations)
-                "Self-Worth Affirmations" -> context.getString(R.string.self_value_affirmations)
-                "Stress and Anxiety Affirmations" -> context.getString(R.string.stress_affirmations)
-                "Positive Thought Affirmations" -> context.getString(R.string.positive_thought_affirmations)
-                "Success Affirmations" -> context.getString(R.string.success_affirmations)
-                "Personal Development Affirmations" -> context.getString(R.string.personal_development_affirmations)
-                "Time Management Affirmations" -> context.getString(R.string.time_management_affirmations)
-                "Relationship Affirmations" -> context.getString(R.string.relationship_affirmations)
-                "Prayer and Request" -> context.getString(R.string.prayer_affirmations)
-                else -> category
-            }
-            "en" -> when (category) {
-                "Genel Olumlamalar" -> context.getString(R.string.general_affirmations)
-                "Beden Olumlamaları" -> context.getString(R.string.body_affirmations)
-                "İnanç Olumlamaları" -> context.getString(R.string.faith_affirmations)
-                "Zor Günler Olumlamaları" -> context.getString(R.string.bad_days_affirmations)
-                "Sevgi ve Aşk Olumlamaları" -> context.getString(R.string.love_affirmations)
-                "Öz Değer Olumlamaları" -> context.getString(R.string.self_value_affirmations)
-                "Stres ve Kaygı Olumlamaları" -> context.getString(R.string.stress_affirmations)
-                "Pozitif Düşünce Olumlamaları" -> context.getString(R.string.positive_thought_affirmations)
-                "Başarı Olumlamaları" -> context.getString(R.string.success_affirmations)
-                "Kişisel Gelişim Olumlamaları" -> context.getString(R.string.personal_development_affirmations)
-                "Zaman Yönetimi Olumlamaları" -> context.getString(R.string.time_management_affirmations)
-                "İlişki Olumlamaları" ->context.getString(R.string.relationship_affirmations)
-                "Dua ve İstek" -> context.getString(R.string.prayer_affirmations)
-                else -> category
-            }
-            else -> category
+    private fun removeItemFromSharedPreferences(item: Pair<String, Pair<Int, Int>>) {
+        val serializedData = sharedPreferences.getString("categories_and_times", "")
+        Log.d("CategoryTimeAdapter", "Current serialized data: $serializedData")
+        if (!serializedData.isNullOrEmpty()) {
+            val items = serializedData.split(";").toMutableList()
+            val itemToRemove = "${item.first},${item.second.first},${item.second.second}"
+            items.remove(itemToRemove)
+            val updatedData = items.joinToString(";")
+            Log.d("CategoryTimeAdapter", "Updated data: $updatedData")
+            val editor = sharedPreferences.edit()
+            editor.putString("categories_and_times", updatedData)
+            editor.apply()
+            Log.d("CategoryTimeAdapter", "SharedPreferences updated")
         }
     }
 
+    private fun getLocalizedCategoryName(category: String, language: String): String {
+        return LocaleHelper.getLocalizedCategoryName(context, category, language)
+    }
 }

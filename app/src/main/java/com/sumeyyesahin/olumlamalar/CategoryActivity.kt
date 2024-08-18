@@ -15,6 +15,11 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // ActionBar'ı etkinleştirme
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
+
         val language = intent.getStringExtra("language") ?: getUserLanguage(this)
         setLocale(language)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
@@ -55,5 +60,14 @@ class CategoryActivity : AppCompatActivity() {
         val config = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // Ana sayfaya geri dön
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        return true
     }
 }

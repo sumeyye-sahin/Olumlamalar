@@ -2,14 +2,22 @@ package com.sumeyyesahin.olumlamalar
 
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.databinding.ActivityNefesBinding
+import kotlin.random.Random
 
 class NefesActivity : AppCompatActivity() {
     private lateinit var circleView: CircleView
@@ -20,12 +28,30 @@ class NefesActivity : AppCompatActivity() {
     private lateinit var btnend: Button
     private lateinit var binding: ActivityNefesBinding
     private val animators = mutableListOf<ValueAnimator>()
+    // Soft (Pastel) Renkler Dizisi
+    private val softColors = arrayOf(
+        Color.parseColor("#FFB3BA"),  // Light Pink
+        Color.parseColor("#FFDFBA"),  // Light Peach
+        Color.parseColor("#FFFFBA"),  // Light Yellow
+        Color.parseColor("#BAFFC9"),  // Light Mint Green
+        Color.parseColor("#BAE1FF"),  // Light Sky Blue
+        Color.parseColor("#D4A5A5"),  // Light Coral
+        Color.parseColor("#C1C1E1"),  // Light Lavender
+        Color.parseColor("#A7BED3")   // Soft Blue-Gray
+    )
 
+    // Eski renkleri saklamak için bir map
+    private val originalButtonColors = mutableMapOf<View, Int>()
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNefesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        // ActionBar'ı etkinleştirme
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = getString(R.string.nefestext)
+
 
         circleView = findViewById(R.id.circleView)
         btnStart = findViewById(R.id.btnStart)
@@ -37,6 +63,9 @@ class NefesActivity : AppCompatActivity() {
         val lottieAnimationView = binding.lt
 
         btnStart.setOnClickListener {
+            // Butonun arka plan rengini değiştir
+            changeButtonBackgroundColor(it)
+
             circleView.visibility = View.VISIBLE
             tvInstruction.visibility = View.INVISIBLE
             tvRoundCounter.visibility = View.VISIBLE
@@ -46,12 +75,20 @@ class NefesActivity : AppCompatActivity() {
             startBreathingExercise(4)
         }
         btnend.setOnClickListener {
+            changeButtonBackgroundColor(it)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
-
+    override fun onSupportNavigateUp(): Boolean {
+        // Ana sayfaya geri dön
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        return true
+    }
     private fun startBreathingExercise(repeatCount: Int) {
         val breatheInDuration = 4000L
         val holdDuration = 7000L
@@ -105,9 +142,14 @@ class NefesActivity : AppCompatActivity() {
 
             // 3 saniye sonra aktiviteyi sonlandır
             handler.postDelayed({
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
                 finish()
             }, 5000)
         }, repeatCount * totalCycleDuration)
+
+
     }
 
     private fun animateCircle(startProgress: Float, endProgress: Float, duration: Long, initialSeconds: Int, mode: Int) {
@@ -129,11 +171,55 @@ class NefesActivity : AppCompatActivity() {
         }
         animators.add(animator)
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun changeButtonBackgroundColor(button: View) {
+        // Rastgele bir soft renk seç
+        val randomColor = getRandomSoftColor()
+
+        // Button'un arka planı olarak kullanılan LayerDrawable'ı al
+        val background = button.background
+
+        if (background is LayerDrawable) {
+            for (i in 0 until background.numberOfLayers) {
+                val layer = background.getDrawable(i)
+                if (layer is GradientDrawable) {
+                    // Eğer button için eski rengi kaydetmediysek, kaydet
+                    if (!originalButtonColors.containsKey(button)) {
+                        originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
+                    }
+                    // Rengi değiştir
+                    layer.setColor(randomColor)
+
+                    // 1 saniye sonra eski rengi geri yükle
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        layer.setColor(originalButtonColors[button] ?: randomColor)
+                    }, 1000)
+                    return
+                }
+            }
+            Log.e("MainActivity", "GradientDrawable bulunamadı.")
+        } else {
+            Log.e("MainActivity", "LayerDrawable değil: ${background?.javaClass?.name}")
+        }
+    }
+
+    // Rastgele bir soft renk seçen fonksiyon
+    private fun getRandomSoftColor(): Int {
+        val randomIndex = Random.nextInt(softColors.size)
+        return softColors[randomIndex]
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         // Tüm animasyonları durdur
         animators.forEach { it.cancel() }
         handler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
 }

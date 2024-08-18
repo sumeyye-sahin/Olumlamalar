@@ -15,7 +15,9 @@ class BreathingIntroActivity : AppCompatActivity() {
         binding = ActivityBreathingIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        // ActionBar'ı etkinleştirme
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
 
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -41,6 +43,17 @@ class BreathingIntroActivity : AppCompatActivity() {
             binding.btnnext.visibility = View.GONE
             binding.btnContinue.visibility = View.VISIBLE
         }
+
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // Ana sayfaya geri dön
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        return true
     }
 }
 

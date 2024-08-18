@@ -1,6 +1,7 @@
 package com.sumeyyesahin.olumlamalar
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,12 @@ class FavoriesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // ActionBar'ı etkinleştirme
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
+
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val language = getUserLanguage(this)
 
@@ -45,6 +52,13 @@ class FavoriesActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val intent = Intent(this, CategoryActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
+
     fun getUserLanguage(context: Context): String {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("language", Locale.getDefault().language) ?: "en" // Varsayılan olarak İngilizce
@@ -53,5 +67,14 @@ class FavoriesActivity : AppCompatActivity() {
     fun setUserLanguage(context: Context, language: String) {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         sharedPreferences.edit().putString("language", language).apply()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // Ana sayfaya geri dön
+        val intent = Intent(this, CategoryActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        return true
     }
 }

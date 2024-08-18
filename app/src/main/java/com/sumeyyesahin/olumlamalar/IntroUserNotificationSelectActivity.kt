@@ -1,3 +1,4 @@
+// IntroUserNotificationSelectActivity.kt
 package com.sumeyyesahin.olumlamalar
 
 import android.Manifest
@@ -7,10 +8,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,81 +29,137 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sumeyyesahin.olumlamalar.databinding.ActivityIntroUserNotificationSelectBinding
 import java.util.Calendar
 import java.util.Locale
+import kotlin.random.Random
 
 class IntroUserNotificationSelectActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIntroUserNotificationSelectBinding
     private lateinit var sharedPreferences: SharedPreferences
     private val NOTIFICATION_PERMISSION_CODE = 100
-    private val categoriesAndTimes = mutableListOf<Pair<String, Pair<Int, Int>>>()
+    private val categoriesAndTimes = mutableMapOf<String, MutableList<Pair<Int, Int>>>()
     private lateinit var adapter: CategoryTimeAdapter
     private lateinit var dbHelper: DBHelper
+    private lateinit var spinnerLanguage: Spinner
+    // Soft (Pastel) Renkler Dizisi
+    private val softColors = arrayOf(
+        Color.parseColor("#FFB3BA"),  // Light Pink
+        Color.parseColor("#FFDFBA"),  // Light Peach
+        Color.parseColor("#FFFFBA"),  // Light Yellow
+        Color.parseColor("#BAFFC9"),  // Light Mint Green
+        Color.parseColor("#BAE1FF"),  // Light Sky Blue
+        Color.parseColor("#D4A5A5"),  // Light Coral
+        Color.parseColor("#C1C1E1"),  // Light Lavender
+        Color.parseColor("#A7BED3")   // Soft Blue-Gray
+    )
 
+    // Eski renkleri saklamak için bir map
+    private val originalButtonColors = mutableMapOf<View, Int>()
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIntroUserNotificationSelectBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // ActionBar'ı etkinleştirme
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
+
         sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         dbHelper = DBHelper(this)
         requestNotificationPermission()
-        // Seçilen dili uygulayın
+
         val selectedLanguage = intent.getStringExtra("language") ?: sharedPreferences.getString("language", "en")
         setLocale(selectedLanguage ?: "en")
 
-        // Kategori seçeneklerini Spinner'a ekle
         val categories = resources.getStringArray(R.array.categoriesNotification)
         val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCategories.adapter = categoryAdapter
 
         binding.recyclerViewCategoryTimes.layoutManager = LinearLayoutManager(this)
-        adapter = CategoryTimeAdapter(this, categoriesAndTimes, selectedLanguage ?: "en", sharedPreferences)
+        adapter = CategoryTimeAdapter(this, convertMapToList(categoriesAndTimes), selectedLanguage ?: "en", sharedPreferences)
         binding.recyclerViewCategoryTimes.adapter = adapter
 
         loadCategoriesAndTimes(selectedLanguage ?: "en")
 
         binding.btnAddTime.setOnClickListener {
+            changeButtonBackgroundColor(it)
+
             val category = binding.spinnerCategories.selectedItem.toString()
             val hour = binding.timePicker.hour
             val minute = binding.timePicker.minute
-            categoriesAndTimes.add(category to (hour to minute))
-            adapter.notifyDataSetChanged()
-        }
+            categoriesAndTimes.getOrPut(category) { mutableListOf() }.add(hour to minute)
+            adapter.updateItems(convertMapToList(categoriesAndTimes))
 
-        binding.btnSave.setOnClickListener {
-            // Save to SharedPreferences
             val editor = sharedPreferences.edit()
             editor.putString("categories_and_times", serializeCategoriesAndTimes(categoriesAndTimes))
             editor.putBoolean("notification_setup_done", true)
             editor.apply()
 
-            // Set alarms for all categories and times
-            for ((category, time) in categoriesAndTimes) {
-                setDailyNotification(time.first, time.second, category)
+            categoriesAndTimes.forEach { (category, times) ->
+                times.forEach { time ->
+                    setDailyNotification(time.first, time.second, category)
+                }
             }
 
             saveNotificationSettings(categoriesAndTimes)
-            // Bildirim izni iste
+        }
+
+        binding.btnSave.setOnClickListener {
+            changeButtonBackgroundColor(it)
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     showPermissionRationale()
                 } else {
-                    // notification_seen değerini güncelle
                     sharedPreferences.edit().putBoolean("notification_seen", true).apply()
-
-                    // MainActivity'ye geç
                     navigateToMainActivity()
+                    finish() //bu kısma bak
                 }
             } else {
-                // notification_seen değerini güncelle
                 sharedPreferences.edit().putBoolean("notification_seen", true).apply()
-
-                // MainActivity'ye geç
                 navigateToMainActivity()
+                finish() //bu kısma bak
             }
         }
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun changeButtonBackgroundColor(button: View) {
+        // Rastgele bir soft renk seç
+        val randomColor = getRandomSoftColor()
 
+        // Button'un arka planı olarak kullanılan LayerDrawable'ı al
+        val background = button.background
+
+        if (background is LayerDrawable) {
+            for (i in 0 until background.numberOfLayers) {
+                val layer = background.getDrawable(i)
+                if (layer is GradientDrawable) {
+                    // Eğer button için eski rengi kaydetmediysek, kaydet
+                    if (!originalButtonColors.containsKey(button)) {
+                        originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
+                    }
+                    // Rengi değiştir
+                    layer.setColor(randomColor)
+
+                    // 1 saniye sonra eski rengi geri yükle
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        layer.setColor(originalButtonColors[button] ?: randomColor)
+                    }, 1000)
+                    return
+                }
+            }
+            Log.e("MainActivity", "GradientDrawable bulunamadı.")
+        } else {
+            Log.e("MainActivity", "LayerDrawable değil: ${background?.javaClass?.name}")
+        }
+    }
+
+    // Rastgele bir soft renk seçen fonksiyon
+    private fun getRandomSoftColor(): Int {
+        val randomIndex = Random.nextInt(softColors.size)
+        return softColors[randomIndex]
+    }
     override fun onResume() {
         super.onResume()
 
@@ -102,9 +168,23 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         loadCategoriesAndTimes(currentLanguage ?: "en")
         adapter.notifyDataSetChanged()
     }
+
     override fun onBackPressed() {
-        finish()
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("intro_seen", true).apply()
+
+        if (sharedPreferences.getBoolean("intro_seen", false)) {
+            val currentLanguage = sharedPreferences.getString("language", "en")
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("language", currentLanguage)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
+
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -112,20 +192,22 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun setDailyNotification(hour: Int, minute: Int, category: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, NotificationReceiver::class.java).apply {
             putExtra("category", category)
         }
-        val pendingIntent = PendingIntent.getBroadcast(this, category.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val requestCode = (category.hashCode() + hour + minute)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
             if (before(Calendar.getInstance())) {
-                add(Calendar.DATE, 1) // Eğer alarm geçmişte ise, bir gün ekleyin
+                add(Calendar.DATE, 1)
             }
         }
 
@@ -145,7 +227,8 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveNotificationSettings(categoriesAndTimes: List<Pair<String, Pair<Int, Int>>>) {
+
+    private fun saveNotificationSettings(categoriesAndTimes: Map<String, List<Pair<Int, Int>>>) {
         val editor = sharedPreferences.edit()
         editor.putString("categories_and_times", serializeCategoriesAndTimes(categoriesAndTimes))
         editor.putBoolean("notification_setup_done", true)
@@ -153,21 +236,20 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
     }
 
     private fun loadCategoriesAndTimes(language: String) {
-        categoriesAndTimes.clear() // Önce listeyi temizleyin
+        categoriesAndTimes.clear()
         val serializedData = sharedPreferences.getString("categories_and_times", "")
         if (!serializedData.isNullOrEmpty()) {
             val items = serializedData.split(";")
             for (item in items) {
                 val parts = item.split(",")
                 if (parts.size == 3) {
-                    var category = parts[0]
+                    val category = getLocalizedCategoryName(this, parts[0], language)
                     val hour = parts[1].toInt()
                     val minute = parts[2].toInt()
-                    category = getLocalizedCategoryName(this, category, language)
-                    categoriesAndTimes.add(category to (hour to minute))
+                    categoriesAndTimes.getOrPut(category) { mutableListOf() }.add(hour to minute)
                 }
             }
-            adapter.notifyDataSetChanged()
+            adapter.updateItems(convertMapToList(categoriesAndTimes))
         }
     }
 
@@ -195,19 +277,23 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == NOTIFICATION_PERMISSION_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // İzin verildi
                 Toast.makeText(this, "Bildirim izni verildi", Toast.LENGTH_SHORT).show()
-                // notification_seen değerini güncelle
                 sharedPreferences.edit().putBoolean("notification_seen", true).apply()
-                // MainActivity'ye geç
                 navigateToMainActivity()
             } else {
-                // İzin reddedildi
                 Toast.makeText(this, "Bildirim izni reddedildi", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        // Ana sayfaya geri dön
+        val intent = Intent(this, SettingsActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        return true
+    }
     private fun navigateToMainActivity() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -225,8 +311,12 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
-    private fun serializeCategoriesAndTimes(data: List<Pair<String, Pair<Int, Int>>>): String {
-        return data.joinToString(";") { "${it.first},${it.second.first},${it.second.second}" }
+    private fun serializeCategoriesAndTimes(data: Map<String, List<Pair<Int, Int>>>): String {
+        return data.flatMap { entry ->
+            entry.value.map { time ->
+                "${entry.key},${time.first},${time.second}"
+            }
+        }.joinToString(";")
     }
 
     private fun updateCategoriesInSharedPreferences(language: String) {
@@ -292,4 +382,13 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
             else -> category
         }
     }
+
+    private fun convertMapToList(map: Map<String, List<Pair<Int, Int>>>): MutableList<Pair<String, Pair<Int, Int>>> {
+        return map.flatMap { (category, times) ->
+            times.map { time ->
+                category to time
+            }
+        }.toMutableList()
+    }
+
 }

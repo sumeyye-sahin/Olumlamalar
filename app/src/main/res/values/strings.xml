@@ -57,7 +57,7 @@
     <string name="introBildirimtext">Please select a category and time</string>
     <string name="settings">Settings</string>
     <string name="settingsbutton1">Select Language</string>
-    <string name="settingsbutton2">Configure Notifications</string>
+    <string name="settingsbutton2">Confıgure Notıfıcatıons</string>
     <string name="settingstext">Category and Notification Times</string>
     <string name="nefesintrotext">4-7-8 Breathing Technique:\n What Is It\n and Why Is It Important?</string>
     <string name="nefesintrobuton">Next</string>
@@ -66,6 +66,8 @@
     <string name="nefesVer">Exhale</string>
     <string name="nefestext2">Completed Rounds </string>
     <string name="breathing_exercise_complete">Your breathing exercise is complete.\nKeep taking good care of yourself.</string>
+    <string name="note_to_myself">Note to Myself:</string>
+    <string name="okey">OK</string>
     <string-array name="categoriesNotification">
         <item>General Affirmations</item>
         <item>Body Affirmations</item>

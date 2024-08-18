@@ -4,10 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.preference.PreferenceManager
 import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
 import org.json.JSONArray
-import java.util.Locale
 
 class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 

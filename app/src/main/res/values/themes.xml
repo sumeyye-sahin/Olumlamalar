@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.Olumlamalar" parent="AppTheme" />
+
+    <style name="IntroActivityTheme" parent="Theme.AppCompat.Light">
+        <!-- ActionBar özellikleri burada belirlenir -->
+
+    </style>
+
 </resources>
