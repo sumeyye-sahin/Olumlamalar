@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     // Eski renkleri saklamak için bir map
     private val originalButtonColors = mutableMapOf<View, Int>()
+    private var batteryOptimizationDialog: AlertDialog? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +66,6 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
 
-        checkBatteryOptimization()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -78,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        checkBatteryOptimization()
 
         binding.imageView2.setOnClickListener {
             // Resmi değiştir
@@ -169,24 +170,30 @@ class MainActivity : AppCompatActivity() {
             val packageName = packageName
             val pm = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-                AlertDialog.Builder(this)
-                    .setTitle("Battery Optimization")
-                    .setMessage("To ensure notifications are delivered on time, please disable battery optimization for this app.")
-                    .setPositiveButton("OK") { dialog, _ ->
-                        intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                        intent.data = android.net.Uri.parse("package:$packageName")
-                        startActivity(intent)
-                        dialog.dismiss()
+                Handler(Looper.getMainLooper()).post {
+                    if (!isFinishing && !isDestroyed) {
+                        batteryOptimizationDialog = AlertDialog.Builder(this)
+                            .setTitle("Battery Optimization")
+                            .setMessage("To ensure notifications are delivered on time, please disable battery optimization for this app.")
+                            .setPositiveButton("OK") { dialog, _ ->
+                                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                                intent.data = android.net.Uri.parse("package:$packageName")
+                                startActivity(intent)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Cancel") { dialog, _ ->
+                                Toast.makeText(
+                                    this,
+                                    "Battery optimization not disabled",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                dialog.dismiss()
+                            }
+                            .create()
+
+                        batteryOptimizationDialog?.show()
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        Toast.makeText(
-                            this,
-                            "Battery optimization not disabled",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        dialog.dismiss()
-                    }
-                    .show()
+                }
             }
         }
     }
@@ -213,5 +220,10 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("language", currentLanguage)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        batteryOptimizationDialog?.dismiss()
     }
 }

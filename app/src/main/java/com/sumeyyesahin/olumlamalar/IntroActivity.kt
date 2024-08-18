@@ -91,7 +91,7 @@ class IntroActivity : AppCompatActivity() {
                 supportActionBar?.show()
 
                 val intent = if (newVisitCount == 1) {
-                    Intent(this, IntroUserNotificationSelectActivity::class.java)
+                    Intent(this, MainActivity::class.java)
                 } else {
                     Intent(this, MainActivity::class.java)
                 }
