@@ -1,8 +1,9 @@
-// IntroUserNotificationSelectActivity.kt
 package com.sumeyyesahin.olumlamalar
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -122,7 +123,11 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
                 finish() //bu kısma bak
             }
         }
+
+        // Notification Channel Oluşturma
+        createNotificationChannel()
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
         // Rastgele bir soft renk seç
@@ -160,6 +165,7 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         val randomIndex = Random.nextInt(softColors.size)
         return softColors[randomIndex]
     }
+
     override fun onResume() {
         super.onResume()
 
@@ -192,6 +198,7 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun setDailyNotification(hour: Int, minute: Int, category: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, NotificationReceiver::class.java).apply {
@@ -226,7 +233,6 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
             )
         }
     }
-
 
     private fun saveNotificationSettings(categoriesAndTimes: Map<String, List<Pair<Int, Int>>>) {
         val editor = sharedPreferences.edit()
@@ -294,6 +300,7 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
         return true
     }
+
     private fun navigateToMainActivity() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -391,4 +398,20 @@ class IntroUserNotificationSelectActivity : AppCompatActivity() {
         }.toMutableList()
     }
 
+    // Bildirim Kanalı Oluşturma
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "daily_notification_channel"
+            val channelName = "Daily Notification"
+            val channelDescription = "Channel for daily notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+            }
+
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
 }

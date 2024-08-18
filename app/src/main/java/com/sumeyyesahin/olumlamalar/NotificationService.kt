@@ -29,9 +29,15 @@ class NotificationService : Service() {
                 val parts = item.split(",")
                 if (parts.size == 3) {
                     val category = parts[0]
-                    val hour = parts[1].toInt()
-                    val minute = parts[2].toInt()
-                    setDailyNotification(hour, minute, category)
+                    val hour = parts[1].toIntOrNull()
+                    val minute = parts[2].toIntOrNull()
+                    if (hour != null && minute != null) {
+                        setDailyNotification(hour, minute, category)
+                    } else {
+                        Log.e("NotificationService", "Invalid time format for $category: $item")
+                    }
+                } else {
+                    Log.e("NotificationService", "Invalid data format: $item")
                 }
             }
         }
@@ -57,10 +63,11 @@ class NotificationService : Service() {
         }
 
         Log.d("NotificationService", "Setting alarm for $category at $hour:$minute")
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 
     private fun getRequestCode(category: String, hour: Int, minute: Int): Int {
+        // Benzersiz bir requestCode için kategori, saat ve dakikayı hash ile dönüştürüyoruz
         return "$category,$hour,$minute".hashCode()
     }
 }

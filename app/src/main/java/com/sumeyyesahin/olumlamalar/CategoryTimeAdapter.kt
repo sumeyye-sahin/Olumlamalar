@@ -1,9 +1,6 @@
 package com.sumeyyesahin.olumlamalar
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,13 +42,11 @@ class CategoryTimeAdapter(
             val itemToRemove = items[position]
             items.removeAt(position)
             notifyItemRemoved(position)
-            notifyItemRangeChanged(position, items.size)
             removeItemFromSharedPreferences(itemToRemove)
 
             // Bildirimi iptal et
             NotificationReceiver.cancelNotification(context, itemToRemove.first, itemToRemove.second.first, itemToRemove.second.second)
         }
-
     }
 
     override fun getItemCount(): Int {

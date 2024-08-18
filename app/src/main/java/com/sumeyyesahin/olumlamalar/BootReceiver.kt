@@ -3,6 +3,7 @@ package com.sumeyyesahin.olumlamalar
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 
 class BootReceiver : BroadcastReceiver() {
@@ -26,7 +27,6 @@ class BootReceiver : BroadcastReceiver() {
 
     private fun updateCategoriesInSharedPreferences(context: Context, language: String) {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
         val serializedData = sharedPreferences.getString("categories_and_times", "")
         if (!serializedData.isNullOrEmpty()) {
             val updatedItems = serializedData.split(";").map { item ->
@@ -41,9 +41,11 @@ class BootReceiver : BroadcastReceiver() {
                     item
                 }
             }.joinToString(";")
-            editor.putString("categories_and_times", updatedItems)
+            with(sharedPreferences.edit()) {
+                putString("categories_and_times", updatedItems)
+                commit()  // apply() yerine commit() kullanarak hataları kontrol edin
+            }
         }
-        editor.apply()
     }
 
     private fun deserializeCategoriesAndTimes(data: String): Map<String, List<Pair<Int, Int>>> {
@@ -57,7 +59,11 @@ class BootReceiver : BroadcastReceiver() {
                 val minute = parts[2].toIntOrNull()
                 if (hour != null && minute != null) {
                     categoriesAndTimes.getOrPut(category) { mutableListOf() }.add(hour to minute)
+                } else {
+                    Log.e("BootReceiver", "Invalid time format in $item")
                 }
+            } else {
+                Log.e("BootReceiver", "Invalid data format in $item")
             }
         }
         return categoriesAndTimes

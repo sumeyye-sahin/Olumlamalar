@@ -1,14 +1,10 @@
 package com.sumeyyesahin.olumlamalar
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Handler
@@ -65,7 +61,7 @@ class NotificationReceiver : BroadcastReceiver() {
             val intent = Intent(context, NotificationReceiver::class.java).apply {
                 putExtra("category", category)
             }
-            val requestCode = (category.hashCode() + hour + minute)
+            val requestCode = getRequestCode(category, hour, minute)
             val pendingIntent = PendingIntent.getBroadcast(
                 context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -77,11 +73,9 @@ class NotificationReceiver : BroadcastReceiver() {
             Log.d("NotificationCancel", "Notification cancelled for $category at $hour:$minute with requestCode $requestCode")
         }
 
-
         private fun getRequestCode(category: String, hour: Int, minute: Int): Int {
             return "$category,$hour,$minute".hashCode()
         }
-
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -115,7 +109,7 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.favori_icon)  // Küçük ikon
+            .setSmallIcon(R.drawable.favori_icon)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
@@ -129,22 +123,13 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(context, "android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_GRANTED) {
-                Handler().postDelayed({
-                    notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW)
-                        .setSound(null)
-                    notificationManager.notify(1, notificationBuilder.build())
-                }, 8000)
-            } else {
-                Toast.makeText(context, "Bildirim izni verilmemiş.", Toast.LENGTH_SHORT).show()
-            }
+        // Sadece izin verilmişse bildirimi göster
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(context, "android.permission.POST_NOTIFICATIONS") != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, "Bildirim izni verilmemiş.", Toast.LENGTH_SHORT).show()
         } else {
             Handler().postDelayed({
-                notificationBuilder.setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setSound(null)
                 notificationManager.notify(1, notificationBuilder.build())
-            }, 8000)
+            }, 8000)  // 8 saniye gecikmeli gönderim
         }
     }
 
@@ -170,5 +155,4 @@ class NotificationReceiver : BroadcastReceiver() {
         remoteView.setImageViewResource(R.id.image, R.drawable.favori_icon)
         return remoteView
     }
-
 }
