@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         dbHelper.readableDatabase
 
         binding.buttonnefes.setOnClickListener {
-            changeButtonBackgroundColor(it)
+            Constants.changeButtonBackgroundColor(it)
             val breathingIntroSeen = sharedPreferences.getBoolean("breathing_intro_seen", false)
 
             if (breathingIntroSeen) {
@@ -117,14 +117,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonSettings.setOnClickListener {
-            changeButtonBackgroundColor(it)
+            Constants.changeButtonBackgroundColor(it)
             val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         binding.buttonkategori.setOnClickListener {
-            changeButtonBackgroundColor(it)
+            Constants.changeButtonBackgroundColor(it)
             val intent = Intent(this, CategoryActivity::class.java)
             intent.putExtra("language", currentLanguage)
             startActivity(intent)
@@ -134,35 +134,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun changeButtonBackgroundColor(button: View) {
-
-        val randomColor = Constants.getRandomSoftColor(this)
-
-        val background = button.background
-
-        if (background is LayerDrawable) {
-            for (i in 0 until background.numberOfLayers) {
-                val layer = background.getDrawable(i)
-                if (layer is GradientDrawable) {
-
-                    if (!originalButtonColors.containsKey(button)) {
-                        originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
-                    }
-                    layer.setColor(randomColor)
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        layer.setColor(originalButtonColors[button] ?: randomColor)
-                    }, 1000)
-                    return
-                }
-            }
-            Log.e("MainActivity", "GradientDrawable bulunamadı.")
-        } else {
-            Log.e("MainActivity", "LayerDrawable değil: ${background?.javaClass?.name}")
-        }
-    }
 
 
     private fun requestPermissions() {

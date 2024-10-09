@@ -23,16 +23,12 @@ import com.sumeyyesahin.olumlamalar.views.CircleView
 import kotlin.random.Random
 
 class NefesActivity : AppCompatActivity() {
-    private lateinit var circleView: CircleView
-    private lateinit var btnStart: Button
-    private lateinit var tvInstruction: TextView
-    private lateinit var tvRoundCounter: TextView
+
     private lateinit var handler: Handler
     private lateinit var btnend: Button
     private lateinit var binding: ActivityNefesBinding
     private val animators = mutableListOf<ValueAnimator>()
-
-    private val originalButtonColors = mutableMapOf<View, Int>()
+    
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,28 +40,24 @@ class NefesActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.nefestext)
 
 
-        circleView = findViewById(R.id.circleView)
-        btnStart = findViewById(R.id.btnStart)
-        tvInstruction = findViewById(R.id.tvInstruction)
-        tvRoundCounter = findViewById(R.id.tvRoundCounter)
         btnend = findViewById(R.id.btnend)
         handler = Handler()
 
         val lottieAnimationView = binding.lt
 
-        btnStart.setOnClickListener {
-            changeButtonBackgroundColor(it)
+        binding.btnStart.setOnClickListener {
+            Constants.changeButtonBackgroundColor(it)
 
-            circleView.visibility = View.VISIBLE
-            tvInstruction.visibility = View.INVISIBLE
-            tvRoundCounter.visibility = View.VISIBLE
-            btnStart.visibility = View.GONE
+            binding.circleView.visibility = View.VISIBLE
+            binding.tvInstruction.visibility = View.INVISIBLE
+            binding.tvRoundCounter.visibility = View.VISIBLE
+            binding.btnStart.visibility = View.GONE
             btnend.visibility = View.VISIBLE
             binding.talimat.visibility = View.VISIBLE
             startBreathingExercise(4)
         }
         btnend.setOnClickListener {
-            changeButtonBackgroundColor(it)
+            Constants.changeButtonBackgroundColor(it)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -104,13 +96,13 @@ class NefesActivity : AppCompatActivity() {
 
             handler.postDelayed({
                 val completedRounds = i + 1
-                tvRoundCounter.text = getString(R.string.nefestext2) + " $completedRounds / $repeatCount"
+                binding.tvRoundCounter.text = getString(R.string.nefestext2) + " $completedRounds / $repeatCount"
             }, delay + totalCycleDuration)
         }
 
 
         handler.postDelayed({
-            tvInstruction.text = getString(R.string.breathing_exercise_complete)
+            binding.tvInstruction.text = getString(R.string.breathing_exercise_complete)
             val lottieAnimationView = binding.lt
             lottieAnimationView.setAnimation("nefes.json")
             lottieAnimationView.playAnimation()
@@ -118,10 +110,10 @@ class NefesActivity : AppCompatActivity() {
             lottieAnimationView.visibility = View.VISIBLE
 
 
-            tvInstruction.visibility = View.VISIBLE
-            circleView.visibility = View.INVISIBLE
-            btnStart.visibility = View.INVISIBLE
-            tvRoundCounter.visibility = View.INVISIBLE
+            binding.tvInstruction.visibility = View.VISIBLE
+            binding.circleView.visibility = View.INVISIBLE
+            binding.btnStart.visibility = View.INVISIBLE
+            binding.tvRoundCounter.visibility = View.INVISIBLE
             binding.talimat.visibility = View.INVISIBLE
             btnend.visibility = View.VISIBLE
 
@@ -141,48 +133,20 @@ class NefesActivity : AppCompatActivity() {
             this.duration = duration
             addUpdateListener { animation ->
                 val progress = animation.animatedValue as Float
-                circleView.setProgress(progress, mode)
+                binding.circleView.setProgress(progress, mode)
 
                 val remainingTime = if (startProgress < endProgress) {
                     initialSeconds - (initialSeconds * progress).toInt()
                 } else {
                     initialSeconds - (initialSeconds * (1 - progress)).toInt()
                 }
-                circleView.setTimerText(remainingTime.toString())
+                binding.circleView.setTimerText(remainingTime.toString())
             }
             start()
         }
         animators.add(animator)
     }
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun changeButtonBackgroundColor(button: View) {
 
-        val randomColor = Constants.getRandomSoftColor(this)
-
-        val background = button.background
-
-        if (background is LayerDrawable) {
-            for (i in 0 until background.numberOfLayers) {
-                val layer = background.getDrawable(i)
-                if (layer is GradientDrawable) {
-
-                    if (!originalButtonColors.containsKey(button)) {
-                        originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
-                    }
-
-                    layer.setColor(randomColor)
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        layer.setColor(originalButtonColors[button] ?: randomColor)
-                    }, 1000)
-                    return
-                }
-            }
-            Log.e("MainActivity", "GradientDrawable bulunamadı.")
-        } else {
-            Log.e("MainActivity", "LayerDrawable değil: ${background?.javaClass?.name}")
-        }
-    }
 
     override fun onDestroy() {
         super.onDestroy()

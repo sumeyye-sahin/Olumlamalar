@@ -146,17 +146,6 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         db.close()
     }
 
-    fun getAffirmationCountByCategoryAndLanguage(category: String, language: String): Int {
-        val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT COUNT(*) FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? AND $COLUMN_LANGUAGE = ?", arrayOf(category, language))
-        var count = 0
-        cursor.use {
-            if (it.moveToFirst()) {
-                count = it.getInt(0)
-            }
-        }
-        return count
-    }
 
     fun updateAffirmationFavStatus(affirmation: OlumlamalarListModel) {
         val db = this.writableDatabase

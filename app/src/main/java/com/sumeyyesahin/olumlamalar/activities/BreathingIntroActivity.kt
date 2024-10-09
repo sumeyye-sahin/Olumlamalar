@@ -21,8 +21,7 @@ class BreathingIntroActivity : AppCompatActivity() {
 
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        val btnContinue = findViewById<Button>(R.id.btnContinue)
-        btnContinue.setOnClickListener {
+        binding.btnContinue.setOnClickListener {
 
             val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("breathing_intro_seen", true).apply()
@@ -32,7 +31,7 @@ class BreathingIntroActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
 
-            btnContinue.visibility = View.GONE
+            binding.btnContinue.visibility = View.GONE
             binding.btnnext.visibility = View.VISIBLE
         }
 

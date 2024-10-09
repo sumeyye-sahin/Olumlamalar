@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.R
+import com.sumeyyesahin.olumlamalar.databinding.ActivityIntroBinding
 import com.sumeyyesahin.olumlamalar.utils.Constants
 import java.util.Locale
 import kotlin.random.Random
@@ -25,12 +26,15 @@ import kotlin.random.Random
 class IntroActivity : AppCompatActivity() {
 
     private lateinit var spinnerLanguage: Spinner
-
-    private val originalButtonColors = mutableMapOf<View, Int>()
+    private lateinit var binding: ActivityIntroBinding
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        spinnerLanguage = binding.spinnerLanguage
 
         applyLocale()
 
@@ -58,11 +62,13 @@ class IntroActivity : AppCompatActivity() {
         val languages = resources.getStringArray(R.array.languagesSelect)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         spinnerLanguage.adapter = adapter
         spinnerLanguage.setSelection(0)
 
         btnContinue.setOnClickListener {
-            changeButtonBackgroundColor(it)
+            Log.d("ButtonClick", "Butona tıklandı!")
+            Constants.changeButtonBackgroundColor(it)
             val selectedPosition = spinnerLanguage.selectedItemPosition
             if (selectedPosition == 0) {
                 Toast.makeText(this, "Please select a language", Toast.LENGTH_SHORT).show()
@@ -118,31 +124,6 @@ class IntroActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
         return true
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun changeButtonBackgroundColor(button: View) {
-        val randomColor = Constants.getRandomSoftColor(this)
-        val background = button.background
-
-        if (background is LayerDrawable) {
-            for (i in 0 until background.numberOfLayers) {
-                val layer = background.getDrawable(i)
-                if (layer is GradientDrawable) {
-                    if (!originalButtonColors.containsKey(button)) {
-                        originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
-                    }
-                    layer.setColor(randomColor)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        layer.setColor(originalButtonColors[button] ?: randomColor)
-                    }, 1000)
-                    return
-                }
-            }
-            Log.e("MainActivity", "GradientDrawable bulunamadı.")
-        } else {
-            Log.e("MainActivity", "LayerDrawable değil: ${background?.javaClass?.name}")
-        }
     }
 
 

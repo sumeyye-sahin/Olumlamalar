@@ -21,39 +21,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Olumlamalar"
         tools:targetApi="31">
+
+        <activity
+            android:name=".activities.IntroActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/IntroActivityTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
         <activity
             android:name=".activities.FirstDescriptionPage"
-            android:exported="false"
-            android:configChanges="locale|layoutDirection"
+            android:exported="true"
             android:screenOrientation="portrait"
             />
         <activity
             android:name=".activities.ShowAffirmationActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:exported="false"
-            android:parentActivityName=".activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/IntroActivityTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activities.IntroUserNotificationSelectActivity"
             android:exported="true"
-            android:parentActivityName=".activities.SettingsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/IntroActivityTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.SettingsActivity" />
-        </activity>
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activities.BreathingIntroActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/IntroActivityTheme">
@@ -61,19 +51,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-        <activity
-            android:name=".activities.IntroActivity"
-            android:exported="false"
-            android:parentActivityName=".activities.SettingsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/IntroActivityTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
+
         <activity
             android:name=".activities.NefesActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/IntroActivityTheme">
@@ -83,7 +64,7 @@
         </activity>
         <activity
             android:name=".activities.AddAffirmationActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SplashScreenActivity"
@@ -98,7 +79,7 @@
 
         <activity
             android:name=".activities.FavoriesActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".activities.CategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/IntroActivityTheme">
@@ -108,7 +89,7 @@
         </activity>
         <activity
             android:name=".activities.CategoryActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/IntroActivityTheme">

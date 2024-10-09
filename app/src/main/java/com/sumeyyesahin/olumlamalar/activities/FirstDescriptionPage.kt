@@ -14,16 +14,12 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper
-import com.sumeyyesahin.olumlamalar.services.NotificationWorker
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFirstDescriptionPageBinding
 import com.sumeyyesahin.olumlamalar.utils.Constants
-import java.util.Calendar
 import java.util.Locale
-import kotlin.random.Random
+
 
 class FirstDescriptionPage : AppCompatActivity() {
     private lateinit var binding: ActivityFirstDescriptionPageBinding
@@ -53,11 +49,11 @@ class FirstDescriptionPage : AppCompatActivity() {
         supportActionBar?.title = ""
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        val btnContinue = findViewById<Button>(R.id.btnCnt)
 
+        btnContinue.setOnClickListener {
 
-        binding.btnContinue.setOnClickListener {
-
-            changeButtonBackgroundColor(it)
+            Constants.changeButtonBackgroundColor(it)
             editor.putBoolean("first_description_seen", true)
             editor.apply()
 
@@ -76,28 +72,6 @@ class FirstDescriptionPage : AppCompatActivity() {
     private fun applySystemLocale() {
         val languageCode = Locale.getDefault().language
         setLocale(languageCode)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun changeButtonBackgroundColor(button: View) {
-        val randomColor = Constants.getRandomSoftColor(this)
-        val background = button.background
-
-        if (background is LayerDrawable) {
-            for (i in 0 until background.numberOfLayers) {
-                val layer = background.getDrawable(i)
-                if (layer is GradientDrawable) {
-                    if (!originalButtonColors.containsKey(button)) {
-                        originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
-                    }
-                    layer.setColor(randomColor)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        layer.setColor(originalButtonColors[button] ?: randomColor)
-                    }, 1000)
-                    return
-                }
-            }
-        }
     }
 
 

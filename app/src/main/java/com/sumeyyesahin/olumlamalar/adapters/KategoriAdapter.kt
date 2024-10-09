@@ -12,19 +12,19 @@ import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.activities.AffirmationMainPageActivity
 import com.sumeyyesahin.olumlamalar.activities.CategoryActivity
 import com.sumeyyesahin.olumlamalar.activities.FavoriesActivity
+import com.sumeyyesahin.olumlamalar.databinding.CategoryItemBinding
+import com.sumeyyesahin.olumlamalar.databinding.FavoriItemBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 
 class KategoriAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
 
-    inner class KategoriViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textViewKategoriAdi: TextView = itemView.findViewById(R.id.tvCategoryLabel)
-        val imageViewKategoriFoto: ImageView = itemView.findViewById(R.id.ivCategoryIcon)
-        val cardView: View = itemView.findViewById(R.id.touchcard)
+    inner class KategoriViewHolder(public val binding: CategoryItemBinding) : RecyclerView.ViewHolder(binding.root){
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KategoriViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.category_item, parent, false)
-        return KategoriViewHolder(itemView)
+        return KategoriViewHolder(CategoryItemBinding.bind(itemView))
     }
 
     override fun onBindViewHolder(holder: KategoriViewHolder, position: Int) {
@@ -50,13 +50,13 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
             else -> currentKategori
         }
 
-        holder.textViewKategoriAdi.text = displayedKategori
+        holder.binding.tvCategoryLabel.text = displayedKategori
         val drawableResourceId = getDrawableResourceId(context, currentKategori)
-        holder.imageViewKategoriFoto.setImageResource(drawableResourceId)
+        holder.binding.ivCategoryIcon.setImageResource(drawableResourceId)
 
         if (currentKategori == context.getString(R.string.favorite_affirmations)) {
-            holder.cardView.setOnClickListener {
-                holder.cardView.alpha = 0.5f
+            holder.binding.touchcard.setOnClickListener {
+                holder.binding.touchcard.alpha = 0.5f
                 val intent = Intent(context, FavoriesActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
@@ -65,8 +65,8 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
                 }
             }
         } else {
-            holder.cardView.setOnClickListener {
-                holder.cardView.alpha = 0.5f
+            holder.binding.touchcard.setOnClickListener {
+                holder.binding.touchcard.alpha = 0.5f
                 val intent = Intent(context, AffirmationMainPageActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
@@ -77,11 +77,6 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
         }
     }
 
-    private fun isCategoryEmpty(context: Context, kategori: String): Boolean {
-        val dbHelper = DBHelper(context)
-        val count = dbHelper.getAffirmationCountByCategoryAndLanguage(kategori, userLanguage)
-        return count == 0
-    }
 
     override fun getItemCount() = kategoriListesi.size
 

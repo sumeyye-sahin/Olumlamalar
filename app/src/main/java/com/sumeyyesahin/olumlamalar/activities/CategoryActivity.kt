@@ -25,14 +25,13 @@ class CategoryActivity : AppCompatActivity() {
 
         val language = intent.getStringExtra("language") ?: getUserLanguage(this)
         setLocale(language)
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         val db = DBHelper(this)
 
         val kategoriListesi = db.getAllCategoriesByLanguage(language)
         val adapter = KategoriAdapter(kategoriListesi, language) // language parametresini geçiriyoruz
-        recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
     }
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
