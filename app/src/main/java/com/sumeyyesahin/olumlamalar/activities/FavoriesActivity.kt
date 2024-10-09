@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sumeyyesahin.olumlamalar.adapters.FavoriAdapter
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFavoriesBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
-import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
+import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
 import java.util.Locale
 
 class FavoriesActivity : AppCompatActivity() {
     private lateinit var favoritesAdapter: FavoriAdapter
-    private lateinit var favoriteAffirmations: List<Olumlamalarlistmodel>
+    private lateinit var favoriteAffirmations: List<OlumlamalarListModel>
     private lateinit var binding: ActivityFavoriesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

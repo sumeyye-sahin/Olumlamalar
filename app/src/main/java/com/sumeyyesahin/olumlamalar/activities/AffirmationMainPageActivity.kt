@@ -15,13 +15,13 @@ import androidx.core.content.FileProvider
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
-import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
+import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Locale
 
 class AffirmationMainPageActivity : AppCompatActivity() {
-    private lateinit var olumlamalar: List<Olumlamalarlistmodel>
+    private lateinit var olumlamalar: List<OlumlamalarListModel>
     private lateinit var binding: ActivityAffirmationMainPageBinding
     private val PREFS_NAME = "MyPrefs"
     private var currentIndex = 0

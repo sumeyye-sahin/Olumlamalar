@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
-import com.sumeyyesahin.olumlamalar.model.Olumlamalarlistmodel
+import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
 
-class FavoriAdapter(private var favoriteAffirmations: List<Olumlamalarlistmodel>, private val userLanguage: String) :
+class FavoriAdapter(private var favoriteAffirmations: List<OlumlamalarListModel>, private val userLanguage: String) :
     RecyclerView.Adapter<FavoriAdapter.FavoriteViewHolder>() {
 
     inner class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,7 +28,7 @@ class FavoriAdapter(private var favoriteAffirmations: List<Olumlamalarlistmodel>
             }
         }
 
-        private fun showDeleteConfirmationDialog(clickedAffirmation: Olumlamalarlistmodel) {
+        private fun showDeleteConfirmationDialog(clickedAffirmation: OlumlamalarListModel) {
             val builder = AlertDialog.Builder(itemView.context)
             builder.apply {
                 setTitle(R.string.favories_not_title)
@@ -45,7 +45,7 @@ class FavoriAdapter(private var favoriteAffirmations: List<Olumlamalarlistmodel>
             dialog.show()
         }
 
-        private fun deleteAffirmations(clickedAffirmation: Olumlamalarlistmodel) {
+        private fun deleteAffirmations(clickedAffirmation: OlumlamalarListModel) {
             clickedAffirmation.favorite = false
             DBHelper(itemView.context).updateAffirmationFavStatus(clickedAffirmation)
             favoriteAffirmations = favoriteAffirmations.filterNot { it.affirmation == clickedAffirmation.affirmation && it.language == clickedAffirmation.language }
