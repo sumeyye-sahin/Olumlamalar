@@ -13,7 +13,7 @@
     <string name="breathing_instruction">Hadi başlayalım.\nBu süreçte nefesini dinlemen çok önemli..</string>
     <string name="start_button">Başla</string>
     <string name="end_button">Sonlandır</string>
-    <string name="completed_rounds">Tamamlanan Turlar: 0</string>
+    <string name="completed_rounds">Tamamlanan Turlar: 0/4</string>
     <string name="initial_image_description">Başlangıç Görüntüsü</string>
     <string name="toast_empty_affirmation">Lütfen olumlama metnini girin</string>
     <string name="favorite_affirmations">Favori Olumlamalarım</string>
@@ -46,8 +46,8 @@
     <string name="prayer">Dua ve İstek</string>
     <string name="favorites">Favorilerim</string>
     <string name="add_buton">Henüz olumlama bulunmamaktadır. + butonuna tıklayarak olumlama ekleyebilirsiniz.</string>
-    <string name="breathingIntro">4-7-8 nefes tekniği, Dr. Andrew Weil tarafından geliştirilmiştir. \n\nBu tekniğin amacı; stres seviyesini azaltmak, kalp sağlığını geliştirmek ve uyku kalitesini artırmaktır. \n\n4-7-8 nefes tekniğinin fizyolojik etkileri;  Kalp atış hızında yavaşlama, kan basıncının düşmesi,  kortizol (stres hormonu) seviyesinin düşmesi ve melatonin (uyku hormonu) seviyesinin artmasıdır. Bu sayede vücut rahatlar ve stresi azaltır.</string>
-    <string name="nefes2">4-7-8 nefes tekniğine başlamadan önce nasıl uygulandığına bakalım.\n\nAdımlar:\n1-Hazırlık: Rahat bir pozisyonda oturun veya uzanın, dilinizi üst dişlerinizin arkasına yerleştirin.\n2-Nefes Alma: Burnunuzdan 4 saniye boyunca sessizce nefes alın.\n3-Nefes Tutma: Nefesinizi 7 saniye boyunca tutun.\n4-Nefes Verme: Ağızdan 8 saniye boyunca sesli bir şekilde nefes verin.\n\nBu adımlar 4 defa tekrarlanmalı.\nGünde iki kez (sabah ve akşam) pratik yapmak iyi bir başlangıç olabilir.</string>
+    <string name="breathingIntro">4-7-8 nefes tekniği, Dr. Andrew Weil tarafından geliştirilmiştir. \n\nBu tekniğin amacı; stres seviyesini azaltmak, \nkalp sağlığını geliştirmek ve uyku kalitesini artırmaktır. \n\n4-7-8 nefes tekniğinin fizyolojik etkileri;  Kalp atış hızında yavaşlama, \nkan basıncının düşmesi,  \nkortizol (stres hormonu) seviyesinin düşmesi ve \nmelatonin (uyku hormonu) seviyesinin artmasıdır. \n\nBu sayede vücut rahatlar ve stresi azaltır.</string>
+    <string name="nefes2">4-7-8 nefes tekniğine başlamadan önce nasıl uygulandığına bakalım.\n\nAdımlar:\n\n1-Hazırlık: Rahat bir pozisyonda oturun veya uzanın, dilinizi üst dişlerinizin arkasına yerleştirin.\n\n2-Nefes Alma: Burnunuzdan 4 saniye boyunca sessizce nefes alın.\n\n3-Nefes Tutma: Nefesinizi 7 saniye boyunca tutun.\n\n4-Nefes Verme: Ağızdan 8 saniye boyunca sesli bir şekilde nefes verin.\n\nBu adımlar 4 defa tekrarlanmalı.\n\nGünde iki kez (sabah ve akşam) pratik yapmak iyi bir başlangıç olabilir.</string>
     <string name="nefestext">4-7-8 Nefes Tekniği</string>
     <string name="introLanguageSelect">Dil Seçimi</string>
     <string name="introLanguagetext">Lütfen dil seçiniz</string>
@@ -68,6 +68,13 @@
     <string name="breathing_exercise_complete">Nefes egzersiziniz tamamlanmıştır.\n Kendinize iyi bakmaya devam edin.</string>
     <string name="note_to_myself">Kendime Hatırlatma:</string>
     <string name="okey">Tamam</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="splash">Daima hatırla, küçük bir düşünce değişikliği büyük farklar yaratır.</string>
+    <string name="favories_not_title">Olumlamayı Favorilerden Sil</string>
+    <string name="favories_not">Bu olumlamayı favorilerden silmek istediğinizden emin misiniz?</string>
+    <string name="first_page_main_title">Hoş geldin! \nSana iyi gelecek ve harika hissettirecek bir başlangıç yapıyorsun.</string>
+    <string name="first_page_main_text">Kendini daha iyi hissetmek ve hayatına pozitif bir dokunuş katmak ister misin? \nUygulamadaki her gün sunulan olumlamalarla, zihnini ve ruhunu besleyebilirsin. \n\nUnutma, küçük bir düşünce değişikliği bile büyük farklar yaratabilir. \nHaydi, şimdi kendin için güzel bir adım at!</string>
     <string-array name="categoriesNotification">
         <item>Genel Olumlamalar</item>
         <item>Beden Olumlamaları</item>

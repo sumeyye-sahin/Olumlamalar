@@ -13,7 +13,7 @@
     <string name="breathing_instruction">Let\'s get started.\nIt\'s very important to listen to your breath during this process..</string>
     <string name="start_button">Start</string>
     <string name="end_button">End</string>
-    <string name="completed_rounds">Completed Rounds: 0</string>
+    <string name="completed_rounds">Completed Rounds: 0/4</string>
     <string name="initial_image_description">Initial Image</string>
     <string name="toast_empty_affirmation">Please enter an affirmation text</string>
     <string name="favorite_affirmations">My Favorite Affirmations</string>
@@ -46,8 +46,8 @@
     <string name="prayer">Prayer</string>
     <string name="favorites">Favorites</string>
     <string name="add_buton">There is no affirmation yet. You can add an affirmation by clicking the + button.</string>
-    <string name="breathingIntro">The 4-7-8 breathing technique was developed by Dr. Andrew Weil. \n\nThe aim of this technique is to reduce stress levels, improve heart health, and enhance sleep quality. \n\nThe physiological effects of the 4-7-8 breathing technique include a slower heart rate, reduced blood pressure, decreased cortisol (stress hormone) levels, and increased melatonin (sleep hormone) levels. This helps the body to relax and reduces stress.</string>
-    <string name="nefes2">Before starting the 4-7-8 breathing technique, let\'s see how it is done.\n\nSteps:\n1-Preparation: Sit or lie down in a comfortable position, place your tongue behind your upper teeth.\n2-Inhale: Silently inhale through your nose for 4 seconds.\n3-Hold: Hold your breath for 7 seconds.\n4-Exhale: Exhale audibly through your mouth for 8 seconds.\n\nThese steps should be repeated 4 times.\nPracticing twice a day (morning and evening) can be a good start.</string>
+    <string name="breathingIntro">The 4-7-8 breathing technique was developed by Dr. Andrew Weil. \n\nThe aim of this technique is to reduce stress levels, \nimprove heart health, \nand enhance sleep quality. \n\nThe physiological effects of the 4-7-8 breathing technique include a slower heart rate, \nreduced blood pressure, \ndecreased cortisol (stress hormone) levels, \nand increased melatonin (sleep hormone) levels. \n\nThis helps the body to relax and reduces stress.</string>
+    <string name="nefes2">Before starting the 4-7-8 breathing technique, let\'s see how it is done.\n\nSteps:\n\n1-Preparation: Sit or lie down in a comfortable position, place your tongue behind your upper teeth.\n\n2-Inhale: Silently inhale through your nose for 4 seconds.\n\n3-Hold: Hold your breath for 7 seconds.\n\n4-Exhale: Exhale audibly through your mouth for 8 seconds.\n\nThese steps should be repeated 4 times.\n\nPracticing twice a day (morning and evening) can be a good start.</string>
     <string name="nefestext">4-7-8 Breathing Technique</string>
     <string name="introLanguageSelect">Language Selection</string>
     <string name="introLanguagetext">Please select a language</string>
@@ -68,6 +68,13 @@
     <string name="breathing_exercise_complete">Your breathing exercise is complete.\nKeep taking good care of yourself.</string>
     <string name="note_to_myself">Note to Myself:</string>
     <string name="okey">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="splash">Always remember, a small shift in thinking can create big changes.</string>
+    <string name="favories_not_title">Remove Affirmation from Favorites</string>
+    <string name="favories_not">Are you sure you want to remove this affirmation from favorites?</string>
+    <string name="first_page_main_title">Welcome!\n You’re starting something that will make you feel great and do wonders for you.</string>
+    <string name="first_page_main_text">Would you like to feel better and add a positive touch to your life? \nWith our app, you can nourish your mind and soul every day through the affirmations provided.\n Remember, a small shift in thinking can create a big impact. \n\nCome on, take a beautiful step for yourself now!</string>
     <string-array name="categoriesNotification">
         <item>General Affirmations</item>
         <item>Body Affirmations</item>

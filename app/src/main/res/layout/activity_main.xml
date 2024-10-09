@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/textView3"
@@ -90,7 +90,7 @@
         android:background="@drawable/buttonmain"
         android:drawableLeft="@drawable/settings_icon"
         android:paddingLeft="10dp"
-        android:text="@string/button_settings"
+        android:text="@string/introLanguageSelect"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
