@@ -36,10 +36,8 @@ class ShowAffirmationActivity : Activity() {
         }
 
         binding.share.setOnClickListener {
-            // Olumlamayı paylaşmak
             val bitmap = takeScreenshot(binding.affirmationBackground, binding.olumlamalarTextView)
 
-            // Geçici dosya oluşturma
             val cachePath = File(cacheDir, "images")
             cachePath.mkdirs()
             val file = File(cachePath, "shared_image.png")
@@ -49,14 +47,12 @@ class ShowAffirmationActivity : Activity() {
 
             val uri = FileProvider.getUriForFile(this, "${packageName}.provider", file)
 
-            // Share intent
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/*"
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(Intent.createChooser(shareIntent, "Share Content"))
 
-            // Paylaşımdan sonra dosyayı silme
             shareIntent.resolveActivity(packageManager)?.also {
                 file.deleteOnExit()
             }

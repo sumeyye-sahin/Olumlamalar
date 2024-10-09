@@ -41,7 +41,6 @@ class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Locale ayarlarını ilk açılışta uygulamak
         applyLocale()
 
         setContentView(R.layout.activity_intro)
@@ -50,7 +49,6 @@ class IntroActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val introVisitCount = sharedPreferences.getInt("intro_visit_count", 0)
 
-        // İlk açılışta ActionBar'ı gizle, sonraki girişlerde göster
         if (introVisitCount == 0) {
             supportActionBar?.hide()
 
@@ -87,20 +85,17 @@ class IntroActivity : AppCompatActivity() {
                     else -> "en"
                 }
 
-                // Seçilen dili hemen uygula
                 setLocale(selectedLanguage)
 
-                // Seçilen dili ve değişiklik zamanını kaydet
                 val editor = sharedPreferences.edit()
                 editor.putString("language", selectedLanguage)
                 editor.putBoolean("intro_seen", true)
                 editor.putLong(
                     "language_change_timestamp",
                     System.currentTimeMillis()
-                ) // Dil değişikliği zaman damgasını kaydet
+                )
                 editor.apply()
 
-                // ActionBar'ı göster
                 supportActionBar?.show()
                 supportActionBar?.title = ""
 
@@ -127,11 +122,10 @@ class IntroActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // Ayarlar sayfasına geri dön
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        finish()
         return true
     }
 
@@ -171,10 +165,8 @@ class IntroActivity : AppCompatActivity() {
         val introVisitCount = sharedPreferences.getInt("intro_visit_count", 0)
 
         if (introVisitCount == 0) {
-            // Eğer kullanıcı ilk kez bu sayfaya girdiyse, uygulamayı kapat.
             finish()
         } else {
-            // Daha önce bu sayfaya girmişse, MainActivity'e dön.
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)

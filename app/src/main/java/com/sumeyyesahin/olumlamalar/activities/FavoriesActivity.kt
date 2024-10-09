@@ -24,7 +24,7 @@ class FavoriesActivity : AppCompatActivity() {
         binding = ActivityFavoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // ActionBar'ı etkinleştirme
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
@@ -32,17 +32,14 @@ class FavoriesActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val language = getUserLanguage(this)
 
-        // Favori olumlamaları veritabanından al
         favoriteAffirmations = DBHelper(this).getFavoriteAffirmationsByLanguage(language).distinctBy { it.affirmation }
 
-        // RecyclerView ve Adapter'ı bağla
         if (favoriteAffirmations.isEmpty()) {
             binding.textViewFav.visibility = View.VISIBLE
             binding.recyclerViewFav.visibility = View.GONE
             binding.baslik.visibility = View.GONE
             binding.topimage.visibility = View.GONE
         } else {
-            // Favori olumlamaları göster
             binding.textViewFav.visibility = View.GONE
             binding.recyclerViewFav.visibility = View.VISIBLE
             binding.topimage.visibility = View.VISIBLE
@@ -72,11 +69,11 @@ class FavoriesActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // Ana sayfaya geri dön
+
         val intent = Intent(this, CategoryActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        finish()
         return true
     }
 }

@@ -31,7 +31,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding = ActivityAffirmationMainPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        // Kategori adını al
+
         val kategori2 = intent.getStringExtra("kategori")
         binding.textView.text = Html.fromHtml("<u>$kategori2</u>")
 
@@ -39,19 +39,14 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         val language = getUserLanguage(this)
         setUserLanguage(this, language)
 
-        // Kullanıcının son görüntülenen olumlamadan ID'sini kontrol et
         currentIndex = getLastPosition(this, kategori!!)
 
-        // DBHelper sınıfını kullanarak kategorinin olumlamalarını alıyoruz
         olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, language)
 
-        // currentIndex değeriyle olumlamaları güncelle
         updateUI()
 
-        // Delete butonunun görünürlüğünü ayarlama
         setDeleteButtonVisibility(kategori, language)
 
-        // İleri butonuna tıklandığında bir sonraki olumlamayı göster
         binding.ileri.setOnClickListener {
             binding.ileri.alpha = 0.5f
             binding.ileri.postDelayed({
@@ -59,12 +54,11 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             }, 300)
             currentIndex = (currentIndex + 1) % olumlamalar.size
             updateAffirmationText(currentIndex)
-            // Son görüntülenen olumlamadan ID'sini kaydet
+
             saveLastPosition(this, currentIndex, kategori)
             updateUI()
         }
 
-        // Geri butonuna tıklandığında bir önceki olumlamayı göster
         binding.geri.setOnClickListener {
             binding.geri.alpha = 0.5f
             binding.geri.postDelayed({
@@ -127,19 +121,19 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
 
         binding.textView.setOnClickListener {
-            // Kategori değiştiğinde currentIndex değerini güncelle
+
             currentIndex = getLastPosition(this, kategori)
             updateAffirmationText(currentIndex)
             updateUI()
         }
 
-        // Beğen butonuna tıklama işlevselliğini ekle
+
         binding.like.setOnClickListener {
-            // Kullanıcının tıkladığı olumlama
+
             val clickedAffirmation = olumlamalar[currentIndex]
-            // Favori durumunu tersine çevir
+
             clickedAffirmation.favorite = !clickedAffirmation.favorite
-            // Favori durumunu güncelle
+
 
             if (clickedAffirmation.favorite) {
                 DBHelper(this).addAffirmationFav(clickedAffirmation, false, language)
@@ -149,7 +143,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
                 DBHelper(this).updateAffirmationFavStatus(clickedAffirmation)
             }
 
-            // Favori butonunun ikonunu güncelle
+
             updateLikeButtonIcon(currentIndex)
         }
 
@@ -165,19 +159,19 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Kategori değiştiğinde currentIndex değerini güncelle
+
         val kategori = intent.getStringExtra("kategori")
         val language = getUserLanguage(this)
         olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori!!, language)
 
-        // Listeyi güncelleme ve currentIndex'i sıfırlama
+
         if (olumlamalar.isNotEmpty()) {
             currentIndex = getLastPosition(this, kategori).coerceAtMost(olumlamalar.size - 1)
         } else {
-            currentIndex = 0 // Eğer liste boşsa currentIndex'i sıfırla
+            currentIndex = 0 //
         }
 
-        // Delete butonunun görünürlüğünü ayarlama
+
         setDeleteButtonVisibility(kategori, language)
 
         updateUI()
@@ -193,10 +187,10 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_AFFIRMATION && resultCode == RESULT_OK) {
-            // DBHelper kullanarak kategorinin güncel olumlamalarını al
+
             val kategori = intent.getStringExtra("kategori")!!
             olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, getUserLanguage(this))
-            updateUI() // UI'yi güncelle
+            updateUI()
         }
     }
 
@@ -222,7 +216,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         if (olumlamalar.isNotEmpty()) {
             updateAffirmationText(currentIndex)
             updateLikeButtonIcon(currentIndex)
-            enableButtons(true) // Butonları etkinleştir
+            enableButtons(true)
         } else {
             binding.olumlamalarTextView.text = getString(R.string.add_buton)
             binding.like.background = getDrawable(R.drawable.baseline_favorite_border_24)
@@ -239,7 +233,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             binding.share.isClickable = false
         }
 
-        // Kategoriye göre arka planı değiştir
+
         val kategori = intent.getStringExtra("kategori") ?: ""
         Log.d("Kategori", "Kategori: $kategori") // Kategori adını loglayın
 
@@ -261,8 +255,8 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             else -> R.drawable.genel_background
         }
 
-        Log.d("Arka Plan", "Arka Plan Resource ID: $backgroundResource") // Arka plan resource ID'sini loglayın
-        binding.affirmationBackground.setImageResource(backgroundResource) // ImageView'un src özelliğini değiştir
+        Log.d("Arka Plan", "Arka Plan Resource ID: $backgroundResource")
+        binding.affirmationBackground.setImageResource(backgroundResource)
 
 
 
@@ -279,7 +273,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding.ileri.visibility = View.VISIBLE
         binding.geri.visibility = View.VISIBLE
         binding.share.visibility = View.VISIBLE
-        // Diğer butonları da bu şekilde ayarlayabilirsiniz.
+
     }
 
     private fun setDeleteButtonVisibility(kategori: String, language: String) {
@@ -331,7 +325,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
     }
 
-    // SharedPreferences'a kategoriye özgü currentIndex değerini kaydetme
+
     private fun saveLastPosition(context: Context, currentIndex: Int, kategori: String) {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
@@ -339,13 +333,13 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    // SharedPreferences'dan kategoriye özgü currentIndex değerini alma
+
     private fun getLastPosition(context: Context, kategori: String): Int {
         val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return sharedPrefs.getInt(kategori, 0)
     }
 
-    // Kategori sayfasına gitmek için onClick fonksiyonu
+
     fun kategori(view: View) {
         view.alpha = 0.5f
         view.postDelayed({
@@ -356,7 +350,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         finish()
     }
 
-    // Request kod tanımı
+
     companion object {
         private const val REQUEST_CODE_ADD_AFFIRMATION = 1
     }

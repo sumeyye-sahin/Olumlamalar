@@ -16,7 +16,6 @@ class BreathingIntroActivity : AppCompatActivity() {
         binding = ActivityBreathingIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // ActionBar'ı etkinleştirme
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
@@ -24,11 +23,11 @@ class BreathingIntroActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val btnContinue = findViewById<Button>(R.id.btnContinue)
         btnContinue.setOnClickListener {
-            // Kullanıcı nefes egzersizi tanıtım sayfasını gördü, SharedPreferences'e kaydet
+
             val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("breathing_intro_seen", true).apply()
 
-            // Nefes egzersizi aktivitesine geç
+
             val intent = Intent(this, NefesActivity::class.java)
             startActivity(intent)
             finish()
@@ -49,11 +48,11 @@ class BreathingIntroActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // Ana sayfaya geri dön
+
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        finish()
         return true
     }
 

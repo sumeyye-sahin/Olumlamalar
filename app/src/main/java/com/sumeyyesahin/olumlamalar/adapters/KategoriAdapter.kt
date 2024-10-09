@@ -31,7 +31,6 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
         val currentKategori = kategoriListesi[position]
         val context = holder.itemView.context
 
-        // Kategori adını değiştirme
         val displayedKategori = when (currentKategori) {
             context.getString(R.string.general_affirmations) -> context.getString(R.string.general)
             context.getString(R.string.body_affirmations) -> context.getString(R.string.body)
@@ -48,11 +47,10 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
             context.getString(R.string.prayer_affirmations) -> context.getString(R.string.prayer)
             context.getString(R.string.favorite_affirmations) -> context.getString(R.string.favorites)
             context.getString(R.string.own_affirmations) -> context.getString(R.string.own_affirmations)
-            else -> currentKategori // Varsayılan değer, eğer kategori bulunamazsa
+            else -> currentKategori
         }
 
         holder.textViewKategoriAdi.text = displayedKategori
-        // Kategoriye göre drawable kaynağını atan
         val drawableResourceId = getDrawableResourceId(context, currentKategori)
         holder.imageViewKategoriFoto.setImageResource(drawableResourceId)
 
@@ -80,7 +78,6 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
     }
 
     private fun isCategoryEmpty(context: Context, kategori: String): Boolean {
-        // Burada DBHelper'ınızdan kategorinin içeriğini kontrol eden bir sorgu yapılabilir
         val dbHelper = DBHelper(context)
         val count = dbHelper.getAffirmationCountByCategoryAndLanguage(kategori, userLanguage)
         return count == 0
@@ -88,7 +85,6 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
 
     override fun getItemCount() = kategoriListesi.size
 
-    // Kategoriye göre drawable kaynağını bulan yardımcı fonksiyon
     private fun getDrawableResourceId(context: Context, kategori: String): Int {
         return when (kategori) {
             context.getString(R.string.general_affirmations) -> R.drawable.genel_icon

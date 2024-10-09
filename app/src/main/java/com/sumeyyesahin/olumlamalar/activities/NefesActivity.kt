@@ -50,7 +50,7 @@ class NefesActivity : AppCompatActivity() {
         binding = ActivityNefesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        // ActionBar'ı etkinleştirme
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.nefestext)
 
@@ -65,7 +65,6 @@ class NefesActivity : AppCompatActivity() {
         val lottieAnimationView = binding.lt
 
         btnStart.setOnClickListener {
-            // Butonun arka plan rengini değiştir
             changeButtonBackgroundColor(it)
 
             circleView.visibility = View.VISIBLE
@@ -84,11 +83,10 @@ class NefesActivity : AppCompatActivity() {
         }
     }
     override fun onSupportNavigateUp(): Boolean {
-        // Ana sayfaya geri dön
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        finish()  // Bu satır isteğe bağlı; ana aktiviteyi başlattıktan sonra mevcut aktiviteyi bitirir
+        finish()
         return true
     }
     private fun startBreathingExercise(repeatCount: Int) {
@@ -101,31 +99,27 @@ class NefesActivity : AppCompatActivity() {
             val delay = i * totalCycleDuration
 
             handler.postDelayed({
-                // Step 1: Breathe In
                 binding.talimat.text = getText(R.string.nefesAl)
                 animateCircle(0f, 1f, breatheInDuration, 4, 0)
             }, delay)
 
             handler.postDelayed({
-                // Step 2: Hold
                 binding.talimat.text = getText(R.string.nefesTut)
                 animateCircle(1f, 0f, holdDuration, 7, 1)
             }, delay + breatheInDuration)
 
             handler.postDelayed({
-                // Step 3: Breathe Out
                 binding.talimat.text = getText(R.string.nefesVer)
                 animateCircle(0f, 1f, breatheOutDuration, 8, 2)
             }, delay + breatheInDuration + holdDuration)
 
-            // Her tur tamamlandığında tamamlanan tur sayısını güncelle
             handler.postDelayed({
                 val completedRounds = i + 1
                 tvRoundCounter.text = getString(R.string.nefestext2) + " $completedRounds / $repeatCount"
             }, delay + totalCycleDuration)
         }
 
-        // Döngü tamamlandıktan sonra mesajı göstermek ve aktiviteyi sonlandırmak için gecikme
+
         handler.postDelayed({
             tvInstruction.text = getString(R.string.breathing_exercise_complete)
             val lottieAnimationView = binding.lt
@@ -142,7 +136,6 @@ class NefesActivity : AppCompatActivity() {
             binding.talimat.visibility = View.INVISIBLE
             btnend.visibility = View.VISIBLE
 
-            // 3 saniye sonra aktiviteyi sonlandır
             handler.postDelayed({
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -161,7 +154,6 @@ class NefesActivity : AppCompatActivity() {
                 val progress = animation.animatedValue as Float
                 circleView.setProgress(progress, mode)
 
-                // Calculate remaining time for countdown
                 val remainingTime = if (startProgress < endProgress) {
                     initialSeconds - (initialSeconds * progress).toInt()
                 } else {
@@ -175,24 +167,22 @@ class NefesActivity : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
-        // Rastgele bir soft renk seç
+
         val randomColor = getRandomSoftColor()
 
-        // Button'un arka planı olarak kullanılan LayerDrawable'ı al
         val background = button.background
 
         if (background is LayerDrawable) {
             for (i in 0 until background.numberOfLayers) {
                 val layer = background.getDrawable(i)
                 if (layer is GradientDrawable) {
-                    // Eğer button için eski rengi kaydetmediysek, kaydet
+
                     if (!originalButtonColors.containsKey(button)) {
                         originalButtonColors[button] = (layer.color?.defaultColor ?: Color.TRANSPARENT)
                     }
-                    // Rengi değiştir
+
                     layer.setColor(randomColor)
 
-                    // 1 saniye sonra eski rengi geri yükle
                     Handler(Looper.getMainLooper()).postDelayed({
                         layer.setColor(originalButtonColors[button] ?: randomColor)
                     }, 1000)
@@ -205,7 +195,6 @@ class NefesActivity : AppCompatActivity() {
         }
     }
 
-    // Rastgele bir soft renk seçen fonksiyon
     private fun getRandomSoftColor(): Int {
         val randomIndex = Random.nextInt(softColors.size)
         return softColors[randomIndex]

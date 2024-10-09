@@ -16,18 +16,16 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
-        setContentView(binding.root) // Sadece bunu kullanın
+        setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         applyLocale()
 
-        // Splash ekranı layout'unu ayarla
         setContentView(R.layout.activity_splash_screen)
 
 
-        binding.lottieAnimationView.setSpeed(1.5f) // Animasyonu 1.5 kat hızlandır
+        binding.lottieAnimationView.setSpeed(1.5f) // Animasyonu 1.5 kat hızlandırır
 
-        // Lottie animasyonunu başlat
         binding.lottieAnimationView.playAnimation()
 
         Handler().postDelayed({
@@ -41,11 +39,10 @@ class SplashScreenActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val selectedLanguage = sharedPreferences.getString("language", null)
 
-        // Eğer bir dil seçilmişse, o dili uygula. Aksi halde sistem dilini kullan.
         if (selectedLanguage != null) {
             setLocale(selectedLanguage)
         } else {
-            // Sistem dilini kullan
+
             val systemLanguage = Locale.getDefault().language
             setLocale(systemLanguage)
         }

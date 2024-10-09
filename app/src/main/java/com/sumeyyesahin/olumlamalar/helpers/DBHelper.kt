@@ -90,9 +90,9 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         cursor.close()
 
         return if (categories.isNotEmpty()) {
-            categories.random() // Rastgele bir kategori döndür
+            categories.random()
         } else {
-            "default_category" // Eğer kategori yoksa varsayılan bir değer döndür
+            "default_category"
         }
     }
 

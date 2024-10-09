@@ -40,8 +40,7 @@ class FirstDescriptionPage : AppCompatActivity() {
     private val originalButtonColors = mutableMapOf<View, Int>()
 
     override fun attachBaseContext(newBase: Context) {
-        // Sistem dilini al ve uygula
-        val languageCode = Locale.getDefault().language // Sistem dilini kullan
+        val languageCode = Locale.getDefault().language
         val context = LocaleHelper.setLocale(newBase, languageCode)
         super.attachBaseContext(context)
     }
@@ -52,36 +51,28 @@ class FirstDescriptionPage : AppCompatActivity() {
         binding = ActivityFirstDescriptionPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Sistem dilini uygula
         applyLocale()
 
-        // Splash ekranı layout'unu ayarla
         setContentView(R.layout.activity_first_description_page)
-        // Bildirimleri butona basıldığında zamanla
-        //scheduleDailyNotification(5, 15) // Saat 14:24'te
-       //scheduleDailyNotification(5, 18) // Saat 14:27'de
+
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        // ActionBar'ı etkinleştirmeme
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.title = ""
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        // Buton tıklama işlemleri
         val btnContinue = findViewById<Button>(R.id.btnContinue)
         btnContinue.setOnClickListener {
-            // Buton rengini değiştir
+
             changeButtonBackgroundColor(it)
 
-
-            // Kullanıcı FirstDescriptionPage'i gördü
             editor.putBoolean("first_description_seen", true)
 
             editor.apply()
 
-            // IntroActivity'e geçiş yap
+
             val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent)
             finish()
@@ -90,68 +81,12 @@ class FirstDescriptionPage : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // onResume'da sistem diline göre güncelleme yap
         applySystemLocale()
     }
 
     private fun applySystemLocale() {
-        // Sistem dilini al ve uygula
         val languageCode = Locale.getDefault().language
         setLocale(languageCode)
-    }
-
-/*
-    private fun scheduleDailyNotification(hour: Int, minute: Int) {
-        val currentDate = Calendar.getInstance()
-
-        // Belirtilen saat ve dakika için zaman ayarlaması
-        val dueDate = Calendar.getInstance()
-        dueDate.set(Calendar.HOUR_OF_DAY, hour)
-        dueDate.set(Calendar.MINUTE, minute)
-        dueDate.set(Calendar.SECOND, 0)
-
-        // Eğer belirtilen saat geçmişse, bir sonraki gün için ayarla
-        if (dueDate.before(currentDate)) {
-            dueDate.add(Calendar.HOUR_OF_DAY, 24)
-        }
-
-        // Gelecekteki işin zamanı
-        val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
-
-        // Gecikmeli ve düzenli bir iş zamanlama
-        val periodicWorkRequest = PeriodicWorkRequestBuilder<NotificationWorker>(24, TimeUnit.HOURS)
-            .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-            .addTag("dailyNotification")
-            .build()
-
-        WorkManager.getInstance(this).enqueue(periodicWorkRequest)
-    }
-*/
-
-    private fun scheduleDailyNotification(hour: Int, minute: Int) {
-        val currentDate = Calendar.getInstance()
-
-        // Belirtilen saat ve dakika için zaman ayarlaması
-        val dueDate = Calendar.getInstance()
-        dueDate.set(Calendar.HOUR_OF_DAY, hour)
-        dueDate.set(Calendar.MINUTE, minute)
-        dueDate.set(Calendar.SECOND, 0)
-
-        // Eğer belirtilen saat geçmişse, bir sonraki gün için ayarla
-        if (dueDate.before(currentDate)) {
-            dueDate.add(Calendar.HOUR_OF_DAY, 24)
-        }
-
-        // Gelecekteki işin zamanı
-        val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
-
-        // Gecikmeli bir iş zamanlama
-        val dailyWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(timeDiff, java.util.concurrent.TimeUnit.MILLISECONDS)
-            .addTag("dailyNotification")
-            .build()
-
-        WorkManager.getInstance(this).enqueue(dailyWorkRequest)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -188,20 +123,15 @@ class FirstDescriptionPage : AppCompatActivity() {
         editor.putBoolean("first_description_seen", true) // Kullanıcı `FirstDescriptionPage`'i gördü
         editor.apply()
 
-        // `IntroActivity`'ye yönlendirme
-       // val intent = Intent(this, IntroActivity::class.java)
-        //startActivity(intent)
         finish()
     }
     private fun applyLocale() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val selectedLanguage = sharedPreferences.getString("language", null)
 
-        // Eğer bir dil seçilmişse, o dili uygula. Aksi halde sistem dilini kullan.
         if (selectedLanguage != null) {
             setLocale(selectedLanguage)
         } else {
-            // Sistem dilini kullan
             val systemLanguage = Locale.getDefault().language
             setLocale(systemLanguage)
         }
