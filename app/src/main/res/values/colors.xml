@@ -6,4 +6,12 @@
     <color name="purple_white">#85B386F4</color>
     <color name="yellow">#E6E676</color>
     <color name="blue">#4EAFDE</color>
+    <color name="soft_light_pink">#FFB3BA</color>
+    <color name="soft_light_peach">#FFDFBA</color>
+    <color name="soft_light_yellow">#FFFFBA</color>
+    <color name="soft_light_mint_green">#BAFFC9</color>
+    <color name="soft_light_sky_blue">#BAE1FF</color>
+    <color name="soft_light_coral">#D4A5A5</color>
+    <color name="soft_light_lavender">#C1C1E1</color>
+    <color name="soft_soft_blue_gray">#A7BED3</color>
 </resources>

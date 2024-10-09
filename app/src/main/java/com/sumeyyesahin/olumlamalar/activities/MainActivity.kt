@@ -30,6 +30,7 @@ import com.sumeyyesahin.olumlamalar.services.NotificationWorker
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityMainBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
+import com.sumeyyesahin.olumlamalar.utils.Constants
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
@@ -48,17 +49,6 @@ class MainActivity : AppCompatActivity() {
         R.drawable.mainfloweryellow,
         R.drawable.mainflowerkirmizi,
         R.drawable.mainflower
-    )
-
-    private val softColors = arrayOf(
-        Color.parseColor("#FFB3BA"),  // Light Pink
-        Color.parseColor("#FFDFBA"),  // Light Peach
-        Color.parseColor("#FFFFBA"),  // Light Yellow
-        Color.parseColor("#BAFFC9"),  // Light Mint Green
-        Color.parseColor("#BAE1FF"),  // Light Sky Blue
-        Color.parseColor("#D4A5A5"),  // Light Coral
-        Color.parseColor("#C1C1E1"),  // Light Lavender
-        Color.parseColor("#A7BED3")   // Soft Blue-Gray
     )
 
     private val originalButtonColors = mutableMapOf<View, Int>()
@@ -97,12 +87,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         requestPermissions()
-
         createNotificationChannel(this)
-
         scheduleNotifications(currentLanguage)
-
-
 
         binding.imageView2.setOnClickListener {
             binding.imageView2.setImageResource(flowerImages[currentIndex])
@@ -152,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
 
-        val randomColor = getRandomSoftColor()
+        val randomColor = Constants.getRandomSoftColor(this)
 
         val background = button.background
 
@@ -178,10 +164,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getRandomSoftColor(): Int {
-        val randomIndex = Random.nextInt(softColors.size)
-        return softColors[randomIndex]
-    }
 
     private fun requestPermissions() {
     // Request notification permission for Android 13 and above
@@ -192,7 +174,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Request battery optimization exclusion for Android 6.0 (Marshmallow) and above
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         val packageName = packageName

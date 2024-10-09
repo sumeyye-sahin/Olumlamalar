@@ -20,22 +20,13 @@ import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper
 import com.sumeyyesahin.olumlamalar.services.NotificationWorker
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFirstDescriptionPageBinding
+import com.sumeyyesahin.olumlamalar.utils.Constants
 import java.util.Calendar
 import java.util.Locale
 import kotlin.random.Random
 
 class FirstDescriptionPage : AppCompatActivity() {
     private lateinit var binding: ActivityFirstDescriptionPageBinding
-    private val softColors = arrayOf(
-        Color.parseColor("#FFB3BA"),  // Light Pink
-        Color.parseColor("#FFDFBA"),  // Light Peach
-        Color.parseColor("#FFFFBA"),  // Light Yellow
-        Color.parseColor("#BAFFC9"),  // Light Mint Green
-        Color.parseColor("#BAE1FF"),  // Light Sky Blue
-        Color.parseColor("#D4A5A5"),  // Light Coral
-        Color.parseColor("#C1C1E1"),  // Light Lavender
-        Color.parseColor("#A7BED3")   // Soft Blue-Gray
-    )
 
     private val originalButtonColors = mutableMapOf<View, Int>()
 
@@ -63,13 +54,11 @@ class FirstDescriptionPage : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        val btnContinue = findViewById<Button>(R.id.btnContinue)
-        btnContinue.setOnClickListener {
+
+        binding.btnContinue.setOnClickListener {
 
             changeButtonBackgroundColor(it)
-
             editor.putBoolean("first_description_seen", true)
-
             editor.apply()
 
 
@@ -91,7 +80,7 @@ class FirstDescriptionPage : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
-        val randomColor = getRandomSoftColor()
+        val randomColor = Constants.getRandomSoftColor(this)
         val background = button.background
 
         if (background is LayerDrawable) {
@@ -111,18 +100,12 @@ class FirstDescriptionPage : AppCompatActivity() {
         }
     }
 
-    private fun getRandomSoftColor(): Int {
-        val randomIndex = Random.nextInt(softColors.size)
-        return softColors[randomIndex]
-    }
-
 
     override fun onBackPressed() {
         val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putBoolean("first_description_seen", true) // Kullanıcı `FirstDescriptionPage`'i gördü
         editor.apply()
-
         finish()
     }
     private fun applyLocale() {

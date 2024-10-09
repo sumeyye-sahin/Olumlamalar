@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityNefesBinding
+import com.sumeyyesahin.olumlamalar.utils.Constants
 import com.sumeyyesahin.olumlamalar.views.CircleView
 import kotlin.random.Random
 
@@ -30,19 +31,7 @@ class NefesActivity : AppCompatActivity() {
     private lateinit var btnend: Button
     private lateinit var binding: ActivityNefesBinding
     private val animators = mutableListOf<ValueAnimator>()
-    // Soft (Pastel) Renkler Dizisi
-    private val softColors = arrayOf(
-        Color.parseColor("#FFB3BA"),  // Light Pink
-        Color.parseColor("#FFDFBA"),  // Light Peach
-        Color.parseColor("#FFFFBA"),  // Light Yellow
-        Color.parseColor("#BAFFC9"),  // Light Mint Green
-        Color.parseColor("#BAE1FF"),  // Light Sky Blue
-        Color.parseColor("#D4A5A5"),  // Light Coral
-        Color.parseColor("#C1C1E1"),  // Light Lavender
-        Color.parseColor("#A7BED3")   // Soft Blue-Gray
-    )
 
-    // Eski renkleri saklamak için bir map
     private val originalButtonColors = mutableMapOf<View, Int>()
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -168,7 +157,7 @@ class NefesActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
 
-        val randomColor = getRandomSoftColor()
+        val randomColor = Constants.getRandomSoftColor(this)
 
         val background = button.background
 
@@ -193,11 +182,6 @@ class NefesActivity : AppCompatActivity() {
         } else {
             Log.e("MainActivity", "LayerDrawable değil: ${background?.javaClass?.name}")
         }
-    }
-
-    private fun getRandomSoftColor(): Int {
-        val randomIndex = Random.nextInt(softColors.size)
-        return softColors[randomIndex]
     }
 
     override fun onDestroy() {

@@ -18,22 +18,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.R
+import com.sumeyyesahin.olumlamalar.utils.Constants
 import java.util.Locale
 import kotlin.random.Random
 
 class IntroActivity : AppCompatActivity() {
 
     private lateinit var spinnerLanguage: Spinner
-    private val softColors = arrayOf(
-        Color.parseColor("#FFB3BA"),  // Light Pink
-        Color.parseColor("#FFDFBA"),  // Light Peach
-        Color.parseColor("#FFFFBA"),  // Light Yellow
-        Color.parseColor("#BAFFC9"),  // Light Mint Green
-        Color.parseColor("#BAE1FF"),  // Light Sky Blue
-        Color.parseColor("#D4A5A5"),  // Light Coral
-        Color.parseColor("#C1C1E1"),  // Light Lavender
-        Color.parseColor("#A7BED3")   // Soft Blue-Gray
-    )
 
     private val originalButtonColors = mutableMapOf<View, Int>()
 
@@ -131,7 +122,7 @@ class IntroActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
-        val randomColor = getRandomSoftColor()
+        val randomColor = Constants.getRandomSoftColor(this)
         val background = button.background
 
         if (background is LayerDrawable) {
@@ -154,10 +145,6 @@ class IntroActivity : AppCompatActivity() {
         }
     }
 
-    private fun getRandomSoftColor(): Int {
-        val randomIndex = Random.nextInt(softColors.size)
-        return softColors[randomIndex]
-    }
 
     override fun onBackPressed() {
 

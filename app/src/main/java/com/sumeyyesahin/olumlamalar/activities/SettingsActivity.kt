@@ -16,23 +16,12 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.sumeyyesahin.olumlamalar.databinding.ActivitySettingsBinding
+import com.sumeyyesahin.olumlamalar.utils.Constants
 import kotlin.random.Random
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var sharedPreferences: SharedPreferences
-   // private lateinit var adapter: CategoryTimeAdapter
-
-    private val softColors = arrayOf(
-        Color.parseColor("#FFB3BA"),  // Light Pink
-        Color.parseColor("#FFDFBA"),  // Light Peach
-        Color.parseColor("#FFFFBA"),  // Light Yellow
-        Color.parseColor("#BAFFC9"),  // Light Mint Green
-        Color.parseColor("#BAE1FF"),  // Light Sky Blue
-        Color.parseColor("#D4A5A5"),  // Light Coral
-        Color.parseColor("#C1C1E1"),  // Light Lavender
-        Color.parseColor("#A7BED3")   // Soft Blue-Gray
-    )
 
     private val originalButtonColors = mutableMapOf<View, Int>()
     @RequiresApi(Build.VERSION_CODES.N)
@@ -72,7 +61,7 @@ class SettingsActivity : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun changeButtonBackgroundColor(button: View) {
-        val randomColor = getRandomSoftColor()
+        val randomColor = Constants.getRandomSoftColor(this)
 
         val background = button.background
 
@@ -97,10 +86,6 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getRandomSoftColor(): Int {
-        val randomIndex = Random.nextInt(softColors.size)
-        return softColors[randomIndex]
-    }
     override fun onBackPressed() {
 
         val currentLanguage = sharedPreferences.getString("language", "en")

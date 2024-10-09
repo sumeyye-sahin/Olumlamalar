@@ -27,7 +27,6 @@ class AddAffirmationActivity : AppCompatActivity() {
         }
 
         binding.ekle.setOnClickListener {
-            // Yeni bir olumlama eklemek için
 
             binding.ekle.alpha = 0.5f
             binding.ekle.postDelayed({
@@ -58,9 +57,5 @@ class AddAffirmationActivity : AppCompatActivity() {
             deviceLanguage == "en" -> "en"
             else -> "en"
         }
-    }
-    fun setUserLanguage(context: Context, language: String) {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("language", language).apply()
     }
 }
