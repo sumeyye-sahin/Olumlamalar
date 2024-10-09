@@ -1,1 +1,1 @@
-# sqlite çalışması
+Yazılımsal mimari iyileştirmelere devam ediliyor.
