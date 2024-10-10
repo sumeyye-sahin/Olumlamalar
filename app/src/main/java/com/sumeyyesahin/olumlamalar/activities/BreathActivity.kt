@@ -2,27 +2,19 @@ package com.sumeyyesahin.olumlamalar.activities
 
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityNefesBinding
 import com.sumeyyesahin.olumlamalar.utils.Constants
-import com.sumeyyesahin.olumlamalar.views.CircleView
-import kotlin.random.Random
 
-class NefesActivity : AppCompatActivity() {
+class BreathActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
     private lateinit var btnend: Button

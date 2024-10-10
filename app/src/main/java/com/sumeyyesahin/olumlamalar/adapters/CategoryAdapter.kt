@@ -3,20 +3,15 @@ package com.sumeyyesahin.olumlamalar.adapters
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.activities.AffirmationMainPageActivity
 import com.sumeyyesahin.olumlamalar.activities.CategoryActivity
-import com.sumeyyesahin.olumlamalar.activities.FavoriesActivity
+import com.sumeyyesahin.olumlamalar.activities.FavoritesActivity
 import com.sumeyyesahin.olumlamalar.databinding.CategoryItemBinding
-import com.sumeyyesahin.olumlamalar.databinding.FavoriItemBinding
-import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 
-class KategoriAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<KategoriAdapter.KategoriViewHolder>() {
+class CategoryAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<CategoryAdapter.KategoriViewHolder>() {
 
     inner class KategoriViewHolder(public val binding: CategoryItemBinding) : RecyclerView.ViewHolder(binding.root){
 
@@ -57,7 +52,7 @@ class KategoriAdapter(private val kategoriListesi: List<String>, private val use
         if (currentKategori == context.getString(R.string.favorite_affirmations)) {
             holder.binding.touchcard.setOnClickListener {
                 holder.binding.touchcard.alpha = 0.5f
-                val intent = Intent(context, FavoriesActivity::class.java)
+                val intent = Intent(context, FavoritesActivity::class.java)
                 intent.putExtra("kategori", currentKategori)
                 context.startActivity(intent)
                 if (context is CategoryActivity) {

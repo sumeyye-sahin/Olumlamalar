@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.sumeyyesahin.olumlamalar.R
-import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
+import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 import org.json.JSONArray
 
 class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -108,9 +108,9 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         return affirmation
     }
 
-    fun getOlumlamalarByCategoryAndLanguage(category: String, language: String): List<OlumlamalarListModel> {
+    fun getOlumlamalarByCategoryAndLanguage(category: String, language: String): List<AffirmationsListModel> {
         val db = this.readableDatabase
-        val list = mutableListOf<OlumlamalarListModel>()
+        val list = mutableListOf<AffirmationsListModel>()
         db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_CATEGORY = ? AND $COLUMN_LANGUAGE = ?", arrayOf(category, language)).use { cursor ->
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
@@ -118,7 +118,7 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
                 val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
                 val favorite = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE)) > 0
                 val language = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LANGUAGE))
-                list.add(OlumlamalarListModel(id, affirmation, category, favorite, language))
+                list.add(AffirmationsListModel(id, affirmation, category, favorite, language))
             }
         }
 
@@ -132,7 +132,7 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
                     val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
                     val favorite = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE)) > 0
                     val language = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LANGUAGE))
-                    list.add(OlumlamalarListModel(id, affirmation, category, favorite, language))
+                    list.add(AffirmationsListModel(id, affirmation, category, favorite, language))
                 }
             }
         }
@@ -147,7 +147,7 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
     }
 
 
-    fun updateAffirmationFavStatus(affirmation: OlumlamalarListModel) {
+    fun updateAffirmationFavStatus(affirmation: AffirmationsListModel) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put(COLUMN_FAVORITE, affirmation.favorite)
@@ -156,7 +156,7 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         db.close()
     }
 
-    fun addAffirmationFav(affirmation: OlumlamalarListModel, isFavorite: Boolean, language: String) {
+    fun addAffirmationFav(affirmation: AffirmationsListModel, isFavorite: Boolean, language: String) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put(COLUMN_AFFIRMATION, affirmation.affirmation)
@@ -174,12 +174,12 @@ class DBHelper(private val context: Context): SQLiteOpenHelper(context, DATABASE
         db.close()
     }
 
-    fun getFavoriteAffirmationsByLanguage(language: String): List<OlumlamalarListModel> {
-        val olumlamalar = mutableListOf<OlumlamalarListModel>()
+    fun getFavoriteAffirmationsByLanguage(language: String): List<AffirmationsListModel> {
+        val olumlamalar = mutableListOf<AffirmationsListModel>()
         val db = this.readableDatabase
         db.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_FAVORITE = 1 AND $COLUMN_LANGUAGE = ?", arrayOf(language)).use { cursor ->
             while (cursor.moveToNext()) {
-                val olumlama = OlumlamalarListModel(
+                val olumlama = AffirmationsListModel(
                     cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AFFIRMATION)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)),

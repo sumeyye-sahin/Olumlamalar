@@ -3,7 +3,6 @@ package com.sumeyyesahin.olumlamalar.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.R
@@ -27,7 +26,7 @@ class BreathingIntroActivity : AppCompatActivity() {
             sharedPreferences.edit().putBoolean("breathing_intro_seen", true).apply()
 
 
-            val intent = Intent(this, NefesActivity::class.java)
+            val intent = Intent(this, BreathActivity::class.java)
             startActivity(intent)
             finish()
 

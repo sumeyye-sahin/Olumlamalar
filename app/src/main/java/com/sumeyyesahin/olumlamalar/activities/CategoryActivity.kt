@@ -1,14 +1,12 @@
 package com.sumeyyesahin.olumlamalar.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
-import com.sumeyyesahin.olumlamalar.adapters.KategoriAdapter
-import com.sumeyyesahin.olumlamalar.R
+import com.sumeyyesahin.olumlamalar.adapters.CategoryAdapter
 import com.sumeyyesahin.olumlamalar.databinding.ActivityCategoryBinding
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.getUserLanguage
 import java.util.Locale
@@ -29,7 +27,7 @@ class CategoryActivity : AppCompatActivity() {
         val db = DBHelper(this)
 
         val kategoriListesi = db.getAllCategoriesByLanguage(language)
-        val adapter = KategoriAdapter(kategoriListesi, language) // language parametresini geçiriyoruz
+        val adapter = CategoryAdapter(kategoriListesi, language) // language parametresini geçiriyoruz
         binding.recyclerView.adapter = adapter
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)

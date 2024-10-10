@@ -6,14 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
-import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
+import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 import java.util.Locale
 
 class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dbHelper = DBHelper(application)
-    private val _favoriteAffirmations = MutableLiveData<List<OlumlamalarListModel>>()
-    val favoriteAffirmations: LiveData<List<OlumlamalarListModel>> get() = _favoriteAffirmations
+    private val _favoriteAffirmations = MutableLiveData<List<AffirmationsListModel>>()
+    val favoriteAffirmations: LiveData<List<AffirmationsListModel>> get() = _favoriteAffirmations
 
     init {
         loadFavoriteAffirmations()
@@ -28,7 +28,7 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
         return sharedPreferences.getString("language", Locale.getDefault().language) ?: "en"
     }
 
-    fun deleteAffirmation(affirmation: OlumlamalarListModel) {
+    fun deleteAffirmation(affirmation: AffirmationsListModel) {
         affirmation.favorite = false
         dbHelper.updateAffirmationFavStatus(affirmation)
         _favoriteAffirmations.value = _favoriteAffirmations.value?.filterNot { it.affirmation == affirmation.affirmation && it.language == affirmation.language }

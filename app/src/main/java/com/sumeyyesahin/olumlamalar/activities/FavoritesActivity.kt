@@ -1,6 +1,5 @@
 package com.sumeyyesahin.olumlamalar.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,16 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.sumeyyesahin.olumlamalar.adapters.FavoriAdapter
+import com.sumeyyesahin.olumlamalar.adapters.FavoriteAdapter
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFavoriesBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
-import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
+import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.getUserLanguage
-import java.util.Locale
 
-class FavoriesActivity : AppCompatActivity() {
-    private lateinit var favoritesAdapter: FavoriAdapter
-    private lateinit var favoriteAffirmations: List<OlumlamalarListModel>
+class FavoritesActivity : AppCompatActivity() {
+    private lateinit var favoritesAdapter: FavoriteAdapter
+    private lateinit var favoriteAffirmations: List<AffirmationsListModel>
     private lateinit var binding: ActivityFavoriesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +44,7 @@ class FavoriesActivity : AppCompatActivity() {
             binding.topimage.visibility = View.VISIBLE
             binding.baslik.visibility = View.VISIBLE
             val recyclerView: RecyclerView = binding.recyclerViewFav
-            favoritesAdapter = FavoriAdapter(favoriteAffirmations, language)
+            favoritesAdapter = FavoriteAdapter(favoriteAffirmations, language)
             recyclerView.adapter = favoritesAdapter
             recyclerView.layoutManager = LinearLayoutManager(this)
         }

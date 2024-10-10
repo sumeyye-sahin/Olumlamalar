@@ -1,6 +1,6 @@
 package com.sumeyyesahin.olumlamalar.model
 
-class OlumlamalarListModel(
+class AffirmationsListModel(
     var id: Int,
     var affirmation: String,
     var category: String,

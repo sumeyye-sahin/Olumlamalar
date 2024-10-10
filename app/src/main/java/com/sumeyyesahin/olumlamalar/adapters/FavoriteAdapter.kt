@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.FavoriItemBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
-import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
+import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 
-class FavoriAdapter(private var favoriteAffirmations: List<OlumlamalarListModel>, private val userLanguage: String) :
-    RecyclerView.Adapter<FavoriAdapter.FavoriteViewHolder>() {
+class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListModel>, private val userLanguage: String) :
+    RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
     inner class FavoriteViewHolder(val binding: FavoriItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -24,7 +24,7 @@ class FavoriAdapter(private var favoriteAffirmations: List<OlumlamalarListModel>
             }
         }
 
-        private fun showDeleteConfirmationDialog(clickedAffirmation: OlumlamalarListModel) {
+        private fun showDeleteConfirmationDialog(clickedAffirmation: AffirmationsListModel) {
             val builder = AlertDialog.Builder(itemView.context)
             builder.apply {
                 setTitle(R.string.favories_not_title)
@@ -41,7 +41,7 @@ class FavoriAdapter(private var favoriteAffirmations: List<OlumlamalarListModel>
             dialog.show()
         }
 
-        private fun deleteAffirmations(clickedAffirmation: OlumlamalarListModel) {
+        private fun deleteAffirmations(clickedAffirmation: AffirmationsListModel) {
             clickedAffirmation.favorite = false
             DBHelper(itemView.context).updateAffirmationFavStatus(clickedAffirmation)
             favoriteAffirmations = favoriteAffirmations.filterNot { it.affirmation == clickedAffirmation.affirmation && it.language == clickedAffirmation.language }

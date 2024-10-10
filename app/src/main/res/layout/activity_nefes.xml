@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:background="@color/white"
-    tools:context=".activities.NefesActivity">
+    tools:context=".activities.BreathActivity">
 
     <TextView
         android:id="@+id/tvInstruction"

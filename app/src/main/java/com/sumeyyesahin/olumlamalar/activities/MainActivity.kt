@@ -5,17 +5,11 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -26,14 +20,13 @@ import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.sumeyyesahin.olumlamalar.services.NotificationWorker
+import com.sumeyyesahin.olumlamalar.worker.NotificationWorker
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityMainBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.utils.Constants
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -106,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             val breathingIntroSeen = sharedPreferences.getBoolean("breathing_intro_seen", false)
 
             if (breathingIntroSeen) {
-                val intent = Intent(this, NefesActivity::class.java)
+                val intent = Intent(this, BreathActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {

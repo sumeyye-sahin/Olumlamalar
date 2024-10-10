@@ -1,4 +1,4 @@
-package com.sumeyyesahin.olumlamalar.services
+package com.sumeyyesahin.olumlamalar.worker
 
 import android.app.Notification
 import android.app.NotificationChannel
