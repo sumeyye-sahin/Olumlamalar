@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.view.View
+import android.widget.Button
 import java.util.Locale
 
 object LocaleHelper {
@@ -16,7 +18,19 @@ object LocaleHelper {
             updateResourcesLegacy(context, language)
         }
     }
+    fun clickedButton(button: Button){
+        button.alpha = 0.5f
+        button.postDelayed({
+            button.alpha = 1f
+        }, 300)
+    }
 
+    fun clickedButton(view: View){
+        view.alpha = 0.5f
+        view.postDelayed({
+            view.alpha = 1f
+        }, 300)
+    }
     @TargetApi(Build.VERSION_CODES.N)
     private fun updateResources(context: Context, language: String): Context {
         val locale = Locale(language)

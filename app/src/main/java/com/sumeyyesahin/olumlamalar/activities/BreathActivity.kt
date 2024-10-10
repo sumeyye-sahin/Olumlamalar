@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,7 +21,9 @@ class BreathActivity : AppCompatActivity() {
     private lateinit var btnend: Button
     private lateinit var binding: ActivityNefesBinding
     private val animators = mutableListOf<ValueAnimator>()
-    
+
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +59,10 @@ class BreathActivity : AppCompatActivity() {
         }
     }
     override fun onSupportNavigateUp(): Boolean {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish()
+        onBackPressed()
         return true
     }
+
     private fun startBreathingExercise(repeatCount: Int) {
         val breatheInDuration = 4000L
         val holdDuration = 7000L

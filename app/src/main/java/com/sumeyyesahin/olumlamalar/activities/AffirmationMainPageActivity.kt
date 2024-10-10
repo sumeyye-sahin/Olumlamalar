@@ -15,6 +15,7 @@ import androidx.core.content.FileProvider
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
+import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper.clickedButton
 import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.setUserLanguage
@@ -49,10 +50,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         setDeleteButtonVisibility(kategori, language)
 
         binding.ileri.setOnClickListener {
-            binding.ileri.alpha = 0.5f
-            binding.ileri.postDelayed({
-                binding.ileri.alpha = 1f
-            }, 300)
+            clickedButton(binding.ileri)
             currentIndex = (currentIndex + 1) % olumlamalar.size
             updateAffirmationText(currentIndex)
 
@@ -61,10 +59,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
 
         binding.geri.setOnClickListener {
-            binding.geri.alpha = 0.5f
-            binding.geri.postDelayed({
-                binding.geri.alpha = 1f
-            }, 300)
+            clickedButton(binding.geri)
 
             currentIndex = (currentIndex - 1 + olumlamalar.size) % olumlamalar.size
             updateAffirmationText(currentIndex)
@@ -75,11 +70,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         binding.delete.setOnClickListener {
             if (olumlamalar.isNotEmpty()) {
-
-                binding.delete.alpha = 0.5f
-                binding.delete.postDelayed({
-                    binding.delete.alpha = 1f
-                }, 300)
+                   clickedButton(binding.delete)
 
                 DBHelper(this).deleteAffirmation(olumlamalar[currentIndex].id)
                 olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, language)
@@ -90,11 +81,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         binding.share.setOnClickListener {
 
-            binding.share.alpha = 0.5f
-            binding.share.postDelayed({
-                binding.share.alpha = 1f
-            }, 300)
-
+            clickedButton(binding.share)
             // Olumlamayı paylaşmak
             val bitmap = takeScreenshot(binding.affirmationBackground, binding.olumlamalarTextView)
 
@@ -149,10 +136,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
 
         binding.addbutton.setOnClickListener {
-            binding.addbutton.alpha = 0.5f
-            binding.addbutton.postDelayed({
-                binding.addbutton.alpha = 1f
-            }, 300)
+            clickedButton(binding.addbutton)
             val intent = Intent(this, AddAffirmationActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_ADD_AFFIRMATION)
         }
@@ -327,10 +311,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
 
     fun kategori(view: View) {
-        view.alpha = 0.5f
-        view.postDelayed({
-            view.alpha = 1f
-        }, 300)
+        clickedButton(view)
         val intent = Intent(this, CategoryActivity::class.java)
         startActivity(intent)
         finish()
