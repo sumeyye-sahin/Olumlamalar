@@ -11,18 +11,18 @@ import com.sumeyyesahin.olumlamalar.activities.CategoryActivity
 import com.sumeyyesahin.olumlamalar.activities.FavoritesActivity
 import com.sumeyyesahin.olumlamalar.databinding.CategoryItemBinding
 
-class CategoryAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<CategoryAdapter.KategoriViewHolder>() {
+class CategoryAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
-    inner class KategoriViewHolder(public val binding: CategoryItemBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class CategoryViewHolder(public val binding: CategoryItemBinding) : RecyclerView.ViewHolder(binding.root){
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KategoriViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.category_item, parent, false)
-        return KategoriViewHolder(CategoryItemBinding.bind(itemView))
+        return CategoryViewHolder(CategoryItemBinding.bind(itemView))
     }
 
-    override fun onBindViewHolder(holder: KategoriViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currentKategori = kategoriListesi[position]
         val context = holder.itemView.context
 
