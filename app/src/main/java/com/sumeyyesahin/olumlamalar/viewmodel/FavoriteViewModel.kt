@@ -11,26 +11,19 @@ import java.util.Locale
 
 class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val _favoriteList = MutableLiveData<List<AffirmationsListModel>>()
+    val favoriteList: LiveData<List<AffirmationsListModel>> get() = _favoriteList
+
     private val dbHelper = DBHelper(application)
-    private val _favoriteAffirmations = MutableLiveData<List<AffirmationsListModel>>()
-    val favoriteAffirmations: LiveData<List<AffirmationsListModel>> get() = _favoriteAffirmations
 
-    init {
-        loadFavoriteAffirmations()
+    fun loadFavoriteList(language: String) {
+        val favorites = dbHelper.getFavoriteAffirmationsByLanguage(language).distinctBy { it.affirmation }
+        _favoriteList.value = favorites
     }
-    private fun loadFavoriteAffirmations() {
-        val language = getUserLanguage(getApplication())
-        _favoriteAffirmations.value = dbHelper.getFavoriteAffirmationsByLanguage(language).distinctBy { it.affirmation }
-    }
-
-    fun getUserLanguage(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("language", Locale.getDefault().language) ?: "en"
+    fun deleteFavorite(affirmation: AffirmationsListModel) {
+        dbHelper.updateAffirmationFavStatus(affirmation.apply { favorite = false })
+        loadFavoriteList(affirmation.language)
     }
 
-    fun deleteAffirmation(affirmation: AffirmationsListModel) {
-        affirmation.favorite = false
-        dbHelper.updateAffirmationFavStatus(affirmation)
-        _favoriteAffirmations.value = _favoriteAffirmations.value?.filterNot { it.affirmation == affirmation.affirmation && it.language == affirmation.language }
-    }
+
 }

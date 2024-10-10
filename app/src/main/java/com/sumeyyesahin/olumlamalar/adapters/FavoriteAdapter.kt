@@ -4,12 +4,13 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.sumeyyesahin.olumlamalar.Listener.OnFavoriteDeleteListener
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.FavoriItemBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 
-class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListModel>, private val userLanguage: String) :
+class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListModel>,private val language: String, private val deleteListener: OnFavoriteDeleteListener) :
     RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
     inner class FavoriteViewHolder(val binding: FavoriItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -43,7 +44,7 @@ class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListMod
 
         private fun deleteAffirmations(clickedAffirmation: AffirmationsListModel) {
             clickedAffirmation.favorite = false
-            DBHelper(itemView.context).updateAffirmationFavStatus(clickedAffirmation)
+            deleteListener.onDeleteFavorite(clickedAffirmation)
             favoriteAffirmations = favoriteAffirmations.filterNot { it.affirmation == clickedAffirmation.affirmation && it.language == clickedAffirmation.language }
             notifyDataSetChanged()
         }
@@ -60,4 +61,9 @@ class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListMod
     }
 
     override fun getItemCount() = favoriteAffirmations.size
+
+    fun updateList(newList: List<AffirmationsListModel>) {
+        favoriteAffirmations = newList
+        notifyDataSetChanged()
+    }
 }
