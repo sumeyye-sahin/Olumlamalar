@@ -12,6 +12,7 @@ import com.sumeyyesahin.olumlamalar.adapters.FavoriAdapter
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFavoriesBinding
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
+import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.getUserLanguage
 import java.util.Locale
 
 class FavoriesActivity : AppCompatActivity() {
@@ -58,15 +59,7 @@ class FavoriesActivity : AppCompatActivity() {
         finish()
     }
 
-    fun getUserLanguage(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("language", Locale.getDefault().language) ?: "en" // Varsayılan olarak İngilizce
-    }
 
-    fun setUserLanguage(context: Context, language: String) {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("language", language).apply()
-    }
 
     override fun onSupportNavigateUp(): Boolean {
 

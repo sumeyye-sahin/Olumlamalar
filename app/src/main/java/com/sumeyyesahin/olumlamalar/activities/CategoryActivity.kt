@@ -10,6 +10,7 @@ import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.adapters.KategoriAdapter
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityCategoryBinding
+import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.getUserLanguage
 import java.util.Locale
 
 class CategoryActivity : AppCompatActivity() {
@@ -38,22 +39,6 @@ class CategoryActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
-    }
-    fun getUserLanguage(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val language = sharedPreferences.getString("language", null)
-        val deviceLanguage = Locale.getDefault().language
-        return when {
-            language != null -> language
-            deviceLanguage == "tr" -> "tr"
-            deviceLanguage == "en" -> "en"
-            else -> "en"
-        }
-    }
-
-    fun setUserLanguage(context: Context, language: String) {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("language", language).apply()
     }
 
     private fun setLocale(languageCode: String) {

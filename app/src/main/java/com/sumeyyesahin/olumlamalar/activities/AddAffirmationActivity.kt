@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAddAffirmationBinding
+import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage
 import java.util.Locale
 
 class AddAffirmationActivity : AppCompatActivity() {
@@ -33,7 +34,7 @@ class AddAffirmationActivity : AppCompatActivity() {
                 binding.ekle.alpha = 1f
             }, 300)
             val olumlamaMetni = binding.editText.text.toString()
-            val language = getUserLanguage(this) // Kullanıcı dili alınır
+            val language = GetSetUserLanguage.getUserLanguage(this) // Kullanıcı dili alınır
 
             if (olumlamaMetni.isNotBlank()) {
 
@@ -47,15 +48,4 @@ class AddAffirmationActivity : AppCompatActivity() {
         }
     }
 
-    fun getUserLanguage(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val language = sharedPreferences.getString("language", null)
-        val deviceLanguage = Locale.getDefault().language
-        return when {
-            language != null -> language
-            deviceLanguage == "tr" -> "tr"
-            deviceLanguage == "en" -> "en"
-            else -> "en"
-        }
-    }
 }

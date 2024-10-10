@@ -7,7 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.activities.AffirmationMainPageActivity
-import com.sumeyyesahin.olumlamalar.activities.FavoritesActivity
+import com.sumeyyesahin.olumlamalar.activities.FavoriesActivity
+
 
 class CategoryViewModel(application : Application): AndroidViewModel(application) {
     private val _navigateToActivity = MutableLiveData<Class<out AppCompatActivity>>()
@@ -16,7 +17,7 @@ class CategoryViewModel(application : Application): AndroidViewModel(application
     fun onCategoryClicked(category: String) {
         val context = getApplication<Application>().applicationContext
         val activityClass = when (category) {
-            context.getString(R.string.favorite_affirmations) -> FavoritesActivity::class.java
+            context.getString(R.string.favorite_affirmations) -> FavoriesActivity::class.java
             else -> AffirmationMainPageActivity::class.java
         }
         _navigateToActivity.value = activityClass

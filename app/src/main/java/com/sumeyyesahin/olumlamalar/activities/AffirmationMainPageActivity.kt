@@ -16,6 +16,8 @@ import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
 import com.sumeyyesahin.olumlamalar.model.OlumlamalarListModel
+import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage
+import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.setUserLanguage
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Locale
@@ -36,7 +38,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         binding.textView.text = Html.fromHtml("<u>$kategori2</u>")
 
         val kategori = intent.getStringExtra("kategori")
-        val language = getUserLanguage(this)
+        val language = GetSetUserLanguage.getUserLanguage(this)
         setUserLanguage(this, language)
 
         currentIndex = getLastPosition(this, kategori!!)
@@ -161,7 +163,7 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         super.onResume()
 
         val kategori = intent.getStringExtra("kategori")
-        val language = getUserLanguage(this)
+        val language = GetSetUserLanguage.getUserLanguage(this)
         olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori!!, language)
 
 
@@ -189,27 +191,12 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_ADD_AFFIRMATION && resultCode == RESULT_OK) {
 
             val kategori = intent.getStringExtra("kategori")!!
-            olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, getUserLanguage(this))
+            olumlamalar = DBHelper(this).getOlumlamalarByCategoryAndLanguage(kategori, GetSetUserLanguage.getUserLanguage(this))
             updateUI()
         }
     }
 
-    fun getUserLanguage(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val language = sharedPreferences.getString("language", null)
-        val deviceLanguage = Locale.getDefault().language
-        return when {
-            language != null -> language
-            deviceLanguage == "tr" -> "tr"
-            deviceLanguage == "en" -> "en"
-            else -> "en"
-        }
-    }
 
-    fun setUserLanguage(context: Context, language: String) {
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("language", language).apply()
-    }
 
     private fun updateUI() {
 
