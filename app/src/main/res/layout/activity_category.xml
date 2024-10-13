@@ -6,7 +6,7 @@
     android:id="@+id/deneme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CategoryActivity"
+    tools:context=".view.CategoryActivity"
     android:background="@color/white">
 
     <FrameLayout

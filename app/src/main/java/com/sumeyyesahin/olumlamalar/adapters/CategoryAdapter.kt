@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sumeyyesahin.olumlamalar.R
-import com.sumeyyesahin.olumlamalar.activities.AffirmationMainPageActivity
-import com.sumeyyesahin.olumlamalar.activities.CategoryActivity
-import com.sumeyyesahin.olumlamalar.activities.FavoritesActivity
+import com.sumeyyesahin.olumlamalar.view.AffirmationMainPageActivity
+import com.sumeyyesahin.olumlamalar.view.CategoryActivity
+import com.sumeyyesahin.olumlamalar.view.FavoritesActivity
 import com.sumeyyesahin.olumlamalar.databinding.CategoryItemBinding
 
 class CategoryAdapter(private val kategoriListesi: List<String>, private val userLanguage: String) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {

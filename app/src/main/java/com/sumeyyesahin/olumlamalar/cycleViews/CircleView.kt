@@ -1,4 +1,4 @@
-package com.sumeyyesahin.olumlamalar.views
+package com.sumeyyesahin.olumlamalar.cycleViews
 
 import android.content.Context
 import android.graphics.Canvas

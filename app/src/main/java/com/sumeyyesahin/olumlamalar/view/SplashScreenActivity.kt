@@ -1,4 +1,4 @@
-package com.sumeyyesahin.olumlamalar.activities
+package com.sumeyyesahin.olumlamalar.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

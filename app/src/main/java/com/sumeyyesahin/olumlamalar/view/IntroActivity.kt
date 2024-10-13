@@ -1,15 +1,9 @@
-package com.sumeyyesahin.olumlamalar.activities
+package com.sumeyyesahin.olumlamalar.view
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -21,7 +15,6 @@ import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityIntroBinding
 import com.sumeyyesahin.olumlamalar.utils.Constants
 import java.util.Locale
-import kotlin.random.Random
 
 class IntroActivity : AppCompatActivity() {
 

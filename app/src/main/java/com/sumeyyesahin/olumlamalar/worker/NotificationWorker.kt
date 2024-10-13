@@ -14,7 +14,7 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.sumeyyesahin.olumlamalar.R
-import com.sumeyyesahin.olumlamalar.activities.ShowAffirmationActivity
+import com.sumeyyesahin.olumlamalar.view.ShowAffirmationActivity
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper
 import java.util.concurrent.TimeUnit

@@ -1,4 +1,4 @@
-package com.sumeyyesahin.olumlamalar.activities
+package com.sumeyyesahin.olumlamalar.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.adapters.CategoryAdapter
 import com.sumeyyesahin.olumlamalar.databinding.ActivityCategoryBinding
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.getUserLanguage
 import com.sumeyyesahin.olumlamalar.viewmodel.CategoryViewModel
-import java.util.Locale
 import androidx.activity.viewModels
 
 class CategoryActivity : AppCompatActivity() {

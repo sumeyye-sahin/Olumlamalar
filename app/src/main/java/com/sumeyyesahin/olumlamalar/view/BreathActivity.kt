@@ -1,4 +1,4 @@
-package com.sumeyyesahin.olumlamalar.activities
+package com.sumeyyesahin.olumlamalar.view
 
 import android.animation.ValueAnimator
 import android.content.Intent
@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Button
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate

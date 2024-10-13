@@ -1,6 +1,5 @@
-package com.sumeyyesahin.olumlamalar.activities
+package com.sumeyyesahin.olumlamalar.view
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +8,6 @@ import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAddAffirmationBinding
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage
-import java.util.Locale
 
 class AddAffirmationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddAffirmationBinding

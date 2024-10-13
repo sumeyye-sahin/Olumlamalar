@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:background="@color/white"
-    tools:context=".activities.BreathActivity">
+    tools:context=".view.BreathActivity">
 
     <TextView
         android:id="@+id/tvInstruction"
@@ -40,7 +40,7 @@
         android:visibility="invisible" />
 
 
-    <com.sumeyyesahin.olumlamalar.views.CircleView
+    <com.sumeyyesahin.olumlamalar.cycleViews.CircleView
         android:id="@+id/circleView"
         android:layout_width="300dp"
         android:layout_height="300dp"
