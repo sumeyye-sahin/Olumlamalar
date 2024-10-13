@@ -16,20 +16,21 @@ class CategoryViewModel(application : Application): AndroidViewModel(application
     private val categoryList = MutableLiveData<List<String>>()
 
     private val dbHelper = DBHelper(getApplication())
+    val language = GetSetUserLanguage.getUserLanguage(getApplication())
 
-    fun initialize(language: String) {
-        setLocale(language)
+    fun initialize() {
+        setLocale()
     }
 
-    private fun setLocale(languageCode: String) {
-        val locale = Locale(languageCode)
+    private fun setLocale() {
+        val locale = Locale(language)
         Locale.setDefault(locale)
         val config = Configuration(getApplication<Application>().resources.configuration)
         config.setLocale(locale)
         getApplication<Application>().resources.updateConfiguration(config, getApplication<Application>().resources.displayMetrics)
     }
 
-    fun getCategories(language: String): MutableLiveData<List<String>> {
+    fun getCategories(): MutableLiveData<List<String>> {
         val kategoriListesi = dbHelper.getAllCategoriesByLanguage(language)
         categoryList.value = kategoriListesi
         return categoryList

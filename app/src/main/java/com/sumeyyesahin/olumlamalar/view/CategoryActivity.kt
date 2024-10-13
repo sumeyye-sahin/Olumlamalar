@@ -27,13 +27,13 @@ class CategoryActivity : AppCompatActivity() {
         supportActionBar?.title = ""
 
 
-        val language = intent.getStringExtra("language") ?: getUserLanguage(this)
-        categoryViewModel.initialize(language)
+
+        categoryViewModel.initialize()
 
 
 
-        categoryViewModel.getCategories(language).observe(this, Observer { categories ->
-            val adapter = CategoryAdapter(categories, language)
+        categoryViewModel.getCategories().observe(this, Observer { categories ->
+            val adapter = CategoryAdapter(categories, categoryViewModel.language)
             binding.recyclerView.adapter = adapter
             binding.recyclerView.setHasFixedSize(true)
             binding.recyclerView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
@@ -51,5 +51,14 @@ class CategoryActivity : AppCompatActivity() {
 
         onBackPressed()
         return true
+    }
+
+    fun observeLiveData() {
+        categoryViewModel.getCategories().observe(this, Observer { categories ->
+            val adapter = CategoryAdapter(categories, categoryViewModel.language)
+            binding.recyclerView.adapter = adapter
+            binding.recyclerView.setHasFixedSize(true)
+            binding.recyclerView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
+        })
     }
 }

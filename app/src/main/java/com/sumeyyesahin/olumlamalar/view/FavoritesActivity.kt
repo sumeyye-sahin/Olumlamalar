@@ -16,7 +16,6 @@ import com.sumeyyesahin.olumlamalar.viewmodel.FavoriteViewModel
 
 class FavoritesActivity : AppCompatActivity() {
     private lateinit var favoritesAdapter: FavoriteAdapter
-    private lateinit var favoriteAffirmations: List<AffirmationsListModel>
     private lateinit var binding: ActivityFavoriesBinding
     private val favoritesViewModel: FavoriteViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +33,7 @@ class FavoritesActivity : AppCompatActivity() {
 
         favoritesViewModel.loadFavoriteList(language)
 
-        favoritesAdapter = FavoriteAdapter(emptyList(), language, object :
+        favoritesAdapter = FavoriteAdapter(emptyList(), object :
             OnFavoriteDeleteListener {
             override fun onDeleteFavorite(affirmation: AffirmationsListModel) {
                 favoritesViewModel.deleteFavorite(affirmation)
@@ -46,14 +45,7 @@ class FavoritesActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@FavoritesActivity)
         }
 
-        favoritesViewModel.favoriteList.observe(this) { affirmations ->
-            if (affirmations.isEmpty()) {
-                showEmptyState()
-            } else {
-                hideEmptyState()
-                favoritesAdapter.updateList(affirmations)
-            }
-        }
+        observeLiveData()
     }
 
     private fun showEmptyState() {
@@ -80,5 +72,16 @@ class FavoritesActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun observeLiveData() {
+        favoritesViewModel.favoriteList.observe(this) { affirmations ->
+            if (affirmations.isEmpty()) {
+                showEmptyState()
+            } else {
+                hideEmptyState()
+                favoritesAdapter.updateList(affirmations)
+            }
+        }
     }
 }

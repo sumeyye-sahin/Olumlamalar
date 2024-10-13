@@ -4,12 +4,12 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.sumeyyesahin.olumlamalar.listener.OnFavoriteDeleteListener
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.FavoriItemBinding
+import com.sumeyyesahin.olumlamalar.listener.OnFavoriteDeleteListener
 import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 
-class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListModel>,private val language: String, private val deleteListener: OnFavoriteDeleteListener) :
+class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListModel>, private val deleteListener: OnFavoriteDeleteListener) :
     RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
     inner class FavoriteViewHolder(val binding: FavoriItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -65,4 +65,5 @@ class FavoriteAdapter(private var favoriteAffirmations: List<AffirmationsListMod
         favoriteAffirmations = newList
         notifyDataSetChanged()
     }
+
 }
