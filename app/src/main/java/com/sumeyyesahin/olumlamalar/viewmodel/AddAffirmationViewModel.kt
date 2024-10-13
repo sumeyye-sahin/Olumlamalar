@@ -1,6 +1,7 @@
 package com.sumeyyesahin.olumlamalar.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,20 +11,22 @@ import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage
 
 class AddAffirmationViewModel ( application: Application) : AndroidViewModel(application) {
 
-    private val _addAffirmationResult = MutableLiveData<Boolean>()
-    val addAffirmationResult: LiveData<Boolean> get() = _addAffirmationResult
+    private val _affirmationAdded = MutableLiveData<Boolean>()
+    val affirmationAdded: LiveData<Boolean> get() = _affirmationAdded
 
-    fun addNewAffirmation(affirmationText: String) {
-        val language = GetSetUserLanguage.getUserLanguage(getApplication())
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
+    private val dbHelper = DBHelper(application)
+
+    fun addNewAffirmation(affirmationText: String, context: Context) {
+        val language = GetSetUserLanguage.getUserLanguage(context)
+
         if (affirmationText.isNotBlank()) {
-            DBHelper(getApplication()).addNewAffirmation(
-                affirmationText,
-                getApplication<Application>().getString(R.string.add_affirmation_title),
-                language
-            )
-            _addAffirmationResult.value = true
+            dbHelper.addNewAffirmation(affirmationText, context.getString(R.string.add_affirmation_title), language)
+            _affirmationAdded.value = true
         } else {
-            _addAffirmationResult.value = false
+            _error.value = context.getString(R.string.toast_empty_affirmation)
         }
     }
 }

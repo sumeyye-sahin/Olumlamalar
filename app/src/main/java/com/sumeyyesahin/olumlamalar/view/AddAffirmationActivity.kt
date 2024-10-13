@@ -2,15 +2,20 @@ package com.sumeyyesahin.olumlamalar.view
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.sumeyyesahin.olumlamalar.helpers.DBHelper
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAddAffirmationBinding
+import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper.clickedButton
+import com.sumeyyesahin.olumlamalar.utils.Constants
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage
+import com.sumeyyesahin.olumlamalar.viewmodel.AddAffirmationViewModel
 
 class AddAffirmationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddAffirmationBinding
+    private val viewModel: AddAffirmationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,32 +23,28 @@ class AddAffirmationActivity : AppCompatActivity() {
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding.geri.setOnClickListener {
-            binding.geri.alpha = 0.5f
-            binding.geri.postDelayed({
-                binding.geri.alpha = 1f
-            }, 300)
+            clickedButton(binding.geri)
             finish()
         }
 
         binding.ekle.setOnClickListener {
-
-            binding.ekle.alpha = 0.5f
-            binding.ekle.postDelayed({
-                binding.ekle.alpha = 1f
-            }, 300)
+            clickedButton(binding.ekle)
             val olumlamaMetni = binding.editText.text.toString()
-            val language = GetSetUserLanguage.getUserLanguage(this) // Kullanıcı dili alınır
+            viewModel.addNewAffirmation(olumlamaMetni, this)
+        }
 
-            if (olumlamaMetni.isNotBlank()) {
-
-                // Olumlama metni boş değilse yeni bir olumlama eklemek için DBHelper fonksiyonu çağrılır
-                DBHelper(this).addNewAffirmation(olumlamaMetni, getString(R.string.add_affirmation_title), language)
-                setResult(RESULT_OK) // Başarı sonucu
+        observeViewModel()
+    }
+    private fun observeViewModel() {
+        viewModel.affirmationAdded.observe(this) { added ->
+            if (added) {
+                setResult(RESULT_OK)
                 finish()
-            } else {
-                Toast.makeText(this, getString(R.string.toast_empty_affirmation), Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+        viewModel.error.observe(this) { errorMessage ->
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
 }

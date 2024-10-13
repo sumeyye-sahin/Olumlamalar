@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.FileProvider
 import com.sumeyyesahin.olumlamalar.R
 import com.sumeyyesahin.olumlamalar.databinding.ActivityAffirmationMainPageBinding
+import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper
+import com.sumeyyesahin.olumlamalar.helpers.LocaleHelper.clickedButton
 import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.setUserLanguage
 import com.sumeyyesahin.olumlamalar.viewmodel.AffirmationMainPageViewModel
@@ -34,31 +36,22 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         val category = intent.getStringExtra("kategori") ?: ""
         viewModel.initialize(category, this)
 
-        viewModel.currentIndex.observe(this) { index ->
-            viewModel.olumlamalar.value?.let { affirmations ->
-                updateUI(affirmations, index)
-            }
-        }
-
-        viewModel.category.observe(this) { category ->
-            binding.textView.text = Html.fromHtml("<u>$category</u>")
-        }
-
-        viewModel.language.observe(this) { language ->
-            setUserLanguage(this, language)
-        }
+        observeLiveData()
 
         binding.ileri.setOnClickListener {
+            clickedButton(binding.ileri)
             val newIndex = (viewModel.currentIndex.value?.plus(1) ?: 0) % (viewModel.olumlamalar.value?.size ?: 1)
             viewModel.updateCurrentIndex(this, newIndex, category)
         }
 
         binding.geri.setOnClickListener {
+            clickedButton(binding.geri)
             val newIndex = (viewModel.currentIndex.value?.minus(1)?.takeIf { it >= 0 } ?: (viewModel.olumlamalar.value?.size ?: 1) - 1)
             viewModel.updateCurrentIndex(this, newIndex, category)
         }
 
         binding.delete.setOnClickListener {
+            clickedButton(binding.delete)
             viewModel.olumlamalar.value?.get(viewModel.currentIndex.value ?: 0)?.let { affirmation ->
                 viewModel.deleteAffirmation(affirmation)
                 viewModel.updateCurrentIndex(this, 0, category)
@@ -73,9 +66,27 @@ class AffirmationMainPageActivity : AppCompatActivity() {
         }
 
         binding.share.setOnClickListener {
+            clickedButton(binding.share)
             val bitmap = takeScreenshot(binding.affirmationBackground, binding.olumlamalarTextView)
             shareBitmap(bitmap)
         }
+    }
+
+    fun observeLiveData() {
+        viewModel.currentIndex.observe(this) { index ->
+            viewModel.olumlamalar.value?.let { affirmations ->
+                updateUI(affirmations, index)
+            }
+        }
+
+        viewModel.category.observe(this) { category ->
+            binding.textView.text = Html.fromHtml("<u>$category</u>")
+        }
+
+        viewModel.language.observe(this) { language ->
+            setUserLanguage(this, language)
+        }
+
     }
 
     override fun onResume() {
