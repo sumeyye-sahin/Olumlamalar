@@ -1,4 +1,4 @@
-package com.sumeyyesahin.olumlamalar.Listener
+package com.sumeyyesahin.olumlamalar.listener
 
 import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
 

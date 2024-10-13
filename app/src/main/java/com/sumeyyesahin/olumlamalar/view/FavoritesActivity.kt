@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sumeyyesahin.olumlamalar.Listener.OnFavoriteDeleteListener
+import com.sumeyyesahin.olumlamalar.listener.OnFavoriteDeleteListener
 import com.sumeyyesahin.olumlamalar.adapters.FavoriteAdapter
 import com.sumeyyesahin.olumlamalar.databinding.ActivityFavoriesBinding
 import com.sumeyyesahin.olumlamalar.model.AffirmationsListModel
