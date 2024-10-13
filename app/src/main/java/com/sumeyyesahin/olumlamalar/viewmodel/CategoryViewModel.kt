@@ -32,9 +32,10 @@ class CategoryViewModel(application : Application): AndroidViewModel(application
 
     fun getCategories(): MutableLiveData<List<String>> {
         val kategoriListesi = dbHelper.getAllCategoriesByLanguage(language)
-        categoryList.value = kategoriListesi
+        categoryList.postValue(kategoriListesi)
         return categoryList
     }
+
 
 
 }

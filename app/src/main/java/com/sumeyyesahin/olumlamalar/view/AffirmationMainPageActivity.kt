@@ -9,6 +9,7 @@ import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -52,10 +53,29 @@ class AffirmationMainPageActivity : AppCompatActivity() {
 
         binding.delete.setOnClickListener {
             clickedButton(binding.delete)
-            viewModel.olumlamalar.value?.get(viewModel.currentIndex.value ?: 0)?.let { affirmation ->
-                viewModel.deleteAffirmation(affirmation)
-                viewModel.updateCurrentIndex(this, 0, category)
+            // Affirmasyon listesi boş değilse silme işlemini gerçekleştir
+            viewModel.olumlamalar.value?.let { affirmations ->
+                if (affirmations.isNotEmpty()) {
+                    affirmations[viewModel.currentIndex.value ?: 0].let { affirmation ->
+                        viewModel.deleteAffirmation(affirmation)
+                        viewModel.updateCurrentIndex(this, 0, category)
+
+                        // Liste boşaldıysa, butonları güncelle
+                        if (affirmations.size == 1) {
+                            updateUI(emptyList(), 0)
+                        }
+                    }
+                } else {
+
+                }
             }
+        }
+
+
+        binding.addbutton.setOnClickListener {
+            clickedButton(binding.addbutton)
+            val intent = Intent(this, AddAffirmationActivity::class.java)
+            startActivity(intent)
         }
 
         binding.like.setOnClickListener {
@@ -87,22 +107,67 @@ class AffirmationMainPageActivity : AppCompatActivity() {
             setUserLanguage(this, language)
         }
 
+        viewModel.isMyAffirmationCategory.observe(this) { isMyCategory ->
+            if (isMyCategory) {
+                binding.delete.visibility = View.VISIBLE
+                if (viewModel.olumlamalar.value?.isEmpty() == true) {
+                    binding.olumlamalarTextView.text = getString(R.string.add_buton)
+                    binding.delete.visibility = View.GONE
+                }
+
+
+            } else {
+                binding.delete.visibility = View.GONE
+            }
+
+
+        }
     }
+
 
     override fun onResume() {
         super.onResume()
-        viewModel.olumlamalar.value?.let { updateUI(it, viewModel.currentIndex.value ?: 0) }
+        val category = intent.getStringExtra("kategori") ?: ""
+        val language = viewModel.language.value ?: "en"
+        viewModel.loadAffirmations(category, language)
+        viewModel.olumlamalar.value?.let { affirmations ->
+            updateUI(affirmations, viewModel.currentIndex.value ?: 0)
+        }
+
+
     }
 
     private fun updateUI(affirmations: List<AffirmationsListModel>, index: Int) {
+        val category = intent.getStringExtra("kategori") ?: ""
+        val isMyAffirmationsCategory = category == getString(R.string.add_affirmation_title)
+
         if (affirmations.isNotEmpty()) {
+
+            if(category==getString(R.string.add_buton)){
+                binding.delete.visibility = View.VISIBLE
+            }
+            else{
+                binding.delete.visibility = View.VISIBLE
+            }
             binding.olumlamalarTextView.text = affirmations[index].affirmation
             updateLikeButtonIcon(affirmations[index])
-            enableButtons(true)
+
+            binding.ileri.visibility = View.VISIBLE
+            binding.geri.visibility = View.VISIBLE
+            binding.like.visibility = View.VISIBLE
+            binding.share.visibility = View.VISIBLE
         } else {
+            binding.ileri.visibility = View.INVISIBLE
+            binding.geri.visibility = View.INVISIBLE
+            binding.like.visibility = View.INVISIBLE
+            binding.share.visibility = View.INVISIBLE
             binding.olumlamalarTextView.text = getString(R.string.add_buton)
-            enableButtons(false)
+            binding.delete.visibility = View.INVISIBLE
+
         }
+
+        binding.addbutton.visibility = View.VISIBLE
+        binding.buttonkategori.visibility = View.VISIBLE
     }
 
     private fun updateLikeButtonIcon(affirmation: AffirmationsListModel) {
@@ -111,11 +176,17 @@ class AffirmationMainPageActivity : AppCompatActivity() {
     }
 
     private fun enableButtons(enable: Boolean) {
-        binding.ileri.isClickable = enable
-        binding.geri.isClickable = enable
-        binding.like.isClickable = enable
-        binding.delete.isClickable = enable
-        binding.share.isClickable = enable
+        if (enable) {
+            binding.ileri.visibility = View.VISIBLE
+            binding.geri.visibility = View.VISIBLE
+            binding.share.visibility = View.VISIBLE
+            binding.like.visibility = View.VISIBLE
+        } else {
+            binding.ileri.visibility = View.INVISIBLE
+            binding.geri.visibility = View.INVISIBLE
+            binding.share.visibility = View.INVISIBLE
+            binding.like.visibility = View.INVISIBLE
+        }
     }
 
     private fun shareBitmap(bitmap: Bitmap) {

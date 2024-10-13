@@ -11,6 +11,7 @@ import com.sumeyyesahin.olumlamalar.databinding.ActivityCategoryBinding
 import com.sumeyyesahin.olumlamalar.utils.GetSetUserLanguage.getUserLanguage
 import com.sumeyyesahin.olumlamalar.viewmodel.CategoryViewModel
 import androidx.activity.viewModels
+import com.sumeyyesahin.olumlamalar.R
 
 class CategoryActivity : AppCompatActivity() {
 
@@ -19,25 +20,19 @@ class CategoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityCategoryBinding.inflate(layoutInflater)
+        binding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = ""
+        supportActionBar?.title = getString(R.string.categories)
 
 
 
         categoryViewModel.initialize()
 
+        observeLiveData()
 
-
-        categoryViewModel.getCategories().observe(this, Observer { categories ->
-            val adapter = CategoryAdapter(categories, categoryViewModel.language)
-            binding.recyclerView.adapter = adapter
-            binding.recyclerView.setHasFixedSize(true)
-            binding.recyclerView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
-        })
     }
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
@@ -51,6 +46,13 @@ class CategoryActivity : AppCompatActivity() {
 
         onBackPressed()
         return true
+    }
+    override fun onResume() {
+        super.onResume()
+        categoryViewModel.getCategories().observe(this, Observer { categories ->
+            val adapter = CategoryAdapter(categories, categoryViewModel.language)
+            binding.recyclerView.adapter = adapter
+        })
     }
 
     fun observeLiveData() {
